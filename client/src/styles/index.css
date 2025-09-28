@@ -1,0 +1,10 @@
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* 這會阻止滾動條出現 */
+  background-color: #282828; /* 預設背景色直接設在這裡 */
+}
