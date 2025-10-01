@@ -1,6 +1,11 @@
 import { Box, Button, Link, Typography } from "@mui/material";
 import AuthForm from "./AuthForm";
 import { LoginInput, RegisterInput } from "../../../generated/graphql";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "src/store";
+import i18n from "../../../i18n/i18n";
+import { setLanguage } from "src/store/modules/languageSlice";
+import { useTranslation } from "react-i18next";
 
 type AuthRightSideProps = {
   mode: "login" | "register";
@@ -8,21 +13,44 @@ type AuthRightSideProps = {
 };
 
 const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
+  const dispatch = useDispatch();
+  const currentLang = useSelector((state: RootState) => state.language.lang);
+  const { t } = useTranslation();
+
+  const toggleLanguage = () => {
+    const nextLang = currentLang === "zh" ? "en" : "zh";
+    dispatch(setLanguage(nextLang));
+    i18n.changeLanguage(nextLang);
+  };
+
   return (
-    <Box padding={3} display="flex" flexDirection="column" alignItems="center">
+    <Box
+      position="relative"
+      padding={3}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Button
+        onClick={toggleLanguage}
+        variant="outlined"
+        sx={{ position: "absolute", right: "0", top: "0", color: "#1B5CD8" }}
+      >
+        {currentLang === "zh" ? "中文" : "English"}
+      </Button>
       <Typography fontSize={"2.5rem"} fontWeight={"bold"}>
-        {mode === "login" ? "登入賬號" : "注冊賬號"}
+        {t(mode === "login" ? "auth.loginAccount" : "auth.registerAccount")}
       </Typography>
       <AuthForm mode={mode} />
       <Typography mt={3}>
-        {mode === "login" ? "還沒有UrMovie的賬號?" : "已經有UrMovie的賬號？"}
+        {t(mode === "login" ? "auth.no_account" : "auth.has_account")}
       </Typography>
       <Button
         onClick={() => {
           setCurrentMode(mode === "login" ? "register" : "login");
         }}
       >
-        {mode === "login" ? "現在報名" : "現在登入"}
+        {t(mode === "login" ? "auth.login_now" : "auth.sign_up_now")}
       </Button>
     </Box>
   );

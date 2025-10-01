@@ -5,6 +5,10 @@ import reportWebVitals from "./reportWebVitals";
 import "../src/styles/index.css";
 import client from "./apollo/apollo-client";
 import { ApolloProvider } from "@apollo/client";
+import "./i18n/i18n";
+import { Provider } from "react-redux";
+import { store, persistor } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -12,7 +16,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </ApolloProvider>
   </React.StrictMode>
 );

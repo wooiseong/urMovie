@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Tooltip, Typography } from "@mui/material";
 import {
   useLoginAccountMutation,
   useRegisterUserMutation,
@@ -6,7 +6,7 @@ import {
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { showToast } from "../../../utils/toast";
 import FullScreenLoader from "../../../globalComponents/FullScreenLoader";
 import { useDelayedLoading } from "../../../globalHooks/useDelayedLoading";
@@ -14,6 +14,7 @@ import { useGraphQLErrorMessage } from "../../../globalHooks/useGraphQLErrorMess
 import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useTranslation } from "react-i18next";
 
 type LoginInput = { username: string; password: string };
 type RegisterInput = LoginInput & { rePassword: string };
@@ -30,30 +31,38 @@ type AuthFormProps =
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-const loginSchema = z.object({
-  username: z.string().min(1, "賬號不能爲空"),
-  password: z
-    .string()
-    .min(1, "密碼不能為空")
-    .regex(passwordRegex, "密碼需為8位以上，且包含英文與數字"),
-});
-
-const registerSchema = loginSchema
-  .extend({
-    rePassword: z.string().min(1, "請再次輸入密碼"),
-  })
-  .superRefine(({ password, rePassword }, ctx) => {
-    if (rePassword !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "兩次密碼不一致",
-        path: ["rePassword"],
-      });
-    }
+function createLoginSchema(t: ReturnType<typeof useTranslation>["t"]) {
+  return z.object({
+    username: z.string().min(1, { message: "auth.username_required" }),
+    password: z
+      .string()
+      .min(1, { message: "auth.password_required" })
+      .regex(passwordRegex, { message: "auth.password_invalid" }),
   });
+}
+
+function createRegisterSchema(t: ReturnType<typeof useTranslation>["t"]) {
+  return createLoginSchema(t)
+    .extend({
+      rePassword: z.string().min(1, { message: "auth.rePassword_required" }),
+    })
+    .superRefine(({ password, rePassword }, ctx) => {
+      if (rePassword !== password) {
+        ctx.addIssue({
+          code: "custom",
+          message: "auth.password_mismatch",
+          path: ["rePassword"],
+        });
+      }
+    });
+}
 
 const AuthForm = ({ mode }: AuthFormProps) => {
   const isRegister = mode === "register";
+  const { t } = useTranslation();
+
+  const loginSchema = useMemo(() => createLoginSchema(t), [t]);
+  const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
 
   const {
     register,
@@ -77,7 +86,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
 
   const [loginMutation, { loading: loginLoading }] = useLoginAccountMutation({
     onCompleted: () => {
-      setToastMessage("登入成功");
+      setToastMessage(t("auth.login_success"));
       setToastType("success");
     },
     onError: (err) => {
@@ -90,7 +99,7 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const [registerMutation, { loading: registerLoading }] =
     useRegisterUserMutation({
       onCompleted: () => {
-        setToastMessage("註冊成功");
+        setToastMessage(t("auth.register_success"));
         setToastType("success");
       },
       onError: (err) => {
@@ -133,37 +142,53 @@ const AuthForm = ({ mode }: AuthFormProps) => {
     <>
       {showLoading && <FullScreenLoader />}
       <form onSubmit={handleSubmit(onFormSubmit)} style={{ marginTop: "20px" }}>
-        <Box sx={{ height: "280px" }}>
+        <Box sx={{ height: "270px" }}>
           <TextField
             {...register("username")}
             name="username"
-            label="賬號名字"
+            label={t("auth.username")}
             variant="outlined"
             fullWidth
             margin="dense"
             error={!!errors.username}
-            helperText={errors.username?.message?.toString()}
+            helperText={
+              errors.username ? t(errors.username.message as string) : ""
+            }
           />
           <TextField
             {...register("password")}
             name="password"
-            label="密碼"
+            label={t("auth.password")}
             type={showPassword ? "text" : "password"}
             variant="outlined"
             fullWidth
             margin={isRegister ? "dense" : "normal"}
             error={!!errors.password}
-            helperText={errors.password?.message?.toString()}
+            helperText={
+              errors.password ? t(errors.password?.message as string) : ""
+            }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
                     onClick={() => setShowPassword(!showPassword)}
                     edge="end"
-                    aria-label={showPassword ? "隱藏密碼" : "顯示密碼"}
+                    aria-label={
+                      showPassword
+                        ? t("auth.hide_password")
+                        : t("auth.show_password")
+                    }
                     sx={{ color: "#a8a8a8" }}
                   >
-                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    {showPassword ? (
+                      <Tooltip title={t("auth.hide_password")}>
+                        <VisibilityIcon />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title={t("auth.show_password")}>
+                        <VisibilityOffIcon />
+                      </Tooltip>
+                    )}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -173,26 +198,36 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             <TextField
               {...register("rePassword")}
               name="rePassword"
-              label="重新輸入密碼"
+              label={t("auth.rePassword")}
               type={showRePassword ? "text" : "password"}
               variant="outlined"
               fullWidth
               margin="dense"
               error={!!errorRePassword}
-              helperText={errorRePassword?.message?.toString()}
+              helperText={
+                errorRePassword ? t(errorRePassword.message as string) : ""
+              }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setShowRePassword(!showRePassword)}
                       edge="end"
-                      aria-label={showRePassword ? "隱藏密碼" : "顯示密碼"}
+                      aria-label={
+                        showPassword
+                          ? t("auth.hide_password")
+                          : t("auth.show_password")
+                      }
                       sx={{ color: "#a8a8a8" }}
                     >
                       {showRePassword ? (
-                        <VisibilityOffIcon />
+                        <Tooltip title={t("auth.hide_password")}>
+                          <VisibilityIcon />
+                        </Tooltip>
                       ) : (
-                        <VisibilityIcon />
+                        <Tooltip title={t("auth.show_password")}>
+                          <VisibilityOffIcon />
+                        </Tooltip>
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -201,14 +236,16 @@ const AuthForm = ({ mode }: AuthFormProps) => {
             />
           )}
         </Box>
-        <Box mt={2}>
+        <Box mt={3}>
           <Button
             type="submit"
             variant="contained"
             fullWidth
             sx={{ height: "45px", borderRadius: "10px" }}
           >
-            <Typography>{isRegister ? "註冊" : "登入"}</Typography>
+            <Typography>
+              {isRegister ? t("auth.register") : t("auth.login")}
+            </Typography>
           </Button>
         </Box>
       </form>
