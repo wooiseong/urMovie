@@ -1,0 +1,33 @@
+{
+  "JWT_SECRET_NOT_DEFINED": "JWT secret is not defined",
+  "TOKEN_VERIFICATION_FAILED": "Token verification failed",
+  "USER_ALREADY_EXISTS": "User already exists",
+  "PASSWORD_MISMATCH": "Passwords do not match",
+  "PASSWORD_INVALID": "Password must be at least 8 characters and contain letters and numbers",
+  "USER_NOT_FOUND": "User not found",
+  "INVALID_PASSWORD": "Invalid password",
+  "USER_ALREADY_LOGGED_IN": "User already logged in",
+  "UNKNOWN": "An unknown error occurred. Please try again later.",
+  "auth": {
+    "username": "Username",
+    "password": "Password",
+    "rePassword": "Confirm Password",
+    "username_required": "Username is required",
+    "password_required": "Password is required",
+    "password_invalid": "Password must be at least 8 characters and include letters and numbers",
+    "rePassword_required": "Please confirm your password",
+    "password_mismatch": "Passwords do not match",
+    "login_success": "Login successful",
+    "register_success": "Registration successful",
+    "login": "Login",
+    "loginAccount": "Login",
+    "register": "Register",
+    "registerAccount": "Register",
+    "show_password": "Show password",
+    "hide_password": "Hide password",
+    "no_account": "Don't have an UrMovie account?",
+    "has_account": "Already have an UrMovie account?",
+    "sign_up_now": "Sign up now",
+    "login_now": "Login now"
+  }
+}

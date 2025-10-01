@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { throwGraphQLError } from "./graphqlError";
 import { Request } from "express";
+import { ErrorCodes } from "@shared-types/errorCodes";
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -16,10 +17,7 @@ export interface Context {
 }
 
 if (!SECRET_KEY) {
-  throwGraphQLError(
-    "JWT_SECRET is not defined in environment variables!",
-    "JWT_SECRET_NOT_DEFINED"
-  );
+  throwGraphQLError(ErrorCodes.JWT_SECRET_NOT_DEFINED);
 }
 
 const authContext = ({ req }: { req: Request }): Context => {
@@ -33,10 +31,7 @@ const authContext = ({ req }: { req: Request }): Context => {
       return { user: decoded as User, req };
     } catch (err) {
       console.error("Token verfication failed", err);
-      throwGraphQLError(
-        "Token verfication failed",
-        "TOKEN_VERIFICATION_FAILED"
-      );
+      throwGraphQLError(ErrorCodes.TOKEN_VERIFICATION_FAILED);
     }
   }
   return { req };

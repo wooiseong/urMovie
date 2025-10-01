@@ -1,3 +1,4 @@
+import { ErrorCodes } from "@shared-types/errorCodes";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import validator from "validator";
@@ -20,20 +21,20 @@ const userResolvers = {
       const { username, password, rePassword } = input;
 
       if (context.user) {
-        throwGraphQLError("User is already logged in", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.USER_ALREADY_EXISTS, {
           field: "username",
         });
       }
 
       const existingUser = await UserModel.findOne({ username });
       if (existingUser) {
-        throwGraphQLError("User already exists", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.USER_ALREADY_EXISTS, {
           field: "username",
         });
       }
 
       if (password !== rePassword) {
-        throwGraphQLError("Passwords do not match", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.PASSWORD_MISMATCH, {
           field: "rePassword",
         });
       }
@@ -43,11 +44,9 @@ const userResolvers = {
         !/[a-zA-Z]/.test(password) ||
         !/\d/.test(password)
       ) {
-        throwGraphQLError(
-          "Password must be at least 8 characters and contain both letters and numbers",
-          "BAD_USER_INPUT",
-          { field: "password" }
-        );
+        throwGraphQLError(ErrorCodes.PASSWORD_INVALID, {
+          field: "password",
+        });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -81,21 +80,21 @@ const userResolvers = {
       const { username, password } = input;
 
       if (context.user) {
-        throwGraphQLError("User is already logged in", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.USER_ALREADY_EXISTS, {
           field: "username",
         });
       }
 
       const user = await UserModel.findOne({ username });
       if (!user) {
-        throwGraphQLError("User not found", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.USER_NOT_FOUND, {
           field: "username",
         });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        throwGraphQLError("Invalid password", "BAD_USER_INPUT", {
+        throwGraphQLError(ErrorCodes.PASSWORD_INVALID, {
           field: "password",
         });
       }

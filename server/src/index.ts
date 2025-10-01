@@ -8,6 +8,7 @@ dotenv.config();
 import userTypeDefs from "./modules/users/user.typeDefs";
 import userResolvers from "./modules/users/user.resolvers";
 import authContext from "../src/utils/authContext";
+import { seedAdminAccount } from "./utils/seedAdmin";
 
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/urMovie";
@@ -24,10 +25,12 @@ const server = new ApolloServer({
 // Connect MongoDB
 mongoose
   .connect(MONGO_URI)
-  .then(() => {
+  .then(async () => {
     console.log("MongoDB connected");
 
-    server.start().then(() => {
+    await seedAdminAccount();
+
+    await server.start().then(() => {
       server.applyMiddleware({ app, path: "/graphql" });
 
       app.listen(PORT, () => {
