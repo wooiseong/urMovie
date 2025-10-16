@@ -1,26 +1,22 @@
 import React, { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 interface ProtectedRouteProps {
-  children: React.ReactNode;
   isAdmin?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  isAdmin = false,
-}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ isAdmin = false }) => {
   const isLoggedIn = Boolean(localStorage.getItem("isLoggedIn"));
   const userRole = localStorage.getItem("role");
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   if (isAdmin && userRole !== "admin") {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

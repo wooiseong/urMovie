@@ -15,7 +15,7 @@ export async function seedAdminAccount() {
     await UserModel.create({
       username: adminUsername,
       password: hashedPassword,
-      role: "ADMIN",
+      role: "admin",
     });
     console.log(`✅ Admin account created: ${adminUsername}/${adminPassword}`);
   } else {

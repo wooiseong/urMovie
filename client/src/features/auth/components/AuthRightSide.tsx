@@ -41,7 +41,7 @@ const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
       <Typography fontSize={"2.5rem"} fontWeight={"bold"}>
         {t(mode === "login" ? "auth.loginAccount" : "auth.registerAccount")}
       </Typography>
-      <AuthForm mode={mode} />
+      <AuthForm mode={mode} setCurrentMode={setCurrentMode} />
       <Typography mt={3}>
         {t(mode === "login" ? "auth.no_account" : "auth.has_account")}
       </Typography>
@@ -50,7 +50,7 @@ const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
           setCurrentMode(mode === "login" ? "register" : "login");
         }}
       >
-        {t(mode === "login" ? "auth.login_now" : "auth.sign_up_now")}
+        {t(mode === "login" ? "auth.sign_up_now" : "auth.login_now")}
       </Button>
     </Box>
   );

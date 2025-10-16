@@ -6,7 +6,7 @@ import {
 import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { showToast } from "../../../utils/toast";
 import FullScreenLoader from "../../../globalComponents/FullScreenLoader";
 import { useDelayedLoading } from "../../../globalHooks/useDelayedLoading";
@@ -15,6 +15,7 @@ import { IconButton, InputAdornment } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 type LoginInput = { username: string; password: string };
 type RegisterInput = LoginInput & { rePassword: string };
@@ -23,10 +24,12 @@ type AuthFormProps =
   | {
       mode: "login";
       onSubmit?: (values: LoginInput) => void;
+      setCurrentMode: Dispatch<SetStateAction<"login" | "register">>;
     }
   | {
       mode: "register";
       onSubmit?: (values: RegisterInput) => void;
+      setCurrentMode: Dispatch<SetStateAction<"login" | "register">>;
     };
 
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -57,9 +60,10 @@ function createRegisterSchema(t: ReturnType<typeof useTranslation>["t"]) {
     });
 }
 
-const AuthForm = ({ mode }: AuthFormProps) => {
+const AuthForm = ({ mode, setCurrentMode }: AuthFormProps) => {
   const isRegister = mode === "register";
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
   const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
@@ -85,9 +89,19 @@ const AuthForm = ({ mode }: AuthFormProps) => {
   const getGraphQLErrorMessage = useGraphQLErrorMessage();
 
   const [loginMutation, { loading: loginLoading }] = useLoginAccountMutation({
-    onCompleted: () => {
+    onCompleted: (data) => {
       setToastMessage(t("auth.login_success"));
       setToastType("success");
+
+      const userRole = data?.loginAccount.user.role;
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("role", userRole);
+
+      if (userRole === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     },
     onError: (err) => {
       const msg = getGraphQLErrorMessage(err);
@@ -101,6 +115,10 @@ const AuthForm = ({ mode }: AuthFormProps) => {
       onCompleted: () => {
         setToastMessage(t("auth.register_success"));
         setToastType("success");
+
+        setTimeout(() => {
+          setCurrentMode("login");
+        }, 1000);
       },
       onError: (err) => {
         const msg = getGraphQLErrorMessage(err);
