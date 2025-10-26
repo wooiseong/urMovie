@@ -29,6 +29,33 @@
     "no_account": "還沒有UrMovie的賬號?",
     "has_account": "已經有UrMovie的賬號？",
     "sign_up_now": "現在報名",
-    "login_now": "現在登入"
+    "login_now": "現在登入",
+    "admin": "管理員",
+    "user": "1星會員",
+    "premiumUser": "2星會員"
+  },
+  "navBar": {
+    "home": "首頁",
+    "movieJournal": "電影收藏",
+    "adminStatistics": "會員數據",
+    "search": "搜索",
+    "profile": "個人資料",
+    "upgrade": "升級會員",
+    "logout": "登出賬戶",
+    "used": "已用",
+    "quoteUsage": "金句額度",
+    "theme": {
+      "label": "主題",
+      "dark": "深色",
+      "light": "淺色"
+    },
+    "language": {
+      "label": "語言",
+      "en": "英文",
+      "zh": "中文"
+    }
+  },
+  "operation": {
+    "loading": "加載中..."
   }
 }

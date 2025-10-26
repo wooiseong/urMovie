@@ -1,6 +1,11 @@
-import { Box, CircularProgress, Paper } from "@mui/material";
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-const FullScreenLoader = () => {
+interface FullScreenLoaderProps {
+  text?: string;
+}
+const FullScreenLoader = ({ text }: FullScreenLoaderProps) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -9,11 +14,12 @@ const FullScreenLoader = () => {
         left: 0,
         width: "100vw",
         height: "100vh",
-        bgcolor: "rgba(11, 10, 10, 0.7)",
-        zIndex: 1300,
+        // bgcolor: "rgba(11, 10, 10, 0.7)",
+        zIndex: 1350,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        pointerEvents: "none",
       }}
     >
       <Paper
@@ -25,9 +31,22 @@ const FullScreenLoader = () => {
           alignItems: "center",
           justifyContent: "center",
           bgcolor: "#fff",
+          position: "relative",
         }}
       >
-        <CircularProgress size={60} sx={{ color: "#1B5CD8" }} />
+        <CircularProgress size={180} sx={{ color: "#1B5CD8" }} />
+
+        <Typography
+          fontSize="20px"
+          sx={{
+            position: "absolute",
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "#1B5CD8",
+          }}
+        >
+          {text ?? t("operation.loading")}
+        </Typography>
       </Paper>
     </Box>
   );

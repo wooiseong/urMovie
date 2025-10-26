@@ -28,6 +28,33 @@
     "no_account": "Don't have an UrMovie account?",
     "has_account": "Already have an UrMovie account?",
     "sign_up_now": "Sign up now",
-    "login_now": "Login now"
+    "login_now": "Login now",
+    "admin": "admin",
+    "user": "user",
+    "premiumUser": "premium user"
+  },
+  "navBar": {
+    "home": "Home",
+    "movieJournal": "Movie Journal",
+    "adminStatistics": "Statistics",
+    "search": "Search",
+    "profile": "Profile",
+    "upgrade": "Upgrade",
+    "logout": "Logout",
+    "used": "is being used",
+    "quoteUsage": "quote",
+    "theme": {
+      "label": "theme",
+      "dark": "dark",
+      "light": "light"
+    },
+    "language": {
+      "label": "language",
+      "en": "english",
+      "zh": "chinese"
+    }
+  },
+  "operation": {
+    "loading": "loading..."
   }
 }

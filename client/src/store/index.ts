@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import languageReducer from "./modules/languageSlice";
+import settingReducer from "./modules/settingSlice";
+import userReducer from "./modules/userSlice";
 import {
   persistStore,
   persistReducer,
@@ -16,14 +17,15 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["language"],
+  whitelist: ["setting"],
 };
 
-const persistedReducer = persistReducer(persistConfig, languageReducer);
+const persistedReducer = persistReducer(persistConfig, settingReducer);
 
 export const store = configureStore({
   reducer: {
-    language: persistedReducer,
+    setting: persistedReducer,
+    user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -16,9 +16,15 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserRole } from "src/store/modules/userSlice";
+import { isValid } from "zod/v3";
+import { useAppDispatch } from "src/store/hook";
+import { setTheme } from "src/store/modules/settingSlice";
 
 type LoginInput = { username: string; password: string };
 type RegisterInput = LoginInput & { rePassword: string };
+type Role = "admin" | "user" | "premiumUser";
 
 type AuthFormProps =
   | {
@@ -60,10 +66,15 @@ function createRegisterSchema(t: ReturnType<typeof useTranslation>["t"]) {
     });
 }
 
+function isValidRole(role: string): role is Role {
+  return ["admin", "user", "premiumUser"].includes(role);
+}
+
 const AuthForm = ({ mode, setCurrentMode }: AuthFormProps) => {
   const isRegister = mode === "register";
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
   const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
@@ -96,6 +107,13 @@ const AuthForm = ({ mode, setCurrentMode }: AuthFormProps) => {
       const userRole = data?.loginAccount.user.role;
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("role", userRole);
+      localStorage.setItem("token", data.loginAccount.token);
+      const savedTheme = localStorage.getItem("theme") as "light" | "dark";
+      dispatch(setTheme(savedTheme ?? "dark"));
+
+      if (isValidRole(userRole)) {
+        dispatch(setUserRole(userRole));
+      }
 
       if (userRole === "admin") {
         navigate("/admin");

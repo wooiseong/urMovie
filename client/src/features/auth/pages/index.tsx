@@ -13,7 +13,7 @@ const AuthPage = () => {
   return (
     <Box
       display="flex"
-      bgcolor="#282828"
+      // bgcolor="#282828"
       width="100%"
       height="100vh"
       alignItems="center"
@@ -25,7 +25,7 @@ const AuthPage = () => {
         sx={{
           height: "90%",
           width: "80%",
-          backgroundColor: "#eee",
+          // backgroundColor: "#eee",
           borderRadius: "10px",
         }}
         p={3}

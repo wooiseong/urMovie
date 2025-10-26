@@ -1,11 +1,9 @@
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import AuthForm from "./AuthForm";
-import { LoginInput, RegisterInput } from "../../../generated/graphql";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "src/store";
 import i18n from "../../../i18n/i18n";
-import { setLanguage } from "src/store/modules/languageSlice";
+import { setLanguage } from "src/store/modules/settingSlice";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "src/store/hook";
 
 type AuthRightSideProps = {
   mode: "login" | "register";
@@ -13,12 +11,12 @@ type AuthRightSideProps = {
 };
 
 const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
-  const dispatch = useDispatch();
-  const currentLang = useSelector((state: RootState) => state.language.lang);
+  const dispatch = useAppDispatch();
+  const currentLang = useAppSelector((state) => state.setting.lang);
   const { t } = useTranslation();
 
   const toggleLanguage = () => {
-    const nextLang = currentLang === "zh" ? "en" : "zh";
+    const nextLang = currentLang === "zh-TW" ? "en" : "zh-TW";
     dispatch(setLanguage(nextLang));
     i18n.changeLanguage(nextLang);
   };
@@ -34,9 +32,9 @@ const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
       <Button
         onClick={toggleLanguage}
         variant="outlined"
-        sx={{ position: "absolute", right: "0", top: "0", color: "#1B5CD8" }}
+        sx={{ position: "absolute", right: "0", top: "0" }}
       >
-        {currentLang === "zh" ? "中文" : "English"}
+        {currentLang === "zh-TW" ? "中文" : "English"}
       </Button>
       <Typography fontSize={"2.5rem"} fontWeight={"bold"}>
         {t(mode === "login" ? "auth.loginAccount" : "auth.registerAccount")}

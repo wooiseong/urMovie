@@ -53,7 +53,7 @@ const userResolvers = {
       const newUser = await UserModel.create({
         username,
         password: hashedPassword,
-        role: "USER",
+        role: "user",
       });
 
       const token = jwt.sign(
