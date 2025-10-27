@@ -56,6 +56,14 @@
     }
   },
   "operation": {
-    "loading": "加載中..."
+    "loading": "加載中...",
+    "submit": "提交"
+  },
+  "home": {
+    "createEdit": "新增編輯",
+    "recentEdit": "最近編輯",
+    "movieName": "電影名字",
+    "journalTitle": "標題",
+    "journalContent": "寫點什麽吧..."
   }
 }

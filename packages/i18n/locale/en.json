@@ -55,6 +55,14 @@
     }
   },
   "operation": {
-    "loading": "loading..."
+    "loading": "loading...",
+    "submit": "submit"
+  },
+  "home": {
+    "createEdit": "Create Journal",
+    "recentEdit": "Recent Journal",
+    "movieName": "Movie name",
+    "journalTitle": "Title",
+    "journalContent": "Write something..."
   }
 }
