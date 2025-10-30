@@ -61,6 +61,8 @@
   "home": {
     "createEdit": "Create Journal",
     "recentEdit": "Recent Journal",
+    "edit": "edit",
+    "delete": "delete",
     "movieName": "Movie name",
     "journalTitle": "Title",
     "journalContent": "Write something..."

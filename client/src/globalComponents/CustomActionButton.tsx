@@ -1,7 +1,5 @@
 import { Theme } from "@emotion/react";
 import { Button, SxProps, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
 interface CustomActionButtonProps {
   icon: React.ReactNode;
   label: string;
