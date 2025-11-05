@@ -26,7 +26,7 @@ const JournalMenu: React.FC<JournalMenuProps> = () => {
     {
       icon: <EditIcon />,
       label: t("home.edit"),
-      // to: "/adminStatistics",
+      to: "editJournal",
     },
     {
       icon: <DeleteOutlineIcon />,

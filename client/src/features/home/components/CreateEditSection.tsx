@@ -5,9 +5,11 @@ import CustomTextField from "src/globalComponents/CustomTextfield";
 import CustomActionButton from "src/globalComponents/CustomActionButton";
 import SendIcon from "@mui/icons-material/Send";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const CreateEditSelection = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <Box>
       <CustomSectionTitle label={t("home.createEdit")} />
@@ -36,7 +38,11 @@ const CreateEditSelection = () => {
               },
             }}
           />
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              navigate("editJournal");
+            }}
+          >
             <EditIcon sx={{ color: "#fff" }} />
           </IconButton>
         </Box>

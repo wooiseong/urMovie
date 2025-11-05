@@ -1,7 +1,7 @@
 import { Box, SxProps, TextField, Theme, Typography } from "@mui/material";
 import { deepmerge } from "@mui/utils";
 
-interface CustomTextFieldProps {
+interface CustomDropdownProps {
   label?: string;
   icon?: React.ReactNode;
   placeholder?: string;
@@ -13,7 +13,7 @@ interface CustomTextFieldProps {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
-const CustomTextField: React.FC<CustomTextFieldProps> = ({
+const CustomDropdown: React.FC<CustomDropdownProps> = ({
   label,
   icon,
   placeholder,
@@ -70,4 +70,4 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   );
 };
 
-export default CustomTextField;
+export default CustomDropdown;

@@ -33,7 +33,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=3",
   },
   {
-    id: 1,
+    id: 4,
     title: "The Art of Code",
     author: "John Doe",
     tag: "Programming",
@@ -42,7 +42,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=1",
   },
   {
-    id: 2,
+    id: 5,
     title: "Mindful Development",
     author: "Jane Smith",
     tag: "Wellness",
@@ -51,7 +51,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=2",
   },
   {
-    id: 3,
+    id: 6,
     title: "GraphQL Simplified",
     author: "Alex Lee",
     tag: "Tech",
@@ -60,7 +60,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=3",
   },
   {
-    id: 1,
+    id: 7,
     title: "The Art of Code",
     author: "John Doe",
     tag: "Programming",
@@ -69,7 +69,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=1",
   },
   {
-    id: 2,
+    id: 8,
     title: "Mindful Development",
     author: "Jane Smith",
     tag: "Wellness",
@@ -78,7 +78,7 @@ const mockJournals = [
     image: "https://picsum.photos/300/200?random=2",
   },
   {
-    id: 3,
+    id: 9,
     title: "GraphQL Simplified",
     author: "Alex Lee",
     tag: "Tech",

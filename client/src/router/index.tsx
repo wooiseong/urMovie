@@ -8,6 +8,7 @@ import HomePage from "../features/home/pages";
 import AdminStatisticsPage from "../features/admin/pages";
 import ProtectedRoute from "../globalComponents/ProtectedRoute";
 import MainLayout from "src/layouts/MainLayout";
+import EditJournalPage from "src/features/home/pages/EditJournalPage";
 
 const routes: RouteObject[] = [
   { path: "/login", element: <AuthPage /> },
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
         element: <MainLayout />,
         children: [
           { path: "/", index: true, element: <HomePage /> },
+          { path: "editJournal", element: <EditJournalPage /> },
           { path: "movieJournal", element: <MovieJournalPage /> },
           { path: "profile", element: <ProfilePage /> },
           { path: "membership", element: <MembershipPage /> },
@@ -38,6 +40,7 @@ const routes: RouteObject[] = [
         children: [
           { index: true, element: <HomePage /> },
           { path: "adminStatistics", element: <AdminStatisticsPage /> },
+          { path: "editJournal", element: <EditJournalPage /> },
           { path: "movieJournal", element: <MovieJournalPage /> },
           { path: "profile", element: <ProfilePage /> },
           { path: "membership", element: <MembershipPage /> },
