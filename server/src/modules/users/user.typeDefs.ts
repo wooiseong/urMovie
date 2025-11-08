@@ -23,13 +23,13 @@ const userTypeDefs = gql`
     password: String!
   }
 
+  type Query {
+    _empty: String
+  }
+
   type Mutation {
     registerUser(input: RegisterInput!): AuthPayload!
     loginAccount(input: LoginInput!): AuthPayload!
-  }
-
-  type Query {
-    _empty: String
   }
 `;
 

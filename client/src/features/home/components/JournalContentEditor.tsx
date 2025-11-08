@@ -6,7 +6,6 @@ import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import History from "@tiptap/extension-history";
 
 import {
   Tooltip,

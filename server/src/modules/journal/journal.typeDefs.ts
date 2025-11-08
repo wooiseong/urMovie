@@ -1,35 +1,67 @@
 import { gql } from "apollo-server-express";
 
 const journalTypeDefs = gql`
-  type User {
-    id: ID!
-    username: String!
-    role: String!
+  scalar JSON
+  scalar Date
+
+  type Quote {
+    name: String
+    content: String
+    backgroundColor: String
+    textColor: String
   }
 
-  type AuthPayload {
-    token: String!
-    user: User!
+  type Journal {
+    _id: ID!
+    movieName: String!
+    director: [String!]
+    actor: [String!]
+    tag: [String!]
+    image: String
+    title: String!
+    content: JSON!
+    quote: [Quote!]
+    date: Date!
   }
 
-  input RegisterInput {
-    username: String!
-    password: String!
-    rePassword: String!
+  input QuoteInput {
+    name: String
+    content: String
+    backgroundColor: String
+    textColor: String
   }
 
-  input LoginInput {
-    username: String!
-    password: String!
+  input CreateJournalInput {
+    movieName: String!
+    director: [String!]
+    actor: [String!]
+    tag: [String!]
+    image: String
+    title: String!
+    content: JSON!
+    quote: [QuoteInput!]
   }
 
-  type Mutation {
-    registerUser(input: RegisterInput!): AuthPayload!
-    loginAccount(input: LoginInput!): AuthPayload!
+  input UpdateJournalInput {
+    movieName: String
+    director: [String!]
+    actor: [String!]
+    tag: [String!]
+    image: String
+    title: String
+    content: JSON
+    quote: [QuoteInput!]
   }
 
   type Query {
-    _empty: String
+    journals: [Journal!]
+    journal(id: ID!): Journal
+  }
+
+  type Mutation {
+    createJournal(input: CreateJournalInput!): Journal!
+    updateJournal(id: ID!, input: UpdateJournalInput!): Journal!
+    deleteJournal(id: ID!): Boolean!
   }
 `;
 

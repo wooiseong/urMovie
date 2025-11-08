@@ -6,3 +6,7 @@ generates:
     plugins:
       - typescript
       - typescript-resolvers
+    config:
+      scalars:
+        Date: Date
+        JSON: Record<string, any>

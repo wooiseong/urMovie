@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -14,12 +14,39 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: Date; output: Date; }
+  JSON: { input: Record<string, any>; output: Record<string, any>; }
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   token: Scalars['String']['output'];
   user: User;
+};
+
+export type CreateJournalInput = {
+  actor?: InputMaybe<Array<Scalars['String']['input']>>;
+  content: Scalars['JSON']['input'];
+  director?: InputMaybe<Array<Scalars['String']['input']>>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  movieName: Scalars['String']['input'];
+  quote?: InputMaybe<Array<QuoteInput>>;
+  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
+};
+
+export type Journal = {
+  __typename?: 'Journal';
+  _id: Scalars['ID']['output'];
+  actor?: Maybe<Array<Scalars['String']['output']>>;
+  content: Scalars['JSON']['output'];
+  date: Scalars['Date']['output'];
+  director?: Maybe<Array<Scalars['String']['output']>>;
+  image?: Maybe<Scalars['String']['output']>;
+  movieName: Scalars['String']['output'];
+  quote?: Maybe<Array<Quote>>;
+  tag?: Maybe<Array<Scalars['String']['output']>>;
+  title: Scalars['String']['output'];
 };
 
 export type LoginInput = {
@@ -29,8 +56,21 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createJournal: Journal;
+  deleteJournal: Scalars['Boolean']['output'];
   loginAccount: AuthPayload;
   registerUser: AuthPayload;
+  updateJournal: Journal;
+};
+
+
+export type MutationCreateJournalArgs = {
+  input: CreateJournalInput;
+};
+
+
+export type MutationDeleteJournalArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -43,15 +83,54 @@ export type MutationRegisterUserArgs = {
   input: RegisterInput;
 };
 
+
+export type MutationUpdateJournalArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateJournalInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']['output']>;
+  journal?: Maybe<Journal>;
+  journals?: Maybe<Array<Journal>>;
+};
+
+
+export type QueryJournalArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type Quote = {
+  __typename?: 'Quote';
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  content?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+export type QuoteInput = {
+  backgroundColor?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  textColor?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RegisterInput = {
   password: Scalars['String']['input'];
   rePassword: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type UpdateJournalInput = {
+  actor?: InputMaybe<Array<Scalars['String']['input']>>;
+  content?: InputMaybe<Scalars['JSON']['input']>;
+  director?: InputMaybe<Array<Scalars['String']['input']>>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  movieName?: InputMaybe<Scalars['String']['input']>;
+  quote?: InputMaybe<Array<QuoteInput>>;
+  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -136,12 +215,19 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = {
   AuthPayload: ResolverTypeWrapper<AuthPayload>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateJournalInput: CreateJournalInput;
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
+  Journal: ResolverTypeWrapper<Journal>;
   LoginInput: LoginInput;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  Quote: ResolverTypeWrapper<Quote>;
+  QuoteInput: QuoteInput;
   RegisterInput: RegisterInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateJournalInput: UpdateJournalInput;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -149,12 +235,19 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AuthPayload: AuthPayload;
   Boolean: Scalars['Boolean']['output'];
+  CreateJournalInput: CreateJournalInput;
+  Date: Scalars['Date']['output'];
   ID: Scalars['ID']['output'];
+  JSON: Scalars['JSON']['output'];
+  Journal: Journal;
   LoginInput: LoginInput;
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
+  Quote: Quote;
+  QuoteInput: QuoteInput;
   RegisterInput: RegisterInput;
   String: Scalars['String']['output'];
+  UpdateJournalInput: UpdateJournalInput;
   User: User;
 };
 
@@ -163,13 +256,46 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
+
+export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
+  name: 'JSON';
+}
+
+export type JournalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Journal'] = ResolversParentTypes['Journal']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  actor?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  content?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  director?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  movieName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  quote?: Resolver<Maybe<Array<ResolversTypes['Quote']>>, ParentType, ContextType>;
+  tag?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createJournal?: Resolver<ResolversTypes['Journal'], ParentType, ContextType, RequireFields<MutationCreateJournalArgs, 'input'>>;
+  deleteJournal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteJournalArgs, 'id'>>;
   loginAccount?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginAccountArgs, 'input'>>;
   registerUser?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
+  updateJournal?: Resolver<ResolversTypes['Journal'], ParentType, ContextType, RequireFields<MutationUpdateJournalArgs, 'id' | 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  journal?: Resolver<Maybe<ResolversTypes['Journal']>, ParentType, ContextType, RequireFields<QueryJournalArgs, 'id'>>;
+  journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType>;
+};
+
+export type QuoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Quote'] = ResolversParentTypes['Quote']> = {
+  backgroundColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  textColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -180,8 +306,12 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   AuthPayload?: AuthPayloadResolvers<ContextType>;
+  Date?: GraphQLScalarType;
+  JSON?: GraphQLScalarType;
+  Journal?: JournalResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Quote?: QuoteResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 
