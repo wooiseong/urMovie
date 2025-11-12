@@ -10,7 +10,8 @@ import {
 } from "../../generated/graphql";
 import { Context } from "../../utils/authContext";
 import { GraphQLError } from "graphql";
-import { handleImageUpload } from "./journal.helper";
+import { handleImageUpload, processTags } from "./journal.helper";
+import { TagModel } from "../tag/tagSchema";
 
 const config = require("../../config");
 
@@ -48,39 +49,47 @@ const journalResolvers = {
       context: Context
     ) {
       try {
-        // if (!context.user) throw new GraphQLError("Unauthorized", { extensions: { code: "UNAUTHORIZED" } });
-        const userId = "test-user"; // Replace with actual user ID from context
+        const userId = "test-user"; // Replace with context.user.id
         const imageUrl = handleImageUpload(input.image || "", userId);
 
+        // --- 處理 Tag ---
+        const tagResults = await processTags(input.tag || []);
+
+        // 新建 Journal
         const newJournal = new JournalModel({
           ...input,
+          tag: tagResults, // 存完整 tag array
           image: imageUrl,
           date: new Date(),
-          // author: userId
         });
 
         const savedJournal = await newJournal.save();
         return savedJournal;
       } catch (error) {
+        console.error("Create Journal Error:", error);
         throw new GraphQLError("Failed to create journal", {
           extensions: { code: ErrorCodes.INTERNAL_SERVER_ERROR },
         });
       }
     },
+
     async updateJournal(
       _: unknown,
       { id, input }: MutationUpdateJournalArgs,
       context: Context
     ) {
       try {
-        // if (!context.user) throw new GraphQLError("Unauthorized", { extensions: { code: "UNAUTHORIZED" } });
-        const userId = "test-user"; // Replace with actual user ID from context
-
-        const updateData = { ...input };
+        const userId = "test-user"; // Replace with context.user.id
+        const updateData: any = { ...input };
 
         if (input.image !== undefined) {
           const imageUrl = handleImageUpload(input.image || "", userId);
           updateData.image = imageUrl;
+        }
+
+        // --- 處理 Tag ---
+        if (input.tag) {
+          updateData.tag = await processTags(input.tag);
         }
 
         const updatedJournal = await JournalModel.findByIdAndUpdate(
@@ -91,12 +100,13 @@ const journalResolvers = {
 
         if (!updatedJournal) {
           throw new GraphQLError("Journal not found", {
-            extensions: { code: "NOT_FOUND" },
+            extensions: { code: ErrorCodes.NOT_FOUND },
           });
         }
 
         return updatedJournal;
       } catch (error) {
+        console.error("Update Journal Error:", error);
         throw new GraphQLError("Failed to update journal", {
           extensions: { code: ErrorCodes.INTERNAL_SERVER_ERROR },
         });

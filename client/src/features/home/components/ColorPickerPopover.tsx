@@ -8,12 +8,18 @@ type ColorPickerPopoverProps = {
   open: boolean;
   anchorEl: HTMLElement | null;
   onClose: () => void;
+  backgroundColor?: string;
+  textColor?: string;
+  onColorChange?: (bg?: string, text?: string) => void;
 };
 
 const ColorPickerPopover = ({
   open,
   anchorEl,
   onClose,
+  backgroundColor,
+  textColor,
+  onColorChange,
 }: ColorPickerPopoverProps) => {
   const colors = [
     "#F87171",
@@ -40,7 +46,7 @@ const ColorPickerPopover = ({
       slotProps={{ paper: { sx: { p: 2 } } }}
     >
       <Box>
-        <Typography sx={{ fontWeight: 600, mb: 1 }}>請選擇顏色</Typography>
+        <Typography sx={{ fontWeight: 600, mb: 1 }}>請選擇背景顏色</Typography>
         <Grid container sx={{ my: isUser ? "20px" : undefined }}>
           {isUser ? (
             colors.map((color) => (
@@ -64,19 +70,21 @@ const ColorPickerPopover = ({
                       transform: "scale(1.1)",
                     },
                   }}
-                  onClick={() => console.log("Selected color:", color)}
+                  // 🧩 點擊時呼叫父層傳入的 onColorChange
+                  onClick={() => {
+                    onColorChange?.(color, "#FFFFFF"); // 預設字體白色
+                    onClose(); // 關閉 popover
+                  }}
                 />
               </Grid>
             ))
           ) : (
             <ColorPickerPlugin
-              onChange={(value: any, mode: any) => {
+              onChange={(value: string, mode: "background" | "text") => {
                 if (mode === "background") {
-                  console.log("背景色:", value);
-                  // update note bg color mutation...
+                  onColorChange?.(value, textColor); // 自訂背景色
                 } else {
-                  console.log("字體色:", value);
-                  // update font color mutation...
+                  onColorChange?.(backgroundColor, value); // 自訂文字色
                 }
               }}
             />
@@ -94,7 +102,7 @@ const ColorPickerPopover = ({
             <Typography
               sx={{ fontSize: "12px", color: "gray", marginRight: "10px" }}
             >
-              升級獲得更多顔色
+              升級獲得更多顏色
             </Typography>
             <CustomActionButton
               onClick={onClose}

@@ -22,23 +22,9 @@ const presetColors = [
   "#4ADE80",
 ];
 
-function adjustBrightness(hex: string, brightness: number) {
-  let c = hex.replace("#", "");
-  let r = parseInt(c.substring(0, 2), 16);
-  let g = parseInt(c.substring(2, 4), 16);
-  let b = parseInt(c.substring(4, 6), 16);
-
-  r = Math.min(255, Math.max(0, r + brightness));
-  g = Math.min(255, Math.max(0, g + brightness));
-  b = Math.min(255, Math.max(0, b + brightness));
-
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-}
-
 const ColorPickerPlugin = ({ onChange }: any) => {
   const [color, setColor] = useState("#aabbcc");
   const [rgba, setRgba] = useState("rgba(170,187,204,1)");
-  const [brightness, setBrightness] = useState(0);
   const [mode, setMode] = useState<"background" | "text">("background");
 
   const handleHexChange = (value: string) => {
@@ -50,8 +36,6 @@ const ColorPickerPlugin = ({ onChange }: any) => {
     setRgba(value);
     onChange?.(value, mode);
   };
-
-  const adjustedColor = adjustBrightness(color, brightness);
 
   return (
     <Box
@@ -69,7 +53,7 @@ const ColorPickerPlugin = ({ onChange }: any) => {
         sx={{
           display: "flex",
           width: "100%",
-          justifyContent: "space-around",
+          justifyContent: "left",
           alignItems: "center",
           gap: 1,
           mb: 1,
@@ -89,14 +73,6 @@ const ColorPickerPlugin = ({ onChange }: any) => {
             <FormatColorTextIcon />
           </IconButton>
         </Box>
-        <Box
-          sx={{
-            width: "70px",
-            height: "65%",
-            borderRadius: "3px",
-            backgroundColor: "red",
-          }}
-        ></Box>
       </Box>
 
       {/* 主色盤 */}

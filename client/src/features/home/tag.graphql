@@ -1,0 +1,16 @@
+fragment TagFields on Tag {
+  _id
+  name
+}
+
+fragment JournalTagFields on Tag {
+  _id
+  name
+  selected
+}
+
+query GetTags {
+  getTags {
+    ...TagFields
+  }
+}

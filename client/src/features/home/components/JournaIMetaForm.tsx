@@ -9,8 +9,19 @@ import { Box, Grid, Stack } from "@mui/material";
 import CustomImageUpload from "src/globalComponents/CustomImageUpload";
 import CustomDropdown from "src/globalComponents/CustomDropdown";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
-const JournalMetaForm = () => {
+import { JournalFormData } from "../pages/EditJournalPage";
+
+interface JournalMetaFormProps {
+  formData: JournalFormData;
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const JournalMetaForm = ({ formData, setFormData }: JournalMetaFormProps) => {
   const { t } = useTranslation();
+
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
+  };
 
   return (
     <Grid container spacing={1}>
@@ -27,6 +38,7 @@ const JournalMetaForm = () => {
                 backgroundColor: "#404040",
               },
             }}
+            onChange={(e) => handleChange("movieName", e.target.value)}
           />
           <CustomTextField
             label="導演"
@@ -38,6 +50,9 @@ const JournalMetaForm = () => {
                 backgroundColor: "#404040",
               },
             }}
+            onChange={(e) =>
+              handleChange("director", e.target.value.split(","))
+            }
           />
           <CustomTextField
             label="演員"
@@ -49,17 +64,15 @@ const JournalMetaForm = () => {
                 backgroundColor: "#404040",
               },
             }}
+            onChange={(e) => handleChange("actor", e.target.value.split(","))}
           />
           <CustomDropdown
-            label="標簽"
+            label="標籤"
             icon={<LocalOfferIcon />}
             placeholder={t("home.movieName")}
-            sx={{
-              paddingLeft: "10px",
-              "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
-              },
-            }}
+            fullWidth
+            tagList={formData.tag}
+            onTagChange={(updatedTags) => handleChange("tag", updatedTags)}
           />
         </Stack>
       </Grid>
@@ -73,6 +86,7 @@ const JournalMetaForm = () => {
               backgroundColor: "#404040",
             },
           }}
+          onUpload={(url) => handleChange("image", url)}
         />
       </Grid>
       <Grid item xs={1} />

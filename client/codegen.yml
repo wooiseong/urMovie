@@ -1,14 +1,18 @@
-schema: http://localhost:4000/graphql # 或你的 server URL
-documents: "src/**/*.graphql" # 你寫好的 .graphql operations（如 login、register）
+schema: http://localhost:4000/graphql
+documents: "src/**/*.graphql"
 generates:
-  src/generated/graphql.ts: # 產出的檔案
+  src/generated/graphql.ts:
     plugins:
-      - typescript # 基本 types（Query, Mutation 等）
-      - typescript-operations # 對應 operation 的 types（如 LoginInput）
-      - typescript-react-apollo # React hooks（如 useLoginMutation）
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
     config:
-      withHooks: true # 啟用 hooks（建議打開）
+      withHooks: true
       withHOC: false
       withComponent: false
-      apolloClientVersion: 3
+      useSuspenseQuery: false
+      reactApolloVersion: 3
       importFrom: "@apollo/client"
+
+# ✅ 支援跨檔案 fragment 引用（# import 語法）
+emitLegacyCommonJSImports: false

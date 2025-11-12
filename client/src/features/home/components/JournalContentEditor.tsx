@@ -33,7 +33,13 @@ import Looks3Icon from "@mui/icons-material/Looks3";
 import { FontSize, TextStyle } from "@tiptap/extension-text-style";
 import CustomTextField from "src/globalComponents/CustomTextfield";
 
-const JournalContentEditor = () => {
+interface JournalContentEditorProps {
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
+}
+
+const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
+  setFormData,
+}) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -48,10 +54,20 @@ const JournalContentEditor = () => {
       FontSize.configure({ types: ["textStyle"] }),
     ],
     content: "",
+    onUpdate: ({ editor }) => {
+      // 當內容改變時執行
+      const json = editor.getJSON(); // 或 getJSON() 若你要存在 JSON 格式
+      setFormData((prev: any) => ({
+        ...prev,
+        content: json, // ⚠️ 對應 createJournal.input.content
+      }));
+    },
   });
 
   if (!editor) return null;
-
+  const handleChange = (field: string, value: any) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
+  };
   const addImage = () => {
     const url = window.prompt("貼上圖片網址");
     if (url) editor.chain().focus().setImage({ src: url }).run();
@@ -72,6 +88,7 @@ const JournalContentEditor = () => {
             backgroundColor: "#404040",
           },
         }}
+        onChange={(e) => handleChange("title", e.target.value)}
       />
       <Box
         sx={{

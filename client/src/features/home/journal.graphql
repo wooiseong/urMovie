@@ -1,0 +1,53 @@
+# import TagFields from "./tag.graphql"
+
+fragment QuoteFields on Quote {
+  name
+  content
+  backgroundColor
+  textColor
+}
+
+fragment JournalFields on Journal {
+  _id
+  movieName
+  director
+  actor
+  tag {
+    ...JournalTagFields
+  }
+  image
+  title
+  content
+  quote {
+    ...QuoteFields
+  }
+  date
+}
+
+query GetJournals {
+  journals {
+    ...JournalFields
+  }
+}
+
+query GetJournal($id: ID!) {
+  journal(id: $id) {
+    ...JournalFields
+  }
+}
+
+mutation CreateJournal($input: CreateJournalInput!) {
+  createJournal(input: $input) {
+    ...JournalFields
+  }
+}
+
+mutation UpdateJournal($id: ID!, $input: UpdateJournalInput!) {
+  updateJournal(id: $id, input: $input) {
+    ...JournalFields
+  }
+}
+
+mutation DeleteJournal($id: ID!) {
+  deleteJournal(id: $id)
+}

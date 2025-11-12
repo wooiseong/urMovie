@@ -11,12 +11,27 @@ const journalTypeDefs = gql`
     textColor: String
   }
 
+  type Tag {
+    _id: ID!
+    name: String!
+    selected: Boolean!
+  }
+
+  input TagInput {
+    id: ID
+    name: String!
+    selected: Boolean!
+    isNew: Boolean
+    isEdited: Boolean
+    isDeleted: Boolean
+  }
+
   type Journal {
     _id: ID!
     movieName: String!
     director: [String!]
     actor: [String!]
-    tag: [String!]
+    tag: [Tag!]
     image: String
     title: String!
     content: JSON!
@@ -35,7 +50,7 @@ const journalTypeDefs = gql`
     movieName: String!
     director: [String!]
     actor: [String!]
-    tag: [String!]
+    tag: [TagInput!]
     image: String
     title: String!
     content: JSON!
@@ -46,7 +61,7 @@ const journalTypeDefs = gql`
     movieName: String
     director: [String!]
     actor: [String!]
-    tag: [String!]
+    tag: [TagInput!]
     image: String
     title: String
     content: JSON

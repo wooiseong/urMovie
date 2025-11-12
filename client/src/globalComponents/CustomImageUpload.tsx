@@ -1,63 +1,86 @@
-import { Box, SxProps, TextField, Theme, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  SxProps,
+  TextField,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { deepmerge } from "@mui/utils";
 import { ChangeEvent, useState } from "react";
+import CancelIcon from "@mui/icons-material/Cancel";
 import defaultImage from "../img/default_imageUpload2.png";
+
 interface CustomImageUploadProps {
   label?: string;
   icon?: React.ReactNode;
   sx?: SxProps<Theme>;
   defaultImage?: string; // 預設圖片 URL
-  onChange?: (file: File | null) => void; // 上傳回調
+  onChange?: (file: File | null) => void;
+  onUpload?: (url: string | null) => void;
 }
 
 const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
   label,
   icon,
   sx = {},
-  defaultImage: defaultImg = defaultImage,
+  defaultImage: defaultImg = "",
   onChange,
+  onUpload,
 }) => {
-  const [image, setImage] = useState<string>(defaultImage);
+  const [image, setImage] = useState<string>(defaultImg);
 
+  // 處理上傳
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && ["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
       const reader = new FileReader();
       reader.onload = () => {
         if (reader.result) {
-          setImage(reader.result as string);
+          const imageUrl = reader.result as string;
+          setImage(imageUrl);
           onChange?.(file);
+          onUpload?.(imageUrl);
         }
       };
       reader.readAsDataURL(file);
     } else {
-      // 非圖片格式可忽略或提示
       alert("請上傳 jpg、jpeg 或 png 圖片");
     }
   };
 
+  // ✅ 取消上傳
+  const handleRemoveImage = () => {
+    setImage(""); // 清空預覽
+    onChange?.(null);
+    onUpload?.(null);
+  };
+
+  // 样式合併
   const mergedSx: SxProps<Theme> = deepmerge(
     {
+      position: "relative", // ✅ 為取消按鈕定位
+      width: 260,
+      height: 250,
+      borderRadius: "4px",
+      backgroundColor: "#404040",
+      overflow: "hidden",
+      cursor: "pointer",
       img: {
-        width: 260,
-        height: 250,
+        width: "100%",
+        height: "100%",
         objectFit: "cover",
-        borderRadius: "4px",
-        cursor: "pointer",
-        backgroundColor: "#404040",
-        // opacity: 0.5,
       },
-      // "&:hover img": {
-      //   opacity: 0.8,
-      // },
     },
     sx
   );
 
   return (
-    <Box display="flex">
+    <Box display="flex" alignItems="start">
       {(label || icon) && (
-        <Box sx={{ display: "flex", marginRight: "12px" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", marginRight: "12px" }}
+        >
           {icon}
           {label && <Typography sx={{ mx: "5px" }}>{label}</Typography>}
         </Box>
@@ -72,8 +95,44 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
           onChange={handleFileChange}
         />
         <label htmlFor="custom-image-upload">
-          <img src={image} alt="upload" />
+          {image ? (
+            <img src={image} alt="upload" />
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#aaa",
+              }}
+            >
+              點擊上傳圖片
+            </Box>
+          )}
         </label>
+
+        {/* ✅ 右上角取消按鈕 */}
+        {image && (
+          <IconButton
+            size="small"
+            sx={{
+              position: "absolute",
+              top: 4,
+              right: 4,
+              backgroundColor: "rgba(0,0,0,0.5)",
+              color: "#fff",
+              "&:hover": { backgroundColor: "rgba(0,0,0,0.8)" },
+            }}
+            onClick={(e) => {
+              e.preventDefault(); // 避免觸發 input 點擊
+              handleRemoveImage();
+            }}
+          >
+            <CancelIcon fontSize="small" />
+          </IconButton>
+        )}
       </Box>
     </Box>
   );

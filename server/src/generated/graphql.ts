@@ -31,7 +31,7 @@ export type CreateJournalInput = {
   image?: InputMaybe<Scalars['String']['input']>;
   movieName: Scalars['String']['input'];
   quote?: InputMaybe<Array<QuoteInput>>;
-  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag?: InputMaybe<Array<TagInput>>;
   title: Scalars['String']['input'];
 };
 
@@ -45,7 +45,7 @@ export type Journal = {
   image?: Maybe<Scalars['String']['output']>;
   movieName: Scalars['String']['output'];
   quote?: Maybe<Array<Quote>>;
-  tag?: Maybe<Array<Scalars['String']['output']>>;
+  tag?: Maybe<Array<Tag>>;
   title: Scalars['String']['output'];
 };
 
@@ -92,6 +92,7 @@ export type MutationUpdateJournalArgs = {
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']['output']>;
+  getTags?: Maybe<Array<Tag>>;
   journal?: Maybe<Journal>;
   journals?: Maybe<Array<Journal>>;
 };
@@ -122,6 +123,22 @@ export type RegisterInput = {
   username: Scalars['String']['input'];
 };
 
+export type Tag = {
+  __typename?: 'Tag';
+  _id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  selected: Scalars['Boolean']['output'];
+};
+
+export type TagInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  isEdited?: InputMaybe<Scalars['Boolean']['input']>;
+  isNew?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  selected: Scalars['Boolean']['input'];
+};
+
 export type UpdateJournalInput = {
   actor?: InputMaybe<Array<Scalars['String']['input']>>;
   content?: InputMaybe<Scalars['JSON']['input']>;
@@ -129,7 +146,7 @@ export type UpdateJournalInput = {
   image?: InputMaybe<Scalars['String']['input']>;
   movieName?: InputMaybe<Scalars['String']['input']>;
   quote?: InputMaybe<Array<QuoteInput>>;
-  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+  tag?: InputMaybe<Array<TagInput>>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -227,6 +244,8 @@ export type ResolversTypes = {
   QuoteInput: QuoteInput;
   RegisterInput: RegisterInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Tag: ResolverTypeWrapper<Tag>;
+  TagInput: TagInput;
   UpdateJournalInput: UpdateJournalInput;
   User: ResolverTypeWrapper<User>;
 };
@@ -247,6 +266,8 @@ export type ResolversParentTypes = {
   QuoteInput: QuoteInput;
   RegisterInput: RegisterInput;
   String: Scalars['String']['output'];
+  Tag: Tag;
+  TagInput: TagInput;
   UpdateJournalInput: UpdateJournalInput;
   User: User;
 };
@@ -273,7 +294,7 @@ export type JournalResolvers<ContextType = any, ParentType extends ResolversPare
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   movieName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quote?: Resolver<Maybe<Array<ResolversTypes['Quote']>>, ParentType, ContextType>;
-  tag?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  tag?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
@@ -287,6 +308,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  getTags?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
   journal?: Resolver<Maybe<ResolversTypes['Journal']>, ParentType, ContextType, RequireFields<QueryJournalArgs, 'id'>>;
   journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType>;
 };
@@ -296,6 +318,12 @@ export type QuoteResolvers<ContextType = any, ParentType extends ResolversParent
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   textColor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  selected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -312,6 +340,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Quote?: QuoteResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

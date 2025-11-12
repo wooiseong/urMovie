@@ -11,6 +11,8 @@ interface CustomTextFieldProps {
   minRows?: number;
   sx?: SxProps<Theme>;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -23,6 +25,8 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   minRows,
   sx = {},
   inputProps,
+  value,
+  onChange,
 }) => {
   // 預設樣式
   const defaultSx: SxProps<Theme> = {
@@ -65,6 +69,8 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         minRows={minRows}
         inputProps={inputProps}
         sx={mergedSx}
+        value={value}
+        onChange={onChange}
       />
     </Box>
   );

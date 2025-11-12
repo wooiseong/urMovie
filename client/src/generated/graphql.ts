@@ -15,12 +15,39 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
+  JSON: { input: any; output: any; }
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   token: Scalars['String']['output'];
   user: User;
+};
+
+export type CreateJournalInput = {
+  actor?: InputMaybe<Array<Scalars['String']['input']>>;
+  content: Scalars['JSON']['input'];
+  director?: InputMaybe<Array<Scalars['String']['input']>>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  movieName: Scalars['String']['input'];
+  quote?: InputMaybe<Array<QuoteInput>>;
+  tag?: InputMaybe<Array<TagInput>>;
+  title: Scalars['String']['input'];
+};
+
+export type Journal = {
+  __typename?: 'Journal';
+  _id: Scalars['ID']['output'];
+  actor?: Maybe<Array<Scalars['String']['output']>>;
+  content: Scalars['JSON']['output'];
+  date: Scalars['Date']['output'];
+  director?: Maybe<Array<Scalars['String']['output']>>;
+  image?: Maybe<Scalars['String']['output']>;
+  movieName: Scalars['String']['output'];
+  quote?: Maybe<Array<Quote>>;
+  tag?: Maybe<Array<Tag>>;
+  title: Scalars['String']['output'];
 };
 
 export type LoginInput = {
@@ -30,8 +57,21 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createJournal: Journal;
+  deleteJournal: Scalars['Boolean']['output'];
   loginAccount: AuthPayload;
   registerUser: AuthPayload;
+  updateJournal: Journal;
+};
+
+
+export type MutationCreateJournalArgs = {
+  input: CreateJournalInput;
+};
+
+
+export type MutationDeleteJournalArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -44,15 +84,71 @@ export type MutationRegisterUserArgs = {
   input: RegisterInput;
 };
 
+
+export type MutationUpdateJournalArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateJournalInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']['output']>;
+  getTags?: Maybe<Array<Tag>>;
+  journal?: Maybe<Journal>;
+  journals?: Maybe<Array<Journal>>;
+};
+
+
+export type QueryJournalArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type Quote = {
+  __typename?: 'Quote';
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  content?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  textColor?: Maybe<Scalars['String']['output']>;
+};
+
+export type QuoteInput = {
+  backgroundColor?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  textColor?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RegisterInput = {
   password: Scalars['String']['input'];
   rePassword: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  _id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  selected: Scalars['Boolean']['output'];
+};
+
+export type TagInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+  isEdited?: InputMaybe<Scalars['Boolean']['input']>;
+  isNew?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  selected: Scalars['Boolean']['input'];
+};
+
+export type UpdateJournalInput = {
+  actor?: InputMaybe<Array<Scalars['String']['input']>>;
+  content?: InputMaybe<Scalars['JSON']['input']>;
+  director?: InputMaybe<Array<Scalars['String']['input']>>;
+  image?: InputMaybe<Scalars['String']['input']>;
+  movieName?: InputMaybe<Scalars['String']['input']>;
+  quote?: InputMaybe<Array<QuoteInput>>;
+  tag?: InputMaybe<Array<TagInput>>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -76,7 +172,93 @@ export type LoginAccountMutationVariables = Exact<{
 
 export type LoginAccountMutation = { __typename?: 'Mutation', loginAccount: { __typename?: 'AuthPayload', token: string, user: { __typename?: 'User', id: string, username: string, role: string } } };
 
+export type QuoteFieldsFragment = { __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null };
 
+export type JournalFieldsFragment = { __typename?: 'Journal', _id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, title: string, content: any, date: any, tag?: Array<{ __typename?: 'Tag', _id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null };
+
+export type GetJournalsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetJournalsQuery = { __typename?: 'Query', journals?: Array<{ __typename?: 'Journal', _id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, title: string, content: any, date: any, tag?: Array<{ __typename?: 'Tag', _id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> | null };
+
+export type GetJournalQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetJournalQuery = { __typename?: 'Query', journal?: { __typename?: 'Journal', _id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, title: string, content: any, date: any, tag?: Array<{ __typename?: 'Tag', _id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } | null };
+
+export type CreateJournalMutationVariables = Exact<{
+  input: CreateJournalInput;
+}>;
+
+
+export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', _id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, title: string, content: any, date: any, tag?: Array<{ __typename?: 'Tag', _id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
+
+export type UpdateJournalMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateJournalInput;
+}>;
+
+
+export type UpdateJournalMutation = { __typename?: 'Mutation', updateJournal: { __typename?: 'Journal', _id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, title: string, content: any, date: any, tag?: Array<{ __typename?: 'Tag', _id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
+
+export type DeleteJournalMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteJournalMutation = { __typename?: 'Mutation', deleteJournal: boolean };
+
+export type TagFieldsFragment = { __typename?: 'Tag', _id: string, name: string };
+
+export type JournalTagFieldsFragment = { __typename?: 'Tag', _id: string, name: string, selected: boolean };
+
+export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTagsQuery = { __typename?: 'Query', getTags?: Array<{ __typename?: 'Tag', _id: string, name: string }> | null };
+
+export const JournalTagFieldsFragmentDoc = gql`
+    fragment JournalTagFields on Tag {
+  _id
+  name
+  selected
+}
+    `;
+export const QuoteFieldsFragmentDoc = gql`
+    fragment QuoteFields on Quote {
+  name
+  content
+  backgroundColor
+  textColor
+}
+    `;
+export const JournalFieldsFragmentDoc = gql`
+    fragment JournalFields on Journal {
+  _id
+  movieName
+  director
+  actor
+  tag {
+    ...JournalTagFields
+  }
+  image
+  title
+  content
+  quote {
+    ...QuoteFields
+  }
+  date
+}
+    ${JournalTagFieldsFragmentDoc}
+${QuoteFieldsFragmentDoc}`;
+export const TagFieldsFragmentDoc = gql`
+    fragment TagFields on Tag {
+  _id
+  name
+}
+    `;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($input: RegisterInput!) {
   registerUser(input: $input) {
@@ -153,3 +335,204 @@ export function useLoginAccountMutation(baseOptions?: Apollo.MutationHookOptions
 export type LoginAccountMutationHookResult = ReturnType<typeof useLoginAccountMutation>;
 export type LoginAccountMutationResult = Apollo.MutationResult<LoginAccountMutation>;
 export type LoginAccountMutationOptions = Apollo.BaseMutationOptions<LoginAccountMutation, LoginAccountMutationVariables>;
+export const GetJournalsDocument = gql`
+    query GetJournals {
+  journals {
+    ...JournalFields
+  }
+}
+    ${JournalFieldsFragmentDoc}`;
+
+/**
+ * __useGetJournalsQuery__
+ *
+ * To run a query within a React component, call `useGetJournalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetJournalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetJournalsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetJournalsQuery(baseOptions?: Apollo.QueryHookOptions<GetJournalsQuery, GetJournalsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetJournalsQuery, GetJournalsQueryVariables>(GetJournalsDocument, options);
+      }
+export function useGetJournalsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetJournalsQuery, GetJournalsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetJournalsQuery, GetJournalsQueryVariables>(GetJournalsDocument, options);
+        }
+export type GetJournalsQueryHookResult = ReturnType<typeof useGetJournalsQuery>;
+export type GetJournalsLazyQueryHookResult = ReturnType<typeof useGetJournalsLazyQuery>;
+export type GetJournalsQueryResult = Apollo.QueryResult<GetJournalsQuery, GetJournalsQueryVariables>;
+export const GetJournalDocument = gql`
+    query GetJournal($id: ID!) {
+  journal(id: $id) {
+    ...JournalFields
+  }
+}
+    ${JournalFieldsFragmentDoc}`;
+
+/**
+ * __useGetJournalQuery__
+ *
+ * To run a query within a React component, call `useGetJournalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetJournalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetJournalQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetJournalQuery(baseOptions: Apollo.QueryHookOptions<GetJournalQuery, GetJournalQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetJournalQuery, GetJournalQueryVariables>(GetJournalDocument, options);
+      }
+export function useGetJournalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetJournalQuery, GetJournalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetJournalQuery, GetJournalQueryVariables>(GetJournalDocument, options);
+        }
+export type GetJournalQueryHookResult = ReturnType<typeof useGetJournalQuery>;
+export type GetJournalLazyQueryHookResult = ReturnType<typeof useGetJournalLazyQuery>;
+export type GetJournalQueryResult = Apollo.QueryResult<GetJournalQuery, GetJournalQueryVariables>;
+export const CreateJournalDocument = gql`
+    mutation CreateJournal($input: CreateJournalInput!) {
+  createJournal(input: $input) {
+    ...JournalFields
+  }
+}
+    ${JournalFieldsFragmentDoc}`;
+export type CreateJournalMutationFn = Apollo.MutationFunction<CreateJournalMutation, CreateJournalMutationVariables>;
+
+/**
+ * __useCreateJournalMutation__
+ *
+ * To run a mutation, you first call `useCreateJournalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateJournalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createJournalMutation, { data, loading, error }] = useCreateJournalMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateJournalMutation(baseOptions?: Apollo.MutationHookOptions<CreateJournalMutation, CreateJournalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateJournalMutation, CreateJournalMutationVariables>(CreateJournalDocument, options);
+      }
+export type CreateJournalMutationHookResult = ReturnType<typeof useCreateJournalMutation>;
+export type CreateJournalMutationResult = Apollo.MutationResult<CreateJournalMutation>;
+export type CreateJournalMutationOptions = Apollo.BaseMutationOptions<CreateJournalMutation, CreateJournalMutationVariables>;
+export const UpdateJournalDocument = gql`
+    mutation UpdateJournal($id: ID!, $input: UpdateJournalInput!) {
+  updateJournal(id: $id, input: $input) {
+    ...JournalFields
+  }
+}
+    ${JournalFieldsFragmentDoc}`;
+export type UpdateJournalMutationFn = Apollo.MutationFunction<UpdateJournalMutation, UpdateJournalMutationVariables>;
+
+/**
+ * __useUpdateJournalMutation__
+ *
+ * To run a mutation, you first call `useUpdateJournalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateJournalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateJournalMutation, { data, loading, error }] = useUpdateJournalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateJournalMutation(baseOptions?: Apollo.MutationHookOptions<UpdateJournalMutation, UpdateJournalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateJournalMutation, UpdateJournalMutationVariables>(UpdateJournalDocument, options);
+      }
+export type UpdateJournalMutationHookResult = ReturnType<typeof useUpdateJournalMutation>;
+export type UpdateJournalMutationResult = Apollo.MutationResult<UpdateJournalMutation>;
+export type UpdateJournalMutationOptions = Apollo.BaseMutationOptions<UpdateJournalMutation, UpdateJournalMutationVariables>;
+export const DeleteJournalDocument = gql`
+    mutation DeleteJournal($id: ID!) {
+  deleteJournal(id: $id)
+}
+    `;
+export type DeleteJournalMutationFn = Apollo.MutationFunction<DeleteJournalMutation, DeleteJournalMutationVariables>;
+
+/**
+ * __useDeleteJournalMutation__
+ *
+ * To run a mutation, you first call `useDeleteJournalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteJournalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteJournalMutation, { data, loading, error }] = useDeleteJournalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteJournalMutation(baseOptions?: Apollo.MutationHookOptions<DeleteJournalMutation, DeleteJournalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteJournalMutation, DeleteJournalMutationVariables>(DeleteJournalDocument, options);
+      }
+export type DeleteJournalMutationHookResult = ReturnType<typeof useDeleteJournalMutation>;
+export type DeleteJournalMutationResult = Apollo.MutationResult<DeleteJournalMutation>;
+export type DeleteJournalMutationOptions = Apollo.BaseMutationOptions<DeleteJournalMutation, DeleteJournalMutationVariables>;
+export const GetTagsDocument = gql`
+    query GetTags {
+  getTags {
+    ...TagFields
+  }
+}
+    ${TagFieldsFragmentDoc}`;
+
+/**
+ * __useGetTagsQuery__
+ *
+ * To run a query within a React component, call `useGetTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTagsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTagsQuery(baseOptions?: Apollo.QueryHookOptions<GetTagsQuery, GetTagsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTagsQuery, GetTagsQueryVariables>(GetTagsDocument, options);
+      }
+export function useGetTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTagsQuery, GetTagsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTagsQuery, GetTagsQueryVariables>(GetTagsDocument, options);
+        }
+export type GetTagsQueryHookResult = ReturnType<typeof useGetTagsQuery>;
+export type GetTagsLazyQueryHookResult = ReturnType<typeof useGetTagsLazyQuery>;
+export type GetTagsQueryResult = Apollo.QueryResult<GetTagsQuery, GetTagsQueryVariables>;

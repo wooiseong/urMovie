@@ -5,10 +5,18 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import CustomTextField from "src/globalComponents/CustomTextfield";
 import { useState } from "react";
 import ColorPickerPopover from "./ColorPickerPopover";
+import { Quote } from "../pages/EditJournalPage";
 
-const QuoteItem = () => {
+interface QuoteItemProps {
+  quote: Quote;
+  onUpdate: (updatedQuote: Partial<Quote>) => void;
+  onDelete: () => void;
+}
+
+const QuoteItem: React.FC<QuoteItemProps> = ({ quote, onUpdate, onDelete }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
+  const [backgroundColor, setBackgroundColor] = useState<string>("#1e1e1e");
+  const [textColor, setTextColor] = useState<string>("#FFFFFF");
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -19,7 +27,7 @@ const QuoteItem = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#1e1e1e",
+        backgroundColor: backgroundColor,
         borderRadius: "12px",
         p: 2,
         display: "flex",
@@ -55,7 +63,10 @@ const QuoteItem = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="刪除臺詞">
-          <IconButton sx={{ "& svg": { cursor: "pointer" } }}>
+          <IconButton
+            sx={{ "& svg": { cursor: "pointer" } }}
+            onClick={onDelete}
+          >
             <CancelIcon />
           </IconButton>
         </Tooltip>
@@ -64,17 +75,29 @@ const QuoteItem = () => {
       {/* Middle text input */}
       <CustomTextField
         placeholder="寫些什麽吧..."
-        sx={{ flexGrow: 1, mt: 1 }}
+        sx={{
+          flexGrow: 1,
+          mt: 1,
+          "& .MuiInputBase-input": { color: textColor },
+        }}
         fullWidth
         multiline
         minRows={2}
+        onChange={(e) => onUpdate({ content: e.target.value })}
       />
 
       {/* Bottom movie input */}
       <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
         <CustomTextField
           placeholder="電影名字"
-          sx={{ input: { textAlign: "right", marginRight: "8px" } }}
+          sx={{
+            input: {
+              textAlign: "right",
+              marginRight: "8px",
+            },
+            "& .MuiInputBase-input": { color: textColor },
+          }}
+          onChange={(e) => onUpdate({ name: e.target.value })}
         />
       </Box>
 
@@ -82,6 +105,13 @@ const QuoteItem = () => {
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
+        backgroundColor={backgroundColor}
+        textColor={textColor}
+        onColorChange={(bg, text) => {
+          if (bg) setBackgroundColor(bg);
+          if (text) setTextColor(text);
+          onUpdate({ backgroundColor: bg, textColor: text });
+        }}
       />
     </Box>
   );
