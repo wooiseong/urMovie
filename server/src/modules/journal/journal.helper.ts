@@ -40,44 +40,42 @@ export const handleImageUpload = (image: string, userId: string) => {
 
 export const processTags = async (
   tagInputs: TagInput[]
-): Promise<{ _id: string; name: string; selected: boolean }[]> => {
-  const tagResults: { _id: string; name: string; selected: boolean }[] = [];
+): Promise<{ id: string; name: string; selected: boolean }[]> => {
+  const tagResults: { id: string; name: string; selected: boolean }[] = [];
 
   for (const t of tagInputs || []) {
-    // 新增新 tag
+    // 刪除既有 tag
+    if (t.isDeleted && t.id && !t.isNew) {
+      await TagModel.findByIdAndDelete(t.id);
+      continue;
+    }
+
+    // 新增 tag
     if (t.isNew) {
       const newTag = await TagModel.create({ name: t.name });
+
       if (t.selected) {
         tagResults.push({
-          _id: newTag._id as any,
+          id: (newTag._id as any).toString(),
           name: newTag.name,
           selected: true,
         });
       }
+      continue;
     }
-    // 編輯現有 tag
-    else if (t.isEdited && t.id) {
+
+    // 修改既有 tag 名稱
+    if (t.isEdited && t.id) {
       await TagModel.findByIdAndUpdate(t.id, { name: t.name });
-      if (t.selected) {
-        tagResults.push({
-          _id: t.id,
-          name: t.name,
-          selected: true,
-        });
-      }
     }
-    // 已存在且被選中的 tag
-    else if (t.selected && t.id) {
+
+    // 已存在 tag 且被選中
+    if (t.selected && t.id) {
       tagResults.push({
-        _id: t.id,
+        id: t.id,
         name: t.name,
         selected: true,
       });
-    }
-
-    // 刪除 tag（可選）
-    if (t.isDeleted && t.id) {
-      await TagModel.findByIdAndDelete(t.id);
     }
   }
 

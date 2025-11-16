@@ -32,21 +32,19 @@ export type CreateJournalInput = {
   movieName: Scalars['String']['input'];
   quote?: InputMaybe<Array<QuoteInput>>;
   tag?: InputMaybe<Array<TagInput>>;
-  title: Scalars['String']['input'];
 };
 
 export type Journal = {
   __typename?: 'Journal';
-  _id: Scalars['ID']['output'];
   actor?: Maybe<Array<Scalars['String']['output']>>;
   content: Scalars['JSON']['output'];
   date: Scalars['Date']['output'];
   director?: Maybe<Array<Scalars['String']['output']>>;
+  id: Scalars['ID']['output'];
   image?: Maybe<Scalars['String']['output']>;
   movieName: Scalars['String']['output'];
   quote?: Maybe<Array<Quote>>;
   tag?: Maybe<Array<Tag>>;
-  title: Scalars['String']['output'];
 };
 
 export type LoginInput = {
@@ -125,7 +123,7 @@ export type RegisterInput = {
 
 export type Tag = {
   __typename?: 'Tag';
-  _id: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   selected: Scalars['Boolean']['output'];
 };
@@ -147,7 +145,6 @@ export type UpdateJournalInput = {
   movieName?: InputMaybe<Scalars['String']['input']>;
   quote?: InputMaybe<Array<QuoteInput>>;
   tag?: InputMaybe<Array<TagInput>>;
-  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -286,16 +283,15 @@ export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type JournalResolvers<ContextType = any, ParentType extends ResolversParentTypes['Journal'] = ResolversParentTypes['Journal']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   actor?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   director?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   movieName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quote?: Resolver<Maybe<Array<ResolversTypes['Quote']>>, ParentType, ContextType>;
   tag?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -321,7 +317,7 @@ export type QuoteResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
-  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   selected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };

@@ -9,19 +9,43 @@ import { Box, Grid, Stack } from "@mui/material";
 import CustomImageUpload from "src/globalComponents/CustomImageUpload";
 import CustomDropdown from "src/globalComponents/CustomDropdown";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
-import { JournalFormData } from "../pages/EditJournalPage";
+import { JournalFormData, selectableTags } from "../pages/EditJournalPage";
+import { useEffect } from "react";
 
 interface JournalMetaFormProps {
   formData: JournalFormData;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
+  tagData: selectableTags[];
 }
 
-const JournalMetaForm = ({ formData, setFormData }: JournalMetaFormProps) => {
+const JournalMetaForm = ({
+  formData,
+  setFormData,
+  tagData,
+}: JournalMetaFormProps) => {
   const { t } = useTranslation();
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
+
+  useEffect(() => {
+    if (!tagData) return;
+
+    const transformed = tagData.map((t) => ({
+      id: t.id,
+      name: t.name,
+      selected: false,
+      isNew: false,
+      isEdited: false,
+      isDeleted: false,
+    }));
+
+    setFormData((prev: any) => ({
+      ...prev,
+      tag: transformed,
+    }));
+  }, [tagData]);
 
   return (
     <Grid container spacing={1}>

@@ -12,11 +12,11 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React, { useState } from "react";
-import { TagItem } from "src/features/home/pages/EditJournalPage";
+import { formTag } from "src/features/home/pages/EditJournalPage";
 
 interface TagDropdownMenuProps {
-  tags: TagItem[];
-  onChange: (tags: TagItem[]) => void;
+  tags: formTag[];
+  onChange: (tags: formTag[]) => void;
   onClose: () => void;
 }
 
@@ -27,32 +27,83 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
 }) => {
   const [newTag, setNewTag] = useState("");
 
+  /** --------------------
+   * 新增 Tag
+   * -------------------- */
   const handleAddTag = () => {
     const name = newTag.trim();
     if (!name) return;
-    const exists = tags.some((t) => t.name === name);
+
+    const exists = tags.some((t) => t.name === name && !t.isDeleted);
+
     if (!exists) {
-      onChange([...tags, { name, selected: false }]);
-      setNewTag("");
+      onChange([
+        ...tags,
+        {
+          id: crypto.randomUUID(),
+          name,
+          selected: false,
+          isNew: true,
+        },
+      ]);
     } else {
-      // 如果已存在則把它設為 selected
       onChange(
-        tags.map((t) => (t.name === name ? { ...t, selected: true } : t))
+        tags.map((t) =>
+          t.name === name && !t.isDeleted
+            ? {
+                ...t,
+                selected: true,
+                isEdited: t.isNew ? false : true,
+              }
+            : t
+        )
       );
-      setNewTag("");
     }
+
+    setNewTag("");
   };
 
+  /** --------------------
+   * 設為刪除
+   * -------------------- */
   const handleDelete = (name: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    onChange(tags.filter((t) => t.name !== name));
-  };
 
-  const handleToggle = (name: string) => {
     onChange(
-      tags.map((t) => (t.name === name ? { ...t, selected: !t.selected } : t))
+      tags
+        .map((t) => {
+          if (t.name !== name) return t;
+
+          if (t.isNew) return null;
+
+          return {
+            ...t,
+            isDeleted: true,
+            selected: false,
+          };
+        })
+        .filter((t): t is formTag => t !== null)
     );
   };
+
+  /** --------------------
+   * toggle / edit
+   * -------------------- */
+  const handleToggle = (name: string) => {
+    onChange(
+      tags.map((t) =>
+        t.name === name && !t.isDeleted
+          ? {
+              ...t,
+              selected: !t.selected,
+              isEdited: t.isNew ? false : true,
+            }
+          : t
+      )
+    );
+  };
+
+  const visibleTags = tags.filter((t) => !t.isDeleted);
 
   return (
     <Box sx={{ p: 2, width: 300 }}>
@@ -80,9 +131,9 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
       </Box>
 
       <List dense sx={{ maxHeight: 240, overflow: "auto", p: 0 }}>
-        {tags.map((tag) => (
+        {visibleTags.map((tag) => (
           <ListItem
-            key={tag.name}
+            key={tag.id ?? tag.name}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -101,7 +152,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
             <ListItemText primary={tag.name} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               {tag.selected && <CheckCircleIcon sx={{ color: "#fff" }} />}
-              {/* 刪除按鈕：真正刪除 tag（停止冒泡，避免觸發 toggle） */}
+
               <IconButton
                 edge="end"
                 aria-label="delete"

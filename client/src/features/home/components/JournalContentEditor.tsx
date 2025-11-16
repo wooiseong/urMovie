@@ -76,20 +76,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
   const fontSizes = [12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48];
 
   return (
-    <Box>
-      <CustomTextField
-        placeholder={"文章題目"}
-        sx={{
-          mt: "30px",
-          mb: "10px",
-          width: "30%",
-          input: { fontSize: "1.3rem" },
-          "& .MuiOutlinedInput-root": {
-            backgroundColor: "#404040",
-          },
-        }}
-        onChange={(e) => handleChange("title", e.target.value)}
-      />
+    <Box sx={{ marginTop: "30px" }}>
       <Box
         sx={{
           background: "#404040",

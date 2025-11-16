@@ -47,15 +47,6 @@ const CreateEditSelection = () => {
           </IconButton>
         </Box>
 
-        {/* title */}
-        <CustomTextField
-          placeholder={t("home.journalTitle")}
-          fullWidth
-          sx={{
-            input: { padding: "0px 12px", fontSize: "1.25rem" },
-          }}
-        />
-
         {/* content */}
         <CustomTextField
           placeholder={t("home.journalContent")}

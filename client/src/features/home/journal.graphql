@@ -8,7 +8,7 @@ fragment QuoteFields on Quote {
 }
 
 fragment JournalFields on Journal {
-  _id
+  id
   movieName
   director
   actor
@@ -16,7 +16,6 @@ fragment JournalFields on Journal {
     ...JournalTagFields
   }
   image
-  title
   content
   quote {
     ...QuoteFields

@@ -135,6 +135,9 @@ const journalResolvers = {
       }
     },
   },
+  Journal: {
+    id: (parent: any) => parent._id.toString(),
+  },
   JSON: GraphQLJSON,
   Date: DateTimeResolver,
 };

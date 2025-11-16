@@ -13,8 +13,9 @@ import { deepmerge } from "@mui/utils";
 import React, { useState } from "react";
 import TagDropdownMenu from "./TagDropDownMenu";
 import CloseIcon from "@mui/icons-material/Close";
-import { TagItem } from "src/features/home/pages/EditJournalPage";
+
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { formTag } from "src/features/home/pages/EditJournalPage";
 
 interface CustomDropdownProps {
   label?: string;
@@ -22,8 +23,8 @@ interface CustomDropdownProps {
   placeholder?: string;
   fullWidth?: boolean;
   sx?: SxProps<Theme>;
-  tagList: TagItem[];
-  onTagChange: (tags: TagItem[]) => void;
+  tagList: formTag[];
+  onTagChange: (tags: formTag[]) => void;
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({

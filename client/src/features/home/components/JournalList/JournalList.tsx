@@ -8,19 +8,10 @@ import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import JournalItem from "./JournalItem";
-
-export interface Journal {
-  id: number;
-  title: string;
-  author: string;
-  tag: string;
-  content: string;
-  date: string;
-  image: string;
-}
+import { GetJournalsQuery } from "src/generated/graphql";
 
 interface JournalListProps {
-  journals: Journal[];
+  journals: NonNullable<GetJournalsQuery["journals"]>;
 }
 
 const JournalList = ({ journals }: JournalListProps) => {
@@ -119,7 +110,7 @@ const JournalList = ({ journals }: JournalListProps) => {
           setIsAtEnd(swiper.isEnd);
         }}
       >
-        {journals.map((journal) => (
+        {journals?.map((journal) => (
           <SwiperSlide
             key={journal.id}
             style={{

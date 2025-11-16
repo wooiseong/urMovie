@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 const tagTypeDefs = gql`
   type Tag {
-    _id: ID!
+    id: ID!
     name: String!
   }
 

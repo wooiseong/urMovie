@@ -8,19 +8,42 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DynamicMenu, {
   DynamicMenuItem,
 } from "src/globalComponents/DynamicMenuItem";
+import { useDeleteJournalMutation } from "src/generated/graphql";
+import FullScreenLoader from "src/globalComponents/FullScreenLoader";
+import { useDelayedLoading } from "src/globalHooks/useDelayedLoading";
+import { useGraphQLErrorMessage } from "src/globalHooks/useGraphQLErrorMessage";
+import toast from "react-hot-toast";
 
 interface JournalMenuProps {
-  // defaultAvatar: string;
+  journalId: string;
 }
 
-const JournalMenu: React.FC<JournalMenuProps> = () => {
+const JournalMenu: React.FC<JournalMenuProps> = ({ journalId }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+  // const [toastMessage, setToastMessage] = useState<string | null>(null);
+  // const [toastType, setToastType] = useState<"success" | "error" | null>(null);
   const { t } = useTranslation();
+  const getGraphQLErrorMessage = useGraphQLErrorMessage();
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const [deleteJournal] = useDeleteJournalMutation({
+    onCompleted: () => {
+      toast.success("日誌已成功刪除！");
+    },
+    onError: (err) => {
+      const msg = getGraphQLErrorMessage(err);
+      toast.error("發生物質錯誤，請重試！");
+    },
+  });
+
   const handleClose = () => setAnchorEl(null);
+
+  const handleDelete = () => {
+    deleteJournal({ variables: { id: journalId } });
+  };
 
   const menuItems: DynamicMenuItem[] = [
     {
@@ -31,7 +54,7 @@ const JournalMenu: React.FC<JournalMenuProps> = () => {
     {
       icon: <DeleteOutlineIcon />,
       label: t("home.delete"),
-      // onClick: handleLogout,
+      onClick: handleDelete,
     },
   ];
 

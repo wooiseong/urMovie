@@ -7,7 +7,12 @@ import { useTranslation } from "react-i18next";
 import CustomActionButton from "src/globalComponents/CustomActionButton";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
-import { useCreateJournalMutation } from "src/generated/graphql";
+import {
+  useCreateJournalMutation,
+  useGetTagsQuery,
+} from "src/generated/graphql";
+import toast from "react-hot-toast";
+import { useQueryWithLoader } from "src/globalHooks/useQueryWithLoader";
 
 export interface Quote {
   name?: string | null;
@@ -16,18 +21,24 @@ export interface Quote {
   textColor?: string | null;
 }
 
-export interface TagItem {
+export interface selectableTags {
+  id: string;
   name: string;
+}
+
+export interface formTag extends selectableTags {
   selected: boolean;
+  isNew?: boolean;
+  isEdited?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface JournalFormData {
   movieName: string;
   director: string[];
   actor: string[];
-  tag: TagItem[];
+  tag: formTag[];
   image: string;
-  title: string;
   content: any;
   quote: Quote[];
 }
@@ -40,42 +51,47 @@ const EditJournalPage = () => {
     actor: [],
     tag: [],
     image: "",
-    title: "",
     content: {},
     quote: [],
   });
 
   const [createJournal, { loading }] = useCreateJournalMutation();
 
+  const { data: tagData, loader, error } = useQueryWithLoader(useGetTagsQuery);
+
   const handleSubmit = async () => {
     try {
-      console.log(formData);
-      // const { data } = await createJournal({
-      //   variables: {
-      //     input: {
-      //       movieName: formData.movieName,
-      //       director: formData.director,
-      //       actor: formData.actor,
-      //       tag: formData.tag,
-      //       image: formData.image, // base64 or URL
-      //       title: formData.title,
-      //       content: formData.content, // tiptap json
-      //       quote: formData.quote,
-      //     },
-      //   },
-      // });
-      // toast.success("日誌已成功建立！");
-      // console.log("✅ 新 journal:", data?.createJournal);
+      const submitTag = formData.tag.filter(
+        (t) => t.isNew || t.isEdited || t.isDeleted
+      );
+
+      const { data } = await createJournal({
+        variables: {
+          input: {
+            movieName: formData.movieName,
+            director: formData.director,
+            actor: formData.actor,
+            tag: submitTag,
+            image: formData.image,
+            content: formData.content,
+            quote: formData.quote,
+          },
+        },
+      });
+      toast.success("日誌已成功建立！");
     } catch (error) {
-      console.error(error);
-      // toast.error("建立失敗，請稍後重試");
+      toast.error("建立失敗，請稍後重試");
     }
   };
 
   return (
     <Box sx={{ pb: "70px", position: "relative" }}>
       <CustomSectionTitle label={t("home.createEdit")} />
-      <JournalMetaForm formData={formData} setFormData={setFormData} />
+      <JournalMetaForm
+        formData={formData}
+        setFormData={setFormData}
+        tagData={tagData?.getTags ?? []}
+      />
       <JournalContentEditor setFormData={setFormData} />
       <QuoteBoard quote={formData.quote} setFormData={setFormData} />
       <Box sx={{ position: "absolute", bottom: "2%", right: "0" }}>
