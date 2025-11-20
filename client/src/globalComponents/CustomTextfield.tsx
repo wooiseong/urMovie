@@ -13,6 +13,7 @@ interface CustomTextFieldProps {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  // onClick?: () => void;
 }
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({

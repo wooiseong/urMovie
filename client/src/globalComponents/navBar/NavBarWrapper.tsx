@@ -64,8 +64,7 @@ const NavBarWrapper = () => {
           )}
         </Box>
       </Box>
-      <Box display="flex">
-        <CustomSearchBar />
+      <Box>
         <UserMenu defaultAvatar={defaultAvatar} />
       </Box>
     </Box>

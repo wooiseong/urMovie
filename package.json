@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@date-io/dayjs": "^3.2.0",
+    "@mui/x-date-pickers": "^8.18.0",
+    "@mui/x-date-pickers-pro": "^8.18.0",
+    "dayjs": "^1.11.19"
+  }
+}

@@ -9,8 +9,7 @@ import DynamicMenu, {
   DynamicMenuItem,
 } from "src/globalComponents/DynamicMenuItem";
 import { useDeleteJournalMutation } from "src/generated/graphql";
-import FullScreenLoader from "src/globalComponents/FullScreenLoader";
-import { useDelayedLoading } from "src/globalHooks/useDelayedLoading";
+
 import { useGraphQLErrorMessage } from "src/globalHooks/useGraphQLErrorMessage";
 import toast from "react-hot-toast";
 
