@@ -11,7 +11,7 @@ const QuoteSchema = new Schema(
   { _id: false }
 );
 
-// 新增：Tag subdocument（符合 processTags 回傳格式）
+// Tag subdocument
 const JournalTagSchema = new Schema(
   {
     id: { type: String, required: true },
@@ -24,6 +24,7 @@ const JournalTagSchema = new Schema(
 // Journal interface
 export interface Journal extends Document {
   _id: string;
+  userId: string; // 新增
   movieName: string;
   director: string[];
   actor: string[];
@@ -32,10 +33,14 @@ export interface Journal extends Document {
   content: any; // Tiptap JSON
   quote: (typeof QuoteSchema)[];
   date: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
+// Journal schema
 const JournalSchema: Schema<Journal> = new Schema(
   {
+    userId: { type: String, required: true }, // 存使用者 ID
     movieName: { type: String, required: true, trim: true },
     director: { type: [String], default: [] },
     actor: { type: [String], default: [] },
@@ -45,7 +50,7 @@ const JournalSchema: Schema<Journal> = new Schema(
     quote: { type: [QuoteSchema], default: [] },
     date: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true } // 自動新增 createdAt / updatedAt
 );
 
 export const JournalModel = mongoose.model<Journal>("Journal", JournalSchema);

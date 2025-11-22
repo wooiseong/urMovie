@@ -1,6 +1,6 @@
 import { ErrorCodes } from "@shared-types/errorCodes";
 import { GraphQLJSON } from "graphql-type-json";
-import { DateTimeResolver, DateTimeTypeDefinition } from "graphql-scalars";
+import { DateTimeResolver } from "graphql-scalars";
 import { JournalModel } from "./journalSchema";
 import {
   MutationCreateJournalArgs,
@@ -11,24 +11,36 @@ import {
 import { Context } from "../../utils/authContext";
 import { GraphQLError } from "graphql";
 import { handleImageUpload, processTags } from "./journal.helper";
-import { TagModel } from "../tag/tagSchema";
-
-const config = require("../../config");
 
 const journalResolvers = {
   Query: {
-    async journals() {
+    async journals(_: unknown, __: unknown, context: Context) {
+      if (!context.user)
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       try {
-        return await JournalModel.find().sort({ createdAt: -1 });
+        // 只返回該使用者的 journal
+        return await JournalModel.find({ userId: context.user.id }).sort({
+          createdAt: -1,
+        });
       } catch (error) {
         throw new GraphQLError("Failed to fetch journals", {
           extensions: { code: ErrorCodes.INTERNAL_SERVER_ERROR },
         });
       }
     },
+
     async journal(_: unknown, { id }: QueryJournalArgs, context: Context) {
+      if (!context.user)
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       try {
-        const journal = await JournalModel.findById(id);
+        const journal = await JournalModel.findOne({
+          _id: id,
+          userId: context.user.id,
+        });
         if (!journal) {
           throw new GraphQLError("Journal not found", {
             extensions: { code: ErrorCodes.NOT_FOUND },
@@ -42,23 +54,27 @@ const journalResolvers = {
       }
     },
   },
+
   Mutation: {
     async createJournal(
       _: unknown,
       { input }: MutationCreateJournalArgs,
       context: Context
     ) {
+      if (!context.user)
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       try {
-        const userId = "test-user"; // Replace with context.user.id
+        const userId = context.user.id;
         const imageUrl = handleImageUpload(input.image || "", userId);
 
-        // --- 處理 Tag ---
-        const tagResults = await processTags(input.tag || []);
+        const tagResults = await processTags(input.tag || [], userId);
 
-        // 新建 Journal
         const newJournal = new JournalModel({
           ...input,
-          tag: tagResults, // 存完整 tag array
+          userId, // 存使用者 ID
+          tag: tagResults,
           image: imageUrl,
           date: new Date(),
         });
@@ -78,8 +94,12 @@ const journalResolvers = {
       { id, input }: MutationUpdateJournalArgs,
       context: Context
     ) {
+      if (!context.user)
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       try {
-        const userId = "test-user"; // Replace with context.user.id
+        const userId = context.user.id;
         const updateData: any = { ...input };
 
         if (input.image !== undefined) {
@@ -87,13 +107,13 @@ const journalResolvers = {
           updateData.image = imageUrl;
         }
 
-        // --- 處理 Tag ---
         if (input.tag) {
-          updateData.tag = await processTags(input.tag);
+          updateData.tag = await processTags(input.tag, userId);
         }
 
-        const updatedJournal = await JournalModel.findByIdAndUpdate(
-          id,
+        // 只更新該使用者的 journal
+        const updatedJournal = await JournalModel.findOneAndUpdate(
+          { _id: id, userId },
           { ...updateData, updatedAt: new Date() },
           { new: true }
         );
@@ -112,15 +132,21 @@ const journalResolvers = {
         });
       }
     },
+
     async deleteJournal(
       _: unknown,
       { id }: MutationDeleteJournalArgs,
       context: Context
     ) {
+      if (!context.user)
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
       try {
-        // if (!context.user) throw new GraphQLError("Unauthorized", { extensions: { code: "UNAUTHORIZED" } });
-
-        const deleted = await JournalModel.findByIdAndDelete(id);
+        const deleted = await JournalModel.findOneAndDelete({
+          _id: id,
+          userId: context.user.id,
+        });
         if (!deleted) {
           throw new GraphQLError("Journal not found", {
             extensions: { code: "NOT_FOUND" },
@@ -135,9 +161,11 @@ const journalResolvers = {
       }
     },
   },
+
   Journal: {
     id: (parent: any) => parent._id.toString(),
   },
+
   JSON: GraphQLJSON,
   Date: DateTimeResolver,
 };

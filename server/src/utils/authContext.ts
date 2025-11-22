@@ -24,13 +24,13 @@ const authContext = ({ req }: { req: Request }): Context => {
   const token = req.headers.authorization || "";
   if (token) {
     try {
-      const toeknWIthoutBearer = token.replace("Bearer", "");
+      const tokenWithoutBearer = token.replace("Bearer ", "");
 
-      const decoded = jwt.verify(toeknWIthoutBearer, SECRET_KEY);
+      const decoded = jwt.verify(tokenWithoutBearer, SECRET_KEY as string);
 
       return { user: decoded as User, req };
     } catch (err) {
-      console.error("Token verfication failed", err);
+      console.error("Token verification failed", err);
       throwGraphQLError(ErrorCodes.TOKEN_VERIFICATION_FAILED);
     }
   }

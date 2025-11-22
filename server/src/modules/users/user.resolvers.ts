@@ -57,7 +57,7 @@ const userResolvers = {
       });
 
       const token = jwt.sign(
-        { userId: newUser._id, role: newUser.role },
+        { id: newUser._id, role: newUser.role },
         config.jwtSecret,
         { expiresIn: "7d" }
       );
@@ -100,7 +100,7 @@ const userResolvers = {
       }
 
       const token = jwt.sign(
-        { userId: user._id, role: user.role },
+        { id: user._id, role: user.role },
         config.jwtSecret,
         { expiresIn: "7d" }
       );

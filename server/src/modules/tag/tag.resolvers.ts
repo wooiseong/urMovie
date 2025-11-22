@@ -1,15 +1,29 @@
-import { ApolloError } from "apollo-server-express";
+import { ErrorCodes } from "@shared-types/errorCodes";
+import { GraphQLError } from "graphql";
+import { Context } from "../../utils/authContext";
 import { TagModel } from "./tagSchema";
 
 const tagResolvers = {
   Query: {
-    getTags: async () => {
+    async getTags(_: unknown, __: unknown, context: Context) {
+      if (!context.user) {
+        throw new GraphQLError("Unauthorized", {
+          extensions: { code: "UNAUTHORIZED" },
+        });
+      }
       try {
-        return await TagModel.find().sort({ name: 1 });
+        return await TagModel.find({ userId: context.user.id }).sort({
+          name: 1,
+        });
       } catch (err) {
-        throw new ApolloError("Failed to fetch tags");
+        throw new GraphQLError("Failed to fetch tags", {
+          extensions: { code: ErrorCodes.INTERNAL_SERVER_ERROR },
+        });
       }
     },
+  },
+  Tag: {
+    id: (parent: any) => parent._id?.toString() ?? parent.id,
   },
 };
 

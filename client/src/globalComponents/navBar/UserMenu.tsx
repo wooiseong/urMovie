@@ -1,3 +1,4 @@
+import { useApolloClient } from "@apollo/client";
 import { Box, Chip, IconButton, Menu, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,6 +32,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ defaultAvatar }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const client = useApolloClient();
   const currentTheme = useAppSelector((state) => state.setting.theme);
   const currentLang = useAppSelector((state) => state.setting.lang);
 
@@ -68,6 +70,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ defaultAvatar }) => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    client.clearStore();
     navigate("/login");
   };
 

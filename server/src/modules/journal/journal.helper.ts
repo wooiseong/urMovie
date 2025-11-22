@@ -39,7 +39,8 @@ export const handleImageUpload = (image: string, userId: string) => {
 };
 
 export const processTags = async (
-  tagInputs: TagInput[]
+  tagInputs: TagInput[],
+  userId: string
 ): Promise<{ id: string; name: string; selected: boolean }[]> => {
   const tagResults: { id: string; name: string; selected: boolean }[] = [];
 
@@ -52,7 +53,7 @@ export const processTags = async (
 
     // 新增 tag
     if (t.isNew) {
-      const newTag = await TagModel.create({ name: t.name });
+      const newTag = await TagModel.create({ name: t.name, userId });
 
       if (t.selected) {
         tagResults.push({
