@@ -8,11 +8,17 @@ import { Quote } from "src/generated/graphql";
 import InboxIcon from "@mui/icons-material/Inbox";
 interface QuoteBoardProps {
   quote: Quote[];
-  setFormData: React.Dispatch<React.SetStateAction<JournalFormData>>;
+  setFormData?: React.Dispatch<React.SetStateAction<JournalFormData>>;
+  readOnly?: boolean;
 }
 
-const QuoteBoard: React.FC<QuoteBoardProps> = ({ quote, setFormData }) => {
+const QuoteBoard: React.FC<QuoteBoardProps> = ({
+  quote,
+  setFormData,
+  readOnly,
+}) => {
   const handleAddQuote = () => {
+    if (!setFormData) return;
     setFormData((prev) => ({
       ...prev,
       quote: [
@@ -28,6 +34,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({ quote, setFormData }) => {
   };
 
   const handleDeleteQuote = (index: number) => {
+    if (!setFormData) return;
     setFormData((prev) => ({
       ...prev,
       quote: prev.quote.filter((_, i) => i !== index),
@@ -35,6 +42,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({ quote, setFormData }) => {
   };
 
   const handleUpdateQuote = (index: number, updatedQuote: Partial<Quote>) => {
+    if (!setFormData) return;
     setFormData((prev) => ({
       ...prev,
       quote: prev.quote.map((q, i) =>
@@ -70,11 +78,13 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({ quote, setFormData }) => {
               篇内容
             </Typography>
           </Box>
-          <Tooltip title="新增臺詞">
-            <IconButton onClick={handleAddQuote}>
-              <AddCircleIcon />
-            </IconButton>
-          </Tooltip>
+          {!readOnly && (
+            <Tooltip title="新增臺詞">
+              <IconButton onClick={handleAddQuote}>
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
         <CustomSearchBar />
       </Box>
@@ -121,6 +131,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({ quote, setFormData }) => {
                   handleUpdateQuote(index, updatedQuote)
                 }
                 onDelete={() => handleDeleteQuote(index)}
+                readOnly={readOnly}
               />
             </Box>
           ))}

@@ -8,6 +8,7 @@ import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import JournalItem from "./JournalItem";
+import JournalModal from "./JournalModal";
 import { GetJournalsQuery } from "src/generated/graphql";
 
 interface JournalListProps {
@@ -22,9 +23,25 @@ const JournalList = ({ journals }: JournalListProps) => {
   const [isAtBeginning, setIsAtBeginning] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
 
+  // Modal states
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedJournal, setSelectedJournal] = useState<any>(null);
+
+  // Open modal handler
+  const handleOpenModal = (journal: any) => {
+    setSelectedJournal(journal);
+    setOpenModal(true);
+  };
+
+  // Close modal handler
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedJournal(null);
+  };
+
   return (
     <Box position="relative" width="100%" sx={{ py: 2 }}>
-      {/* prev button */}
+      {/* Prev button */}
       <IconButton
         ref={prevRef}
         className="journal-prev-btn"
@@ -45,7 +62,7 @@ const JournalList = ({ journals }: JournalListProps) => {
         <ChevronLeftIcon />
       </IconButton>
 
-      {/* next button */}
+      {/* Next button */}
       <IconButton
         ref={nextRef}
         className="journal-next-btn"
@@ -79,23 +96,15 @@ const JournalList = ({ journals }: JournalListProps) => {
         style={{
           padding: "0 20px",
         }}
-        // 在 Swiper 初始化前，把 ref 裝回 swiper.params.navigation，然後 init & update
         onBeforeInit={(swiper: any) => {
           if (!swiper.params) return;
           if (!swiper.params.navigation) swiper.params.navigation = {};
           swiper.params.navigation.prevEl = prevRef.current;
           swiper.params.navigation.nextEl = nextRef.current;
-          // 必須呼叫 init/update 才會綁定上去
           try {
-            // navigation 可能存在於 swiper
-            swiper.navigation &&
-              swiper.navigation.init &&
-              swiper.navigation.init();
-            swiper.navigation &&
-              swiper.navigation.update &&
-              swiper.navigation.update();
+            swiper.navigation?.init?.();
+            swiper.navigation?.update?.();
           } catch (err) {
-            // 忽略初始化錯誤（防禦式）
             console.warn("swiper navigation init error", err);
           }
         }}
@@ -119,10 +128,21 @@ const JournalList = ({ journals }: JournalListProps) => {
               justifyContent: "center",
             }}
           >
-            <JournalItem journal={journal} />
+            <JournalItem
+              journal={journal}
+              onClick={() => handleOpenModal(journal)}
+            />
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Journal Modal */}
+      <JournalModal
+        open={openModal}
+        onClose={handleCloseModal}
+        journal={selectedJournal}
+        onEdit={() => console.log("Edit", selectedJournal?.id)}
+      />
     </Box>
   );
 };

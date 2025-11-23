@@ -11,15 +11,17 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import JournalMenu from "./JournalMenu";
+
 import { GetJournalQuery, GetJournalsQuery } from "src/generated/graphql";
 import { useTiptapHtml } from "src/globalHooks/useTipTapHtml";
+import JournalMenu from "./JournalMenu";
 
 interface JournalItemProps {
   journal: NonNullable<GetJournalsQuery["journals"]>[number];
+  onClick?: () => void;
 }
 
-const JournalItem = ({ journal }: JournalItemProps) => {
+const JournalItem = ({ journal, onClick }: JournalItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [showExpandBtn, setShowExpandBtn] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -40,6 +42,7 @@ const JournalItem = ({ journal }: JournalItemProps) => {
 
   return (
     <Card
+      onClick={onClick}
       sx={{
         width: 280,
         minHeight: 400,
@@ -51,6 +54,7 @@ const JournalItem = ({ journal }: JournalItemProps) => {
         display: "flex",
         flexDirection: "column",
         mb: 2,
+        cursor: "pointer",
       }}
     >
       {/* setting icon */}
@@ -94,7 +98,10 @@ const JournalItem = ({ journal }: JournalItemProps) => {
         {showExpandBtn && (
           <IconButton
             size="small"
-            onClick={toggleExpand}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleExpand();
+            }}
             sx={{
               position: "absolute",
               bottom: 0,

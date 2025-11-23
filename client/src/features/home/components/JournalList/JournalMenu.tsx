@@ -68,7 +68,10 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journalId }) => {
             right: 8,
             "&:hover": { backgroundColor: "rgba(0,0,0,0.1)" },
           }}
-          onClick={handleOpen}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpen(e);
+          }}
         >
           <MoreHorizIcon />
         </IconButton>
@@ -77,6 +80,7 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journalId }) => {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          onClick={(e) => e.stopPropagation()}
           slotProps={{
             paper: {
               sx: {

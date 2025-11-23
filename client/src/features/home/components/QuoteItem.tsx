@@ -1,4 +1,4 @@
-import { Box, IconButton, TextField, Tooltip } from "@mui/material";
+import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
@@ -9,14 +9,22 @@ import { Quote } from "../pages/EditJournalPage";
 
 interface QuoteItemProps {
   quote: Quote;
-  onUpdate: (updatedQuote: Partial<Quote>) => void;
-  onDelete: () => void;
+  onUpdate?: (updatedQuote: Partial<Quote>) => void;
+  onDelete?: () => void;
+  readOnly?: boolean;
 }
 
-const QuoteItem: React.FC<QuoteItemProps> = ({ quote, onUpdate, onDelete }) => {
+const QuoteItem: React.FC<QuoteItemProps> = ({
+  quote,
+  onUpdate,
+  onDelete,
+  readOnly,
+}) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [backgroundColor, setBackgroundColor] = useState<string>("#1e1e1e");
-  const [textColor, setTextColor] = useState<string>("#FFFFFF");
+  const backgroundColor = readOnly
+    ? quote.backgroundColor
+    : quote.backgroundColor ?? "#1e1e1e";
+  const textColor = readOnly ? quote.textColor : quote.textColor ?? "#FFFFFF";
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -39,80 +47,111 @@ const QuoteItem: React.FC<QuoteItemProps> = ({ quote, onUpdate, onDelete }) => {
       }}
     >
       {/* Top icons */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "end",
-          position: "absolute",
-          top: "2%",
-          right: "2%",
-          zIndex: 2,
-        }}
-      >
-        <Tooltip title="更改顏色">
-          <IconButton
-            onClick={handleOpen}
-            sx={{ "& svg": { cursor: "pointer" } }}
-          >
-            <ColorLensIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="更改內容">
-          <IconButton sx={{ "& svg": { cursor: "pointer" } }}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="刪除臺詞">
-          <IconButton
-            sx={{ "& svg": { cursor: "pointer" } }}
-            onClick={onDelete}
-          >
-            <CancelIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
+      {!readOnly && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            position: "absolute",
+            top: "2%",
+            right: "2%",
+            zIndex: 2,
+          }}
+        >
+          <Tooltip title="更改顏色">
+            <IconButton
+              onClick={handleOpen}
+              sx={{ "& svg": { cursor: "pointer" } }}
+            >
+              <ColorLensIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="更改內容">
+            <IconButton sx={{ "& svg": { cursor: "pointer" } }}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="刪除臺詞">
+            <IconButton
+              sx={{ "& svg": { cursor: "pointer" } }}
+              onClick={onDelete}
+            >
+              <CancelIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
 
       {/* Middle text input */}
-      <CustomTextField
-        placeholder="寫些什麽吧..."
-        sx={{
-          flexGrow: 1,
-          mt: 1,
-          "& .MuiInputBase-input": { color: textColor },
-        }}
-        fullWidth
-        multiline
-        minRows={2}
-        onChange={(e) => onUpdate({ content: e.target.value })}
-      />
-
-      {/* Bottom movie input */}
-      <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
-        <CustomTextField
-          placeholder="電影名字"
+      {readOnly ? (
+        <Typography
           sx={{
-            input: {
-              textAlign: "right",
-              marginRight: "8px",
-            },
+            whiteSpace: "pre-line",
+            color: textColor,
+            fontSize: "16px",
+            mt: 1,
+            ml: 1,
+          }}
+        >
+          {quote.content}
+        </Typography>
+      ) : (
+        <CustomTextField
+          placeholder="寫些什麽吧..."
+          sx={{
+            flexGrow: 1,
+            mt: 1,
             "& .MuiInputBase-input": { color: textColor },
           }}
-          onChange={(e) => onUpdate({ name: e.target.value })}
+          fullWidth
+          multiline
+          minRows={2}
+          onChange={(e) => onUpdate?.({ content: e.target.value })}
         />
-      </Box>
+      )}
 
-      <ColorPickerPopover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        backgroundColor={backgroundColor}
-        textColor={textColor}
-        onColorChange={(bg, text) => {
-          if (bg) setBackgroundColor(bg);
-          if (text) setTextColor(text);
-          onUpdate({ backgroundColor: bg, textColor: text });
-        }}
-      />
+      {/* Bottom movie input */}
+      {readOnly ? (
+        <Typography
+          sx={{
+            position: "absolute",
+            bottom: 8,
+            right: 12,
+            fontSize: "14px",
+            opacity: 0.9,
+            color: textColor,
+          }}
+        >
+          {quote.name}
+        </Typography>
+      ) : (
+        <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
+          <CustomTextField
+            placeholder="電影名字"
+            sx={{
+              input: {
+                textAlign: "right",
+                marginRight: "8px",
+              },
+              "& .MuiInputBase-input": { color: textColor },
+            }}
+            onChange={(e) => onUpdate?.({ name: e.target.value })}
+          />
+        </Box>
+      )}
+
+      {!readOnly && (
+        <ColorPickerPopover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          backgroundColor={backgroundColor ?? "#1e1e1e"}
+          textColor={textColor ?? "#ffffff"}
+          onColorChange={(bg, text) => {
+            onUpdate?.({ backgroundColor: bg, textColor: text });
+          }}
+        />
+      )}
     </Box>
   );
 };

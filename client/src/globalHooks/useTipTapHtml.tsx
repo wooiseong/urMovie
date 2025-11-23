@@ -2,7 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 import Color from "@tiptap/extension-color";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { TextStyle } from "@tiptap/extension-text-style";
 
 export const useTiptapHtml = (content: any, editable = false) => {
@@ -12,11 +12,12 @@ export const useTiptapHtml = (content: any, editable = false) => {
     extensions: [StarterKit, TextStyle, Color],
   });
 
-  const html = useMemo(() => {
-    if (!editor) return null;
-    // 返回 EditorContent 讓 React 可以渲染
-    return <EditorContent editor={editor} />;
-  }, [editor]);
+  // 🔥 當 content 改變時更新 editor 內容
+  useEffect(() => {
+    if (editor && content) {
+      editor.commands.setContent(content);
+    }
+  }, [editor, content]);
 
-  return html;
+  return editor ? <EditorContent editor={editor} /> : null;
 };
