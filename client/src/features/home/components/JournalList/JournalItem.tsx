@@ -58,7 +58,7 @@ const JournalItem = ({ journal, onClick }: JournalItemProps) => {
       }}
     >
       {/* setting icon */}
-      <JournalMenu journalId={journal.id} />
+      <JournalMenu journal={journal} />
 
       {/* 圖片 */}
       <CardMedia

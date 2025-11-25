@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import settingReducer from "./modules/settingSlice";
 import userReducer from "./modules/userSlice";
+import journalReducer from "./modules/journalSlice";
 import {
   persistStore,
   persistReducer,
@@ -17,7 +18,7 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["setting"],
+  whitelist: ["setting", "journal"],
 };
 
 const persistedReducer = persistReducer(persistConfig, settingReducer);
@@ -26,6 +27,7 @@ export const store = configureStore({
   reducer: {
     setting: persistedReducer,
     user: userReducer,
+    journal: journalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

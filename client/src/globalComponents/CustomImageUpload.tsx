@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { deepmerge } from "@mui/utils";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import defaultImage from "../img/default_imageUpload2.png";
 
@@ -15,7 +15,7 @@ interface CustomImageUploadProps {
   label?: string;
   icon?: React.ReactNode;
   sx?: SxProps<Theme>;
-  defaultImage?: string; // 預設圖片 URL
+  value?: string; // 預設圖片 URL
   onChange?: (file: File | null) => void;
   onUpload?: (url: string | null) => void;
 }
@@ -24,11 +24,15 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
   label,
   icon,
   sx = {},
-  defaultImage: defaultImg = "",
+  value = "",
   onChange,
   onUpload,
 }) => {
-  const [image, setImage] = useState<string>(defaultImg);
+  const [image, setImage] = useState<string>(value);
+
+  useEffect(() => {
+    setImage(value);
+  }, [value]);
 
   // 處理上傳
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

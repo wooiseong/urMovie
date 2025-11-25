@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -35,10 +35,12 @@ import CustomTextField from "src/globalComponents/CustomTextfield";
 
 interface JournalContentEditorProps {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
+  initialContent?: any;
 }
 
 const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
   setFormData,
+  initialContent,
 }) => {
   const editor = useEditor({
     extensions: [
@@ -53,7 +55,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
       }),
       FontSize.configure({ types: ["textStyle"] }),
     ],
-    content: "",
+    content: initialContent,
     onUpdate: ({ editor }) => {
       // 當內容改變時執行
       const json = editor.getJSON(); // 或 getJSON() 若你要存在 JSON 格式
@@ -63,6 +65,12 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
       }));
     },
   });
+
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [editor, initialContent]);
 
   if (!editor) return null;
   const handleChange = (field: string, value: any) => {

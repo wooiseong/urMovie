@@ -1,29 +1,35 @@
-import { Box, IconButton, Menu, Typography } from "@mui/material";
+import { Box, IconButton, Menu } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
+import { useNavigate } from "react-router-dom";
 import DynamicMenu, {
   DynamicMenuItem,
 } from "src/globalComponents/DynamicMenuItem";
-import { useDeleteJournalMutation } from "src/generated/graphql";
+import {
+  useDeleteJournalMutation,
+  GetJournalsQuery,
+} from "src/generated/graphql";
+import { useAppDispatch } from "src/store/hook";
+import { setSelectedJournal } from "src/store/modules/journalSlice";
 
 import { useGraphQLErrorMessage } from "src/globalHooks/useGraphQLErrorMessage";
 import toast from "react-hot-toast";
 
 interface JournalMenuProps {
-  journalId: string;
+  journal: NonNullable<GetJournalsQuery["journals"]>[number];
 }
 
-const JournalMenu: React.FC<JournalMenuProps> = ({ journalId }) => {
+const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  // const [toastMessage, setToastMessage] = useState<string | null>(null);
-  // const [toastType, setToastType] = useState<"success" | "error" | null>(null);
   const { t } = useTranslation();
   const getGraphQLErrorMessage = useGraphQLErrorMessage();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -34,21 +40,28 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journalId }) => {
     },
     onError: (err) => {
       const msg = getGraphQLErrorMessage(err);
-      toast.error("發生物質錯誤，請重試！");
+      toast.error(msg);
     },
   });
 
   const handleClose = () => setAnchorEl(null);
 
+  const handleEdit = () => {
+    dispatch(setSelectedJournal(journal));
+    navigate("/editJournal");
+    handleClose();
+  };
+
   const handleDelete = () => {
-    deleteJournal({ variables: { id: journalId } });
+    deleteJournal({ variables: { id: journal.id } });
+    handleClose();
   };
 
   const menuItems: DynamicMenuItem[] = [
     {
       icon: <EditIcon />,
       label: t("home.edit"),
-      to: "editJournal",
+      onClick: handleEdit,
     },
     {
       icon: <DeleteOutlineIcon />,

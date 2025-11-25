@@ -106,6 +106,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
           fullWidth
           multiline
           minRows={2}
+          value={quote.content ?? ""}
           onChange={(e) => onUpdate?.({ content: e.target.value })}
         />
       )}
@@ -135,6 +136,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
               },
               "& .MuiInputBase-input": { color: textColor },
             }}
+            value={quote.name ?? ""}
             onChange={(e) => onUpdate?.({ name: e.target.value })}
           />
         </Box>

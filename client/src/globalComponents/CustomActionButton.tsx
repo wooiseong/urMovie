@@ -1,10 +1,11 @@
 import { Theme } from "@emotion/react";
-import { Button, SxProps, Typography } from "@mui/material";
+import { Button, SxProps, Typography, CircularProgress } from "@mui/material";
 interface CustomActionButtonProps {
   icon: React.ReactNode;
   label: string;
   sx?: SxProps<Theme>;
   onClick?: () => void;
+  loading?: boolean;
 }
 
 const CustomActionButton: React.FC<CustomActionButtonProps> = ({
@@ -12,10 +13,12 @@ const CustomActionButton: React.FC<CustomActionButtonProps> = ({
   label,
   sx,
   onClick,
+  loading,
 }) => {
   return (
     <Button
       onClick={onClick}
+      disabled={loading}
       sx={{
         px: 2,
         py: 1,
@@ -29,7 +32,7 @@ const CustomActionButton: React.FC<CustomActionButtonProps> = ({
         ...sx,
       }}
     >
-      {icon}
+      {loading ? <CircularProgress size={24} sx={{ color: 'white', marginRight: '8px' }} /> : icon}
       <Typography sx={{ marginLeft: "5px" }}> {label}</Typography>
     </Button>
   );

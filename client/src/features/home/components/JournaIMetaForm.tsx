@@ -29,24 +29,6 @@ const JournalMetaForm = ({
     setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  useEffect(() => {
-    if (!tagData) return;
-
-    const transformed = tagData.map((t) => ({
-      id: t.id,
-      name: t.name,
-      selected: false,
-      isNew: false,
-      isEdited: false,
-      isDeleted: false,
-    }));
-
-    setFormData((prev: any) => ({
-      ...prev,
-      tag: transformed,
-    }));
-  }, [tagData]);
-
   return (
     <Grid container spacing={1}>
       {/* <Grid item xs={1} /> */}
@@ -62,6 +44,7 @@ const JournalMetaForm = ({
                 backgroundColor: "#404040",
               },
             }}
+            value={formData.movieName}
             onChange={(e) => handleChange("movieName", e.target.value)}
           />
           <CustomTextField
@@ -74,6 +57,7 @@ const JournalMetaForm = ({
                 backgroundColor: "#404040",
               },
             }}
+            value={formData.director.join(",")}
             onChange={(e) =>
               handleChange("director", e.target.value.split(","))
             }
@@ -88,6 +72,7 @@ const JournalMetaForm = ({
                 backgroundColor: "#404040",
               },
             }}
+            value={formData.actor.join(",")}
             onChange={(e) => handleChange("actor", e.target.value.split(","))}
           />
           <CustomDropdown
@@ -110,6 +95,7 @@ const JournalMetaForm = ({
               backgroundColor: "#404040",
             },
           }}
+          value={formData.image}
           onUpload={(url) => handleChange("image", url)}
         />
       </Grid>
