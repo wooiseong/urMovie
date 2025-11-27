@@ -59,6 +59,7 @@ export type Mutation = {
   loginAccount: AuthPayload;
   registerUser: AuthPayload;
   updateJournal: Journal;
+  updateUser: User;
 };
 
 
@@ -87,12 +88,18 @@ export type MutationUpdateJournalArgs = {
   input: UpdateJournalInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']['output']>;
   getTags?: Maybe<Array<Tag>>;
   journal?: Maybe<Journal>;
   journals?: Maybe<Array<Journal>>;
+  me: User;
 };
 
 
@@ -147,8 +154,15 @@ export type UpdateJournalInput = {
   tag?: InputMaybe<Array<TagInput>>;
 };
 
+export type UpdateUserInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  rePassword?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type User = {
   __typename?: 'User';
+  avatar?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   role: Scalars['String']['output'];
   username: Scalars['String']['output'];
@@ -244,6 +258,7 @@ export type ResolversTypes = {
   Tag: ResolverTypeWrapper<Tag>;
   TagInput: TagInput;
   UpdateJournalInput: UpdateJournalInput;
+  UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -266,6 +281,7 @@ export type ResolversParentTypes = {
   Tag: Tag;
   TagInput: TagInput;
   UpdateJournalInput: UpdateJournalInput;
+  UpdateUserInput: UpdateUserInput;
   User: User;
 };
 
@@ -300,6 +316,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   loginAccount?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationLoginAccountArgs, 'input'>>;
   registerUser?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   updateJournal?: Resolver<ResolversTypes['Journal'], ParentType, ContextType, RequireFields<MutationUpdateJournalArgs, 'id' | 'input'>>;
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -307,6 +324,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getTags?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
   journal?: Resolver<Maybe<ResolversTypes['Journal']>, ParentType, ContextType, RequireFields<QueryJournalArgs, 'id'>>;
   journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType>;
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
 export type QuoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Quote'] = ResolversParentTypes['Quote']> = {
@@ -323,6 +341,7 @@ export type TagResolvers<ContextType = any, ParentType extends ResolversParentTy
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

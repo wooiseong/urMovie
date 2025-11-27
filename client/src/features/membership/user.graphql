@@ -1,0 +1,17 @@
+query Me {
+  me {
+    id
+    username
+    role
+    avatar
+  }
+}
+
+mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+    username
+    role
+    avatar
+  }
+}

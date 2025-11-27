@@ -7,11 +7,33 @@ import {
   AuthPayload,
   MutationLoginAccountArgs,
   MutationRegisterUserArgs,
+  MutationUpdateUserArgs,
+  User,
 } from "../../generated/graphql";
 import { throwGraphQLError } from "../../utils/graphqlError";
 import { Context } from "../../utils/authContext";
+import { handleImageUpload } from "../../utils/imageUploadUtils";
 const config = require("../../config");
 const userResolvers = {
+  Query: {
+    async me(_: unknown, __: unknown, context: Context): Promise<User> {
+      if (!context.user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_AUTHENTICATED);
+      }
+
+      const user = await UserModel.findById(context.user.id);
+      if (!user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_FOUND);
+      }
+
+      return {
+        id: user._id,
+        username: user.username,
+        role: user.role,
+        avatar: user.avatar || null,
+      };
+    },
+  },
   Mutation: {
     async registerUser(
       _: unknown,
@@ -68,6 +90,7 @@ const userResolvers = {
           id: newUser._id,
           username: newUser.username,
           role: newUser.role,
+          avatar: newUser.avatar || null,
         },
       };
     },
@@ -111,7 +134,56 @@ const userResolvers = {
           id: user._id,
           username: user.username,
           role: user.role,
+          avatar: user.avatar || null,
         },
+      };
+    },
+    async updateUser(
+      _: unknown,
+      { input }: MutationUpdateUserArgs,
+      context: Context
+    ): Promise<User> {
+      if (!context.user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_AUTHENTICATED);
+      }
+
+      const { password, rePassword, avatar } = input;
+      const user = await UserModel.findById(context.user.id);
+
+      if (!user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_FOUND);
+      }
+
+      if (password) {
+        if (password !== rePassword) {
+          throwGraphQLError(ErrorCodes.PASSWORD_MISMATCH, {
+            field: "rePassword",
+          });
+        }
+        if (
+          !validator.isLength(password, { min: 8 }) ||
+          !/[a-zA-Z]/.test(password) ||
+          !/\d/.test(password)
+        ) {
+          throwGraphQLError(ErrorCodes.PASSWORD_INVALID, {
+            field: "password",
+          });
+        }
+        user.password = await bcrypt.hash(password, 10);
+      }
+
+      if (avatar) {
+        const imageUrl = handleImageUpload(avatar, user._id.toString());
+        user.avatar = imageUrl;
+      }
+
+      await user.save();
+
+      return {
+        id: user._id,
+        username: user.username,
+        role: user.role,
+        avatar: user.avatar || null,
       };
     },
   },

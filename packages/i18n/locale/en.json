@@ -33,6 +33,15 @@
     "user": "user",
     "premiumUser": "premium user"
   },
+  "user": {
+    "username": "Username",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "avatar": "Avatar"
+  },
+  "membership": {
+    "title": "Membership Settings"
+  },
   "navBar": {
     "home": "Home",
     "movieJournal": "Movie Journal",

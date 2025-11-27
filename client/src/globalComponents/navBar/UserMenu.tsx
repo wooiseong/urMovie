@@ -114,7 +114,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ defaultAvatar }) => {
     {
       icon: <AccountBoxIcon />,
       label: t("navBar.profile"),
-      to: "/adminStatistics",
+      to: "/membership",
     },
     {
       icon: <OfflineBoltIcon />,

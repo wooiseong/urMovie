@@ -10,7 +10,8 @@ import {
 } from "../../generated/graphql";
 import { Context } from "../../utils/authContext";
 import { GraphQLError } from "graphql";
-import { handleImageUpload, processTags } from "./journal.helper";
+import { processTags } from "./journal.helper";
+import { handleImageUpload } from "../../utils/imageUploadUtils";
 
 const journalResolvers = {
   Query: {

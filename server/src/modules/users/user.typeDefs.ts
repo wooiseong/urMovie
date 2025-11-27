@@ -5,6 +5,7 @@ const userTypeDefs = gql`
     id: ID!
     username: String!
     role: String!
+    avatar: String
   }
 
   type AuthPayload {
@@ -23,13 +24,21 @@ const userTypeDefs = gql`
     password: String!
   }
 
+  input UpdateUserInput {
+    password: String
+    rePassword: String
+    avatar: String
+  }
+
   type Query {
     _empty: String
+    me: User!
   }
 
   type Mutation {
     registerUser(input: RegisterInput!): AuthPayload!
     loginAccount(input: LoginInput!): AuthPayload!
+    updateUser(input: UpdateUserInput!): User!
   }
 `;
 

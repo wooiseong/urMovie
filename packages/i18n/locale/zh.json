@@ -34,6 +34,15 @@
     "user": "1星會員",
     "premiumUser": "2星會員"
   },
+  "user": {
+    "username": "用戶名",
+    "oldPassword": "舊密碼",
+    "newPassword": "新密碼",
+    "avatar": "頭像"
+  },
+  "membership": {
+    "title": "會員設定"
+  },
   "navBar": {
     "home": "首頁",
     "movieJournal": "電影收藏",
