@@ -5,6 +5,7 @@ import validator from "validator";
 import { UserModel } from "./userSchema";
 import {
   AuthPayload,
+  MemberMutationResponse,
   MutationLoginAccountArgs,
   MutationRegisterUserArgs,
   MutationUpdateUserArgs,
@@ -184,6 +185,58 @@ const userResolvers = {
         username: user.username,
         role: user.role,
         avatar: user.avatar || null,
+      };
+    },
+    async upgradeToPremium(
+      _: unknown,
+      __: unknown,
+      context: Context
+    ): Promise<MemberMutationResponse> {
+      if (!context.user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_AUTHENTICATED);
+      }
+
+      const user = await UserModel.findById(context.user.id);
+
+      if (!user) {
+        throwGraphQLError(ErrorCodes.USER_NOT_FOUND);
+      }
+
+      if (user.role === "admin") {
+        return {
+          message: "You are an admin and cannot be upgraded.",
+          user: {
+            id: user._id,
+            username: user.username,
+            role: user.role,
+            avatar: user.avatar || null,
+          },
+        };
+      }
+
+      if (user.role === "premiumUser") {
+        return {
+          message: "You are already a premium user.",
+          user: {
+            id: user._id,
+            username: user.username,
+            role: user.role,
+            avatar: user.avatar || null,
+          },
+        };
+      }
+
+      user.role = "premiumUser";
+      await user.save();
+
+      return {
+        message: "User successfully upgraded to premium.",
+        user: {
+          id: user._id,
+          username: user.username,
+          role: user.role,
+          avatar: user.avatar || null,
+        },
       };
     },
   },

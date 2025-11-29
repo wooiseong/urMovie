@@ -13,6 +13,11 @@ const userTypeDefs = gql`
     user: User!
   }
 
+  type MemberMutationResponse {
+    message: String!
+    user: User
+  }
+
   input RegisterInput {
     username: String!
     password: String!
@@ -39,6 +44,7 @@ const userTypeDefs = gql`
     registerUser(input: RegisterInput!): AuthPayload!
     loginAccount(input: LoginInput!): AuthPayload!
     updateUser(input: UpdateUserInput!): User!
+    upgradeToPremium: MemberMutationResponse!
   }
 `;
 

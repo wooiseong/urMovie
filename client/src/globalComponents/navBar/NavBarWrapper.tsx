@@ -1,24 +1,38 @@
-import {
-  Box,
-  Button,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-import defaultAvatar from "../../img/default_avatar.jpg";
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import { useAppSelector } from "src/store/hook";
+import { useAppDispatch, useAppSelector } from "src/store/hook";
+import { setUser } from "src/store/modules/userSlice";
 import CustomNavButton from "../CustomNavButton";
 import { useTranslation } from "react-i18next";
 import UserMenu from "./UserMenu";
-import CustomSearchBar from "../CustomSearchBar";
+import { useMeQuery } from "src/generated/graphql";
+import { useEffect } from "react";
 
 const NavBarWrapper = () => {
   const userRole = useAppSelector((state) => state.user.role);
+  const dispatch = useAppDispatch();
+  const { data: meData, loading } = useMeQuery();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (meData?.me) {
+      dispatch(setUser(meData.me));
+    }
+  }, [meData, dispatch]);
+
+  if (loading) {
+    return null;
+  }
+
+  const currentUserAvatar = meData?.me?.avatar || "/img/default_avatar.jpg";
+  const currentUserName = meData?.me?.username || "";
+  const currentUserRole = (meData?.me?.role || "user") as
+    | "admin"
+    | "user"
+    | "premiumUser";
+
   return (
     <Box
       display="flex"
@@ -65,7 +79,11 @@ const NavBarWrapper = () => {
         </Box>
       </Box>
       <Box>
-        <UserMenu defaultAvatar={defaultAvatar} />
+        <UserMenu
+          avatar={currentUserAvatar}
+          username={currentUserName}
+          role={currentUserRole}
+        />
       </Box>
     </Box>
   );

@@ -1,0 +1,11 @@
+mutation UpgradeToPremium {
+  upgradeToPremium {
+    message
+    user {
+      id
+      username
+      role
+      avatar
+    }
+  }
+}

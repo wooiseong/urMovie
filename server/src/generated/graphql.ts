@@ -52,6 +52,12 @@ export type LoginInput = {
   username: Scalars['String']['input'];
 };
 
+export type MemberMutationResponse = {
+  __typename?: 'MemberMutationResponse';
+  message: Scalars['String']['output'];
+  user?: Maybe<User>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createJournal: Journal;
@@ -60,6 +66,7 @@ export type Mutation = {
   registerUser: AuthPayload;
   updateJournal: Journal;
   updateUser: User;
+  upgradeToPremium: MemberMutationResponse;
 };
 
 
@@ -249,6 +256,7 @@ export type ResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Journal: ResolverTypeWrapper<Journal>;
   LoginInput: LoginInput;
+  MemberMutationResponse: ResolverTypeWrapper<MemberMutationResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Quote: ResolverTypeWrapper<Quote>;
@@ -272,6 +280,7 @@ export type ResolversParentTypes = {
   JSON: Scalars['JSON']['output'];
   Journal: Journal;
   LoginInput: LoginInput;
+  MemberMutationResponse: MemberMutationResponse;
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   Quote: Quote;
@@ -310,6 +319,11 @@ export type JournalResolvers<ContextType = any, ParentType extends ResolversPare
   tag?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
 };
 
+export type MemberMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberMutationResponse'] = ResolversParentTypes['MemberMutationResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createJournal?: Resolver<ResolversTypes['Journal'], ParentType, ContextType, RequireFields<MutationCreateJournalArgs, 'input'>>;
   deleteJournal?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteJournalArgs, 'id'>>;
@@ -317,6 +331,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   registerUser?: Resolver<ResolversTypes['AuthPayload'], ParentType, ContextType, RequireFields<MutationRegisterUserArgs, 'input'>>;
   updateJournal?: Resolver<ResolversTypes['Journal'], ParentType, ContextType, RequireFields<MutationUpdateJournalArgs, 'id' | 'input'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
+  upgradeToPremium?: Resolver<ResolversTypes['MemberMutationResponse'], ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -352,6 +367,7 @@ export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Journal?: JournalResolvers<ContextType>;
+  MemberMutationResponse?: MemberMutationResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Quote?: QuoteResolvers<ContextType>;

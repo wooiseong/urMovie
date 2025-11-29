@@ -53,6 +53,12 @@ export type LoginInput = {
   username: Scalars['String']['input'];
 };
 
+export type MemberMutationResponse = {
+  __typename?: 'MemberMutationResponse';
+  message: Scalars['String']['output'];
+  user?: Maybe<User>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createJournal: Journal;
@@ -61,6 +67,7 @@ export type Mutation = {
   registerUser: AuthPayload;
   updateJournal: Journal;
   updateUser: User;
+  upgradeToPremium: MemberMutationResponse;
 };
 
 
@@ -229,6 +236,11 @@ export type GetTagsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetTagsQuery = { __typename?: 'Query', getTags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null };
+
+export type UpgradeToPremiumMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UpgradeToPremiumMutation = { __typename?: 'Mutation', upgradeToPremium: { __typename?: 'MemberMutationResponse', message: string, user?: { __typename?: 'User', id: string, username: string, role: string, avatar?: string | null } | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -558,6 +570,44 @@ export function useGetTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetTagsQueryHookResult = ReturnType<typeof useGetTagsQuery>;
 export type GetTagsLazyQueryHookResult = ReturnType<typeof useGetTagsLazyQuery>;
 export type GetTagsQueryResult = Apollo.QueryResult<GetTagsQuery, GetTagsQueryVariables>;
+export const UpgradeToPremiumDocument = gql`
+    mutation UpgradeToPremium {
+  upgradeToPremium {
+    message
+    user {
+      id
+      username
+      role
+      avatar
+    }
+  }
+}
+    `;
+export type UpgradeToPremiumMutationFn = Apollo.MutationFunction<UpgradeToPremiumMutation, UpgradeToPremiumMutationVariables>;
+
+/**
+ * __useUpgradeToPremiumMutation__
+ *
+ * To run a mutation, you first call `useUpgradeToPremiumMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpgradeToPremiumMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [upgradeToPremiumMutation, { data, loading, error }] = useUpgradeToPremiumMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUpgradeToPremiumMutation(baseOptions?: Apollo.MutationHookOptions<UpgradeToPremiumMutation, UpgradeToPremiumMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpgradeToPremiumMutation, UpgradeToPremiumMutationVariables>(UpgradeToPremiumDocument, options);
+      }
+export type UpgradeToPremiumMutationHookResult = ReturnType<typeof useUpgradeToPremiumMutation>;
+export type UpgradeToPremiumMutationResult = Apollo.MutationResult<UpgradeToPremiumMutation>;
+export type UpgradeToPremiumMutationOptions = Apollo.BaseMutationOptions<UpgradeToPremiumMutation, UpgradeToPremiumMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
