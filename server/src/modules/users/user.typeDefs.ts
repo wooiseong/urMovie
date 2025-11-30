@@ -6,6 +6,7 @@ const userTypeDefs = gql`
     username: String!
     role: String!
     avatar: String
+    createdAt: Date!
   }
 
   type AuthPayload {

@@ -19,6 +19,15 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type AdminStats = {
+  __typename?: 'AdminStats';
+  totalJournals: Scalars['Int']['output'];
+  totalMembers: Scalars['Int']['output'];
+  totalPremiumUsers: Scalars['Int']['output'];
+  totalSalary: Scalars['Int']['output'];
+  totalUsers: Scalars['Int']['output'];
+};
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   token: Scalars['String']['output'];
@@ -104,7 +113,9 @@ export type MutationUpdateUserArgs = {
 export type Query = {
   __typename?: 'Query';
   _empty?: Maybe<Scalars['String']['output']>;
+  getAdminStats: AdminStats;
   getTags?: Maybe<Array<Tag>>;
+  getUsersWithStats: Array<UserStats>;
   journal?: Maybe<Journal>;
   journals?: Maybe<Array<Journal>>;
   me: User;
@@ -152,6 +163,12 @@ export type TagInput = {
   selected: Scalars['Boolean']['input'];
 };
 
+export type TagUsage = {
+  __typename?: 'TagUsage';
+  count: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type UpdateJournalInput = {
   actor?: InputMaybe<Array<Scalars['String']['input']>>;
   content?: InputMaybe<Scalars['JSON']['input']>;
@@ -171,10 +188,31 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
   id: Scalars['ID']['output'];
   role: Scalars['String']['output'];
   username: Scalars['String']['output'];
 };
+
+export type UserStats = {
+  __typename?: 'UserStats';
+  _id: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
+  journalCount: Scalars['Int']['output'];
+  lastJournalDate?: Maybe<Scalars['String']['output']>;
+  tags: Array<TagUsage>;
+  username: Scalars['String']['output'];
+};
+
+export type GetAdminStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminStatsQuery = { __typename?: 'Query', getAdminStats: { __typename?: 'AdminStats', totalMembers: number, totalUsers: number, totalPremiumUsers: number, totalJournals: number, totalSalary: number } };
+
+export type GetUsersWithStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersWithStatsQuery = { __typename?: 'Query', getUsersWithStats: Array<{ __typename?: 'UserStats', _id: string, username: string, journalCount: number, lastJournalDate?: string | null, createdAt?: string | null, tags: Array<{ __typename?: 'TagUsage', name: string, count: number }> }> };
 
 export type RegisterUserMutationVariables = Exact<{
   input: RegisterInput;
@@ -293,6 +331,86 @@ export const TagFieldsFragmentDoc = gql`
   name
 }
     `;
+export const GetAdminStatsDocument = gql`
+    query GetAdminStats {
+  getAdminStats {
+    totalMembers
+    totalUsers
+    totalPremiumUsers
+    totalJournals
+    totalSalary
+  }
+}
+    `;
+
+/**
+ * __useGetAdminStatsQuery__
+ *
+ * To run a query within a React component, call `useGetAdminStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAdminStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAdminStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAdminStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminStatsQuery, GetAdminStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminStatsQuery, GetAdminStatsQueryVariables>(GetAdminStatsDocument, options);
+      }
+export function useGetAdminStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminStatsQuery, GetAdminStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminStatsQuery, GetAdminStatsQueryVariables>(GetAdminStatsDocument, options);
+        }
+export type GetAdminStatsQueryHookResult = ReturnType<typeof useGetAdminStatsQuery>;
+export type GetAdminStatsLazyQueryHookResult = ReturnType<typeof useGetAdminStatsLazyQuery>;
+export type GetAdminStatsQueryResult = Apollo.QueryResult<GetAdminStatsQuery, GetAdminStatsQueryVariables>;
+export const GetUsersWithStatsDocument = gql`
+    query GetUsersWithStats {
+  getUsersWithStats {
+    _id
+    username
+    journalCount
+    tags {
+      name
+      count
+    }
+    lastJournalDate
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetUsersWithStatsQuery__
+ *
+ * To run a query within a React component, call `useGetUsersWithStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersWithStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersWithStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUsersWithStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersWithStatsQuery, GetUsersWithStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsersWithStatsQuery, GetUsersWithStatsQueryVariables>(GetUsersWithStatsDocument, options);
+      }
+export function useGetUsersWithStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersWithStatsQuery, GetUsersWithStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsersWithStatsQuery, GetUsersWithStatsQueryVariables>(GetUsersWithStatsDocument, options);
+        }
+export type GetUsersWithStatsQueryHookResult = ReturnType<typeof useGetUsersWithStatsQuery>;
+export type GetUsersWithStatsLazyQueryHookResult = ReturnType<typeof useGetUsersWithStatsLazyQuery>;
+export type GetUsersWithStatsQueryResult = Apollo.QueryResult<GetUsersWithStatsQuery, GetUsersWithStatsQueryVariables>;
 export const RegisterUserDocument = gql`
     mutation RegisterUser($input: RegisterInput!) {
   registerUser(input: $input) {

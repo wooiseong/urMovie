@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   role: "admin" | "user" | "premiumUser";
   avatar: string | null;
+  createdAt: Date;
 }
 
 // User Schema

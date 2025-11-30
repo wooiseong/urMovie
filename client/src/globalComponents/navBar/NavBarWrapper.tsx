@@ -73,7 +73,7 @@ const NavBarWrapper = () => {
             <CustomNavButton
               icon={<AssessmentIcon />}
               label={t("navBar.adminStatistics")}
-              to="/adminStatistics"
+              to="/admin/adminStatistics"
             />
           )}
         </Box>

@@ -32,6 +32,7 @@ const userResolvers = {
         username: user.username,
         role: user.role,
         avatar: user.avatar || null,
+        createdAt: user.createdAt,
       };
     },
   },
@@ -92,6 +93,7 @@ const userResolvers = {
           username: newUser.username,
           role: newUser.role,
           avatar: newUser.avatar || null,
+          createdAt: newUser.createdAt,
         },
       };
     },
@@ -136,6 +138,7 @@ const userResolvers = {
           username: user.username,
           role: user.role,
           avatar: user.avatar || null,
+          createdAt: user.createdAt,
         },
       };
     },
@@ -185,6 +188,7 @@ const userResolvers = {
         username: user.username,
         role: user.role,
         avatar: user.avatar || null,
+        createdAt: user.createdAt,
       };
     },
     async upgradeToPremium(
@@ -210,6 +214,7 @@ const userResolvers = {
             username: user.username,
             role: user.role,
             avatar: user.avatar || null,
+            createdAt: user.createdAt,
           },
         };
       }
@@ -222,6 +227,7 @@ const userResolvers = {
             username: user.username,
             role: user.role,
             avatar: user.avatar || null,
+            createdAt: user.createdAt,
           },
         };
       }
@@ -236,6 +242,7 @@ const userResolvers = {
           username: user.username,
           role: user.role,
           avatar: user.avatar || null,
+          createdAt: user.createdAt,
         },
       };
     },

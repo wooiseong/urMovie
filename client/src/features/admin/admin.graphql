@@ -1,0 +1,23 @@
+query GetAdminStats {
+  getAdminStats {
+    totalMembers
+    totalUsers
+    totalPremiumUsers
+    totalJournals
+    totalSalary
+  }
+}
+
+query GetUsersWithStats {
+  getUsersWithStats {
+    _id
+    username
+    journalCount
+    tags {
+      name
+      count
+    }
+    lastJournalDate
+    createdAt
+  }
+}

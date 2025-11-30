@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "src/generated/graphql";
+import { MeQuery, User } from "src/generated/graphql";
 
 export interface UserState {
   id: string | null;
@@ -21,7 +21,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<Omit<User, "__typename">>) => {
+    setUser: (state, action: PayloadAction<NonNullable<MeQuery["me"]>>) => {
       state.id = action.payload.id;
       state.username = action.payload.username;
       state.role = action.payload.role as UserState["role"];
