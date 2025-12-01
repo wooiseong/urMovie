@@ -56,7 +56,10 @@ const EditJournalPage = () => {
     actor: [],
     tag: [],
     image: "",
-    content: {},
+    content: {
+      type: "doc",
+      content: [],
+    },
     quote: [],
   });
 
