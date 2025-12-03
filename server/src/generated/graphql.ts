@@ -54,6 +54,7 @@ export type Journal = {
   movieName: Scalars['String']['output'];
   quote?: Maybe<Array<Quote>>;
   tag?: Maybe<Array<Tag>>;
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type LoginInput = {
@@ -361,6 +362,7 @@ export type JournalResolvers<ContextType = any, ParentType extends ResolversPare
   movieName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quote?: Resolver<Maybe<Array<ResolversTypes['Quote']>>, ParentType, ContextType>;
   tag?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
 };
 
 export type MemberMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberMutationResponse'] = ResolversParentTypes['MemberMutationResponse']> = {

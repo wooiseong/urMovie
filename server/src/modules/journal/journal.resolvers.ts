@@ -23,7 +23,7 @@ const journalResolvers = {
       try {
         // 只返回該使用者的 journal
         return await JournalModel.find({ userId: context.user.id }).sort({
-          createdAt: -1,
+          updatedAt: -1,
         });
       } catch (error) {
         throw new GraphQLError("Failed to fetch journals", {
@@ -124,7 +124,7 @@ const journalResolvers = {
             extensions: { code: ErrorCodes.NOT_FOUND },
           });
         }
-
+        console.log("Updated Journal:", updatedJournal);
         return updatedJournal;
       } catch (error) {
         console.error("Update Journal Error:", error);

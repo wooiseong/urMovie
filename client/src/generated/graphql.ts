@@ -55,6 +55,7 @@ export type Journal = {
   movieName: Scalars['String']['output'];
   quote?: Maybe<Array<Quote>>;
   tag?: Maybe<Array<Tag>>;
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type LoginInput = {
@@ -230,26 +231,26 @@ export type LoginAccountMutation = { __typename?: 'Mutation', loginAccount: { __
 
 export type QuoteFieldsFragment = { __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null };
 
-export type JournalFieldsFragment = { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null };
+export type JournalFieldsFragment = { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null };
 
 export type GetJournalsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetJournalsQuery = { __typename?: 'Query', journals?: Array<{ __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> | null };
+export type GetJournalsQuery = { __typename?: 'Query', journals?: Array<{ __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> | null };
 
 export type GetJournalQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetJournalQuery = { __typename?: 'Query', journal?: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } | null };
+export type GetJournalQuery = { __typename?: 'Query', journal?: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } | null };
 
 export type CreateJournalMutationVariables = Exact<{
   input: CreateJournalInput;
 }>;
 
 
-export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
+export type CreateJournalMutation = { __typename?: 'Mutation', createJournal: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
 
 export type UpdateJournalMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -257,7 +258,7 @@ export type UpdateJournalMutationVariables = Exact<{
 }>;
 
 
-export type UpdateJournalMutation = { __typename?: 'Mutation', updateJournal: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
+export type UpdateJournalMutation = { __typename?: 'Mutation', updateJournal: { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null } };
 
 export type DeleteJournalMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -322,6 +323,7 @@ export const JournalFieldsFragmentDoc = gql`
     ...QuoteFields
   }
   date
+  updatedAt
 }
     ${JournalTagFieldsFragmentDoc}
 ${QuoteFieldsFragmentDoc}`;

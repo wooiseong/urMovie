@@ -8,6 +8,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -119,7 +120,7 @@ const JournalItem = ({ journal, onClick }: JournalItemProps) => {
           textAlign="left"
         >
           <Typography variant="caption" color="text.disabled">
-            {journal.date}
+            {journal.updatedAt}
           </Typography>
         </Box>
       </CardContent>
