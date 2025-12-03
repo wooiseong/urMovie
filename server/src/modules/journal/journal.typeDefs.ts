@@ -36,6 +36,7 @@ const journalTypeDefs = gql`
     content: JSON!
     quote: [Quote!]
     date: Date!
+    updatedAt: Date!
   }
 
   input QuoteInput {

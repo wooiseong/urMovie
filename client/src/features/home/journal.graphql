@@ -21,6 +21,7 @@ fragment JournalFields on Journal {
     ...QuoteFields
   }
   date
+  updatedAt
 }
 
 query GetJournals {

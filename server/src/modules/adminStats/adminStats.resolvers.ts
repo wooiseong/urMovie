@@ -54,8 +54,8 @@ export const adminStatsResolvers = {
         const lastJournalDate =
           userJournals.length > 0
             ? userJournals.sort(
-                (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-              )[0].createdAt
+                (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+              )[0].updatedAt
             : null;
 
         const tags = userJournals.flatMap((j) =>
