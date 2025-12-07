@@ -24,8 +24,24 @@ fragment JournalFields on Journal {
   updatedAt
 }
 
-query GetJournals {
-  journals {
+query GetJournals(
+  $limit: Int
+  $offset: Int
+  $startDate: Date
+  $endDate: Date
+  $tag: [String!]
+  $orderBy: String
+  $order: String
+) {
+  journals(
+    limit: $limit
+    offset: $offset
+    startDate: $startDate
+    endDate: $endDate
+    tag: $tag
+    orderBy: $orderBy
+    order: $order
+  ) {
     ...JournalFields
   }
 }
