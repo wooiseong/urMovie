@@ -18,6 +18,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { formTag } from "src/features/home/pages/EditJournalPage";
 
 interface CustomDropdownProps {
+  readonly?: boolean;
   label?: string;
   icon?: React.ReactNode;
   placeholder?: string;
@@ -28,6 +29,7 @@ interface CustomDropdownProps {
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
+  readonly,
   label,
   icon,
   placeholder,
@@ -121,6 +123,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         PaperProps={{ sx: { p: 0 } }}
       >
         <TagDropdownMenu
+          readonly={readonly}
           tags={tagList}
           onChange={onTagChange}
           onClose={handleClose}

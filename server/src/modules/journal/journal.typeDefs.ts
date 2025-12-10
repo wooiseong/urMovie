@@ -67,7 +67,15 @@ const journalTypeDefs = gql`
   }
 
   type Query {
-    journals: [Journal!]
+    journals(
+      limit: Int
+      offset: Int
+      startDate: Date
+      endDate: Date
+      tag: [String!]
+      orderBy: String
+      order: String
+    ): [Journal!]
     journal(id: ID!): Journal
   }
 

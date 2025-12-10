@@ -126,6 +126,17 @@ export type QueryJournalArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryJournalsArgs = {
+  endDate?: InputMaybe<Scalars['Date']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  startDate?: InputMaybe<Scalars['Date']['input']>;
+  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type Quote = {
   __typename?: 'Quote';
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -386,7 +397,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getTags?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
   getUsersWithStats?: Resolver<Array<ResolversTypes['UserStats']>, ParentType, ContextType>;
   journal?: Resolver<Maybe<ResolversTypes['Journal']>, ParentType, ContextType, RequireFields<QueryJournalArgs, 'id'>>;
-  journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType>;
+  journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType, Partial<QueryJournalsArgs>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 

@@ -3,16 +3,15 @@ import { useTranslation } from "react-i18next";
 import CustomSectionTitle from "src/globalComponents/CustomSectionTitle";
 import { JournalList } from "../components/JournalList";
 import { useGetJournalsQuery } from "src/generated/graphql";
-import { useQueryWithLoader } from "src/globalHooks/useQueryWithLoader";
 
 const PreviousEditSelection = () => {
-  // const { data, loading, error } = useGetJournalsQuery();
-
   const {
     data: journalData,
-    loader,
+    loading,
     error,
-  } = useQueryWithLoader(useGetJournalsQuery);
+  } = useGetJournalsQuery({
+    variables: { limit: 10 },
+  });
 
   const { t } = useTranslation();
   return (

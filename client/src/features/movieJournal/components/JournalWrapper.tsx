@@ -5,7 +5,25 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import WindowIcon from "@mui/icons-material/Window";
 import JournalSearchMenu from "./JournalSearchMenu";
 import { useNavigate } from "react-router-dom";
-const JournalWrapper = () => {
+import { JournalFilters } from "../pages/index";
+
+interface JournalWrapperProps {
+  filters: JournalFilters;
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  onFilterChange: (filters: Partial<JournalFilters>) => void;
+  onClearFilters: () => void;
+  totalCount: number;
+}
+
+const JournalWrapper = ({
+  filters,
+  searchTerm,
+  onSearchChange,
+  onFilterChange,
+  onClearFilters,
+  totalCount,
+}: JournalWrapperProps) => {
   const navigate = useNavigate();
 
   return (
@@ -24,7 +42,7 @@ const JournalWrapper = () => {
               <Typography variant="subtitle2">
                 共
                 <Box component="span" fontSize="20px">
-                  {/* {quote.length} */}1
+                  {totalCount}
                 </Box>
                 篇内容
               </Typography>
@@ -46,8 +64,15 @@ const JournalWrapper = () => {
           </Tooltip>
         </Box>
         <Box display="flex" alignItems="center">
-          <CustomSearchBar />
-          <JournalSearchMenu />
+          <CustomSearchBar
+            value={searchTerm}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+          <JournalSearchMenu
+            filters={filters}
+            onFilterChange={onFilterChange}
+            onClearFilters={onClearFilters}
+          />
           <IconButton
             sx={{
               width: 40,

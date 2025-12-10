@@ -15,12 +15,14 @@ import React, { useState } from "react";
 import { formTag } from "src/features/home/pages/EditJournalPage";
 
 interface TagDropdownMenuProps {
+  readonly?: boolean;
   tags: formTag[];
   onChange: (tags: formTag[]) => void;
   onClose: () => void;
 }
 
 const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
+  readonly,
   tags,
   onChange,
   onClose,
@@ -109,26 +111,28 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
     <Box sx={{ p: 2, width: 300 }}>
       <Typography sx={{ fontWeight: 600, mb: 1 }}>標籤管理</Typography>
 
-      <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
-        <TextField
-          size="small"
-          placeholder="新增標籤..."
-          value={newTag}
-          onChange={(e) => setNewTag(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              handleAddTag();
-            }
-          }}
-          sx={{ flex: 1 }}
-        />
-        <Tooltip title="新增">
-          <IconButton onClick={handleAddTag} size="small">
-            <AddCircleIcon color="primary" />
-          </IconButton>
-        </Tooltip>
-      </Box>
+      {readonly ? null : (
+        <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
+          <TextField
+            size="small"
+            placeholder="新增標籤..."
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleAddTag();
+              }
+            }}
+            sx={{ flex: 1 }}
+          />
+          <Tooltip title="新增">
+            <IconButton onClick={handleAddTag} size="small">
+              <AddCircleIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
 
       <List dense sx={{ maxHeight: 240, overflow: "auto", p: 0 }}>
         {visibleTags.map((tag) => (
@@ -153,15 +157,17 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               {tag.selected && <CheckCircleIcon sx={{ color: "#fff" }} />}
 
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                size="small"
-                onClick={(e) => handleDelete(tag.name, e)}
-                sx={{ color: tag.selected ? "#fff" : "#888" }}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              {readonly ? null : (
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  size="small"
+                  onClick={(e) => handleDelete(tag.name, e)}
+                  sx={{ color: tag.selected ? "#fff" : "#888" }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              )}
             </Box>
           </ListItem>
         ))}

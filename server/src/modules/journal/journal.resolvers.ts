@@ -7,6 +7,7 @@ import {
   MutationDeleteJournalArgs,
   MutationUpdateJournalArgs,
   QueryJournalArgs,
+  QueryJournalsArgs,
 } from "../../generated/graphql";
 import { Context } from "../../utils/authContext";
 import { GraphQLError } from "graphql";
@@ -15,17 +16,45 @@ import { handleImageUpload } from "../../utils/imageUploadUtils";
 
 const journalResolvers = {
   Query: {
-    async journals(_: unknown, __: unknown, context: Context) {
+    async journals(_: unknown, args: QueryJournalsArgs, context: Context) {
       if (!context.user)
         throw new GraphQLError("Unauthorized", {
           extensions: { code: "UNAUTHORIZED" },
         });
       try {
-        // 只返回該使用者的 journal
-        return await JournalModel.find({ userId: context.user.id }).sort({
-          updatedAt: -1,
-        });
+        const { limit, offset, startDate, endDate, tag, orderBy, order } = args;
+
+        // Use nullish coalescing to provide default values for nullable arguments.
+        const finalLimit = limit ?? 20;
+        const finalOffset = offset ?? 0;
+        const finalOrderBy = orderBy ?? "updatedAt";
+        const finalOrder = order ?? "desc";
+
+        const filters: any = { userId: context.user.id };
+
+        if (startDate || endDate) {
+          filters.date = {};
+          if (startDate) {
+            filters.date.$gte = startDate;
+          }
+          if (endDate) {
+            filters.date.$lte = endDate;
+          }
+        }
+
+        if (tag && tag.length > 0) {
+          filters["tag.name"] = { $in: tag };
+        }
+
+        const sortOrder = finalOrder.toLowerCase() === "asc" ? 1 : -1;
+        const sort: any = { [finalOrderBy]: sortOrder };
+
+        return await JournalModel.find(filters)
+          .sort(sort)
+          .skip(finalOffset)
+          .limit(finalLimit);
       } catch (error) {
+        console.error("Fetch Journals Error:", error);
         throw new GraphQLError("Failed to fetch journals", {
           extensions: { code: ErrorCodes.INTERNAL_SERVER_ERROR },
         });

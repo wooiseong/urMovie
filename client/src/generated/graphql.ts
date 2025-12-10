@@ -127,6 +127,17 @@ export type QueryJournalArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryJournalsArgs = {
+  endDate?: InputMaybe<Scalars['Date']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  startDate?: InputMaybe<Scalars['Date']['input']>;
+  tag?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
 export type Quote = {
   __typename?: 'Quote';
   backgroundColor?: Maybe<Scalars['String']['output']>;
@@ -233,7 +244,15 @@ export type QuoteFieldsFragment = { __typename?: 'Quote', name?: string | null, 
 
 export type JournalFieldsFragment = { __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null };
 
-export type GetJournalsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetJournalsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  startDate?: InputMaybe<Scalars['Date']['input']>;
+  endDate?: InputMaybe<Scalars['Date']['input']>;
+  tag?: InputMaybe<Array<Scalars['String']['input']> | Scalars['String']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
 export type GetJournalsQuery = { __typename?: 'Query', journals?: Array<{ __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> | null };
@@ -490,8 +509,16 @@ export type LoginAccountMutationHookResult = ReturnType<typeof useLoginAccountMu
 export type LoginAccountMutationResult = Apollo.MutationResult<LoginAccountMutation>;
 export type LoginAccountMutationOptions = Apollo.BaseMutationOptions<LoginAccountMutation, LoginAccountMutationVariables>;
 export const GetJournalsDocument = gql`
-    query GetJournals {
-  journals {
+    query GetJournals($limit: Int, $offset: Int, $startDate: Date, $endDate: Date, $tag: [String!], $orderBy: String, $order: String) {
+  journals(
+    limit: $limit
+    offset: $offset
+    startDate: $startDate
+    endDate: $endDate
+    tag: $tag
+    orderBy: $orderBy
+    order: $order
+  ) {
     ...JournalFields
   }
 }
@@ -509,6 +536,13 @@ export const GetJournalsDocument = gql`
  * @example
  * const { data, loading, error } = useGetJournalsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      tag: // value for 'tag'
+ *      orderBy: // value for 'orderBy'
+ *      order: // value for 'order'
  *   },
  * });
  */
