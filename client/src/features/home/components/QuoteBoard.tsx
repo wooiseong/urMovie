@@ -6,6 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { JournalFormData } from "../pages/EditJournalPage";
 import { Quote } from "src/generated/graphql";
 import InboxIcon from "@mui/icons-material/Inbox";
+import { useState, useMemo } from "react";
 interface QuoteBoardProps {
   quote: Quote[];
   setFormData?: React.Dispatch<React.SetStateAction<JournalFormData>>;
@@ -17,6 +18,22 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
   setFormData,
   readOnly,
 }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter quotes based on search term (search in name and content)
+  const filteredQuotes = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return quote;
+    }
+
+    const lowerSearch = searchTerm.toLowerCase();
+    return quote.filter((q) => {
+      const matchesName = q.name?.toLowerCase().includes(lowerSearch);
+      const matchesContent = q.content?.toLowerCase().includes(lowerSearch);
+      return matchesName || matchesContent;
+    });
+  }, [quote, searchTerm]);
+
   const handleAddQuote = () => {
     if (!setFormData) return;
     setFormData((prev) => ({
@@ -73,9 +90,14 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             <Typography variant="subtitle2">
               共{" "}
               <Box component="span" fontSize="20px">
-                {quote.length}
+                {searchTerm.trim() ? filteredQuotes.length : quote.length}
               </Box>{" "}
               篇内容
+              {searchTerm.trim() && quote.length !== filteredQuotes.length && (
+                <Box component="span" sx={{ color: "#aaa", ml: 0.5 }}>
+                  (總共 {quote.length} 篇)
+                </Box>
+              )}
             </Typography>
           </Box>
           {!readOnly && (
@@ -86,7 +108,11 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             </Tooltip>
           )}
         </Box>
-        <CustomSearchBar />
+        <CustomSearchBar
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="搜尋台詞標題或內容"
+        />
       </Box>
 
       {/* 內容區 */}
@@ -106,6 +132,22 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             暫無內容，點擊上方「＋」新增台詞
           </Typography>
         </Box>
+      ) : filteredQuotes.length === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "gray",
+            height: "165px",
+          }}
+        >
+          <InboxIcon sx={{ fontSize: 60, mb: 1 }} />
+          <Typography variant="body1">
+            找不到符合「{searchTerm}」的台詞
+          </Typography>
+        </Box>
       ) : (
         <Box
           sx={{
@@ -116,25 +158,29 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             justifyContent: "flex-start",
           }}
         >
-          {quote.map((item, index) => (
-            <Box
-              key={index}
-              sx={{
-                width: "32%",
-                minWidth: "280px",
-                boxSizing: "border-box",
-              }}
-            >
-              <QuoteItem
-                quote={item}
-                onUpdate={(updatedQuote) =>
-                  handleUpdateQuote(index, updatedQuote)
-                }
-                onDelete={() => handleDeleteQuote(index)}
-                readOnly={readOnly}
-              />
-            </Box>
-          ))}
+          {filteredQuotes.map((item, index) => {
+            // Find the original index in the quote array
+            const originalIndex = quote.findIndex((q) => q === item);
+            return (
+              <Box
+                key={originalIndex}
+                sx={{
+                  width: "32%",
+                  minWidth: "280px",
+                  boxSizing: "border-box",
+                }}
+              >
+                <QuoteItem
+                  quote={item}
+                  onUpdate={(updatedQuote) =>
+                    handleUpdateQuote(originalIndex, updatedQuote)
+                  }
+                  onDelete={() => handleDeleteQuote(originalIndex)}
+                  readOnly={readOnly}
+                />
+              </Box>
+            );
+          })}
         </Box>
       )}
 

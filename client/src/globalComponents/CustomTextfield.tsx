@@ -13,8 +13,11 @@ interface CustomTextFieldProps {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  // onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  readOnly?: boolean;
 }
+
+export type { CustomTextFieldProps };
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
   label,
@@ -28,6 +31,8 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   inputProps,
   value,
   onChange,
+  onClick,
+  readOnly = false,
 }) => {
   // 預設樣式
   const defaultSx: SxProps<Theme> = {
@@ -72,6 +77,10 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         sx={mergedSx}
         value={value}
         onChange={onChange}
+        onClick={onClick}
+        InputProps={{
+          readOnly: readOnly,
+        }}
       />
     </Box>
   );

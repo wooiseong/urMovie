@@ -43,7 +43,7 @@ const journalResolvers = {
         }
 
         if (tag && tag.length > 0) {
-          filters.tag = { $in: tag };
+          filters["tag.name"] = { $in: tag };
         }
 
         const sortOrder = finalOrder.toLowerCase() === "asc" ? 1 : -1;

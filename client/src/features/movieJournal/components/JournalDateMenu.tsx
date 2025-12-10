@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, Popover, Stack } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { DayPicker, DateRange } from "react-day-picker";
@@ -6,21 +6,36 @@ import "react-day-picker/dist/style.css";
 import CustomTextField from "src/globalComponents/CustomTextfield";
 import { useTranslation } from "react-i18next";
 import DateRangeIcon from "@mui/icons-material/DateRange";
+
 type DayjsRange = {
   from: Dayjs | null;
   to: Dayjs | null;
 };
 
-const JournalDateMenu = () => {
+interface JournalDateMenuProps {
+  startDate?: string;
+  endDate?: string;
+  onDateChange: (startDate: string | undefined, endDate: string | undefined) => void;
+}
+
+const JournalDateMenu = ({ startDate, endDate, onDateChange }: JournalDateMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { t } = useTranslation();
 
   // 起訖日期
   const [selectedRange, setSelectedRange] = useState<DayjsRange>({
-    from: dayjs(),
-    to: dayjs(),
+    from: startDate ? dayjs(startDate) : null,
+    to: endDate ? dayjs(endDate) : null,
   });
+
+  // Sync external props to internal state
+  useEffect(() => {
+    setSelectedRange({
+      from: startDate ? dayjs(startDate) : null,
+      to: endDate ? dayjs(endDate) : null,
+    });
+  }, [startDate, endDate]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -31,33 +46,59 @@ const JournalDateMenu = () => {
   // react-day-picker 會傳回 DateRange< Date >
   const handleRangeSelect = (range: DateRange | undefined) => {
     if (range?.from) {
-      setSelectedRange({
+      const newRange = {
         from: dayjs(range.from),
         to: range.to ? dayjs(range.to) : null,
-      });
+      };
+      setSelectedRange(newRange);
+      onDateChange(
+        newRange.from?.format("YYYY-MM-DD"),
+        newRange.to?.format("YYYY-MM-DD")
+      );
     }
   };
 
   /** 快速選擇（全改成 Range） */
   const quickSelect = {
-    today: () => setSelectedRange({ from: dayjs(), to: dayjs() }),
+    today: () => {
+      const newRange = { from: dayjs(), to: dayjs() };
+      setSelectedRange(newRange);
+      onDateChange(
+        newRange.from.format("YYYY-MM-DD"),
+        newRange.to.format("YYYY-MM-DD")
+      );
+    },
 
     yesterday: () => {
       const d = dayjs().subtract(1, "day");
-      setSelectedRange({ from: d, to: d });
+      const newRange = { from: d, to: d };
+      setSelectedRange(newRange);
+      onDateChange(d.format("YYYY-MM-DD"), d.format("YYYY-MM-DD"));
     },
 
-    lastWeek: () =>
-      setSelectedRange({
+    lastWeek: () => {
+      const newRange = {
         from: dayjs().subtract(7, "day"),
         to: dayjs(),
-      }),
+      };
+      setSelectedRange(newRange);
+      onDateChange(
+        newRange.from.format("YYYY-MM-DD"),
+        newRange.to.format("YYYY-MM-DD")
+      );
+    },
 
-    lastMonth: () =>
-      setSelectedRange({
+    lastMonth: () => {
+      const newRange = {
         from: dayjs().subtract(1, "month"),
         to: dayjs(),
-      }),
+      };
+      setSelectedRange(newRange);
+      onDateChange(
+        newRange.from.format("YYYY-MM-DD"),
+        newRange.to.format("YYYY-MM-DD")
+      );
+    },
   };
 
   return (
@@ -68,16 +109,22 @@ const JournalDateMenu = () => {
 
       <CustomTextField
         icon={<DateRangeIcon />}
-        label={t("home.movieName")}
-        placeholder={t("home.movieName")}
+        label="日期範圍"
+        placeholder="選擇日期範圍"
+        value={
+          selectedRange.from && selectedRange.to
+            ? `${selectedRange.from.format("YYYY-MM-DD")} ~ ${selectedRange.to.format("YYYY-MM-DD")}`
+            : ""
+        }
         sx={{
           paddingLeft: "10px",
           "& .MuiOutlinedInput-root": {
             backgroundColor: "#404040",
           },
         }}
-        // onClick={handleOpen}
-      ></CustomTextField>
+        onClick={handleOpen}
+        readOnly
+      />
 
       <Popover
         open={open}

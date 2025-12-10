@@ -22,6 +22,8 @@ interface CustomSearchBarProps {
   sx?: SxProps<Theme>;
   size?: "small" | "medium";
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
@@ -33,6 +35,8 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
   sx = {},
   size = "small",
   inputProps,
+  value,
+  onChange,
 }) => {
   // 預設樣式
   const { t } = useTranslation();
@@ -80,6 +84,8 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
         minRows={minRows}
         inputProps={inputProps}
         sx={mergedSx}
+        value={value}
+        onChange={onChange}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
