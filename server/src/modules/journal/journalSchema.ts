@@ -1,5 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+// Quote interface
+interface Quote {
+  name?: string;
+  content?: string;
+  backgroundColor: string;
+  textColor: string;
+}
+
 // Quote subdocument
 const QuoteSchema = new Schema(
   {
@@ -23,7 +31,6 @@ const JournalTagSchema = new Schema(
 
 // Journal interface
 export interface Journal extends Document {
-  _id: string;
   userId: string; // 新增
   movieName: string;
   director: string[];
@@ -31,14 +38,14 @@ export interface Journal extends Document {
   tag: { id: string; name: string; selected: boolean }[];
   image?: string;
   content: any; // Tiptap JSON
-  quote: (typeof QuoteSchema)[];
+  quote: Quote[];
   date: Date;
   createdAt: Date;
   updatedAt: Date;
 }
 
 // Journal schema
-const JournalSchema: Schema<Journal> = new Schema(
+const JournalSchema = new Schema(
   {
     userId: { type: String, required: true }, // 存使用者 ID
     movieName: { type: String, required: true, trim: true },
@@ -53,4 +60,4 @@ const JournalSchema: Schema<Journal> = new Schema(
   { timestamps: true } // 自動新增 createdAt / updatedAt
 );
 
-export const JournalModel = mongoose.model<Journal>("Journal", JournalSchema);
+export const JournalModel = mongoose.model<Journal>("Journal", JournalSchema as any);

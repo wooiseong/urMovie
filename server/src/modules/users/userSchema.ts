@@ -2,7 +2,6 @@ import mongoose, { Schema, Document } from "mongoose";
 
 // IUser interface
 export interface IUser extends Document {
-  _id: string;
   username: string;
   password: string;
   role: "admin" | "user" | "premiumUser";
@@ -11,7 +10,7 @@ export interface IUser extends Document {
 }
 
 // User Schema
-const UserSchema: Schema<IUser> = new Schema(
+const UserSchema = new Schema(
   {
     username: {
       type: String,
@@ -40,7 +39,7 @@ const UserSchema: Schema<IUser> = new Schema(
 );
 
 // User Model
-export const UserModel = mongoose.model<IUser & { _id: string }>(
+export const UserModel = mongoose.model<IUser>(
   "User",
-  UserSchema
+  UserSchema as any
 );
