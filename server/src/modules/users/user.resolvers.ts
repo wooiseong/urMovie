@@ -28,7 +28,7 @@ const userResolvers = {
       }
 
       return {
-        id: user._id,
+        id: user._id.toString(),
         username: user.username,
         role: user.role,
         avatar: user.avatar || null,
@@ -81,7 +81,7 @@ const userResolvers = {
       });
 
       const token = jwt.sign(
-        { id: newUser._id, role: newUser.role },
+        { id: newUser._id.toString(), role: newUser.role },
         config.jwtSecret,
         { expiresIn: "7d" }
       );
@@ -89,7 +89,7 @@ const userResolvers = {
       return {
         token,
         user: {
-          id: newUser._id,
+          id: newUser._id.toString(),
           username: newUser.username,
           role: newUser.role,
           avatar: newUser.avatar || null,
@@ -126,7 +126,7 @@ const userResolvers = {
       }
 
       const token = jwt.sign(
-        { id: user._id, role: user.role },
+        { id: user._id.toString(), role: user.role },
         config.jwtSecret,
         { expiresIn: "7d" }
       );
@@ -134,7 +134,7 @@ const userResolvers = {
       return {
         token,
         user: {
-          id: user._id,
+          id: user._id.toString(),
           username: user.username,
           role: user.role,
           avatar: user.avatar || null,
@@ -184,7 +184,7 @@ const userResolvers = {
       await user.save();
 
       return {
-        id: user._id,
+        id: user._id.toString(),
         username: user.username,
         role: user.role,
         avatar: user.avatar || null,
@@ -210,7 +210,7 @@ const userResolvers = {
         return {
           message: "You are an admin and cannot be upgraded.",
           user: {
-            id: user._id,
+            id: user._id.toString(),
             username: user.username,
             role: user.role,
             avatar: user.avatar || null,
@@ -223,7 +223,7 @@ const userResolvers = {
         return {
           message: "You are already a premium user.",
           user: {
-            id: user._id,
+            id: user._id.toString(),
             username: user.username,
             role: user.role,
             avatar: user.avatar || null,
@@ -238,7 +238,7 @@ const userResolvers = {
       return {
         message: "User successfully upgraded to premium.",
         user: {
-          id: user._id,
+          id: user._id.toString(),
           username: user.username,
           role: user.role,
           avatar: user.avatar || null,

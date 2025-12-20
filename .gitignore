@@ -15,8 +15,7 @@
 client/.env
 server/.env
 
-# Lock files
-package-lock.json
+# Lock files (keep root, ignore workspace lock files)
 client/package-lock.json
 server/package-lock.json
-packages/i18n/package-lock.json
+packages/*/package-lock.json

@@ -5,7 +5,7 @@ export interface Tag extends Document {
   userId: string;
 }
 
-const TagSchema: Schema<Tag> = new Schema(
+const TagSchema = new Schema(
   {
     name: { type: String, required: true, trim: true },
     userId: { type: String, required: true },
@@ -15,4 +15,4 @@ const TagSchema: Schema<Tag> = new Schema(
 
 TagSchema.index({ name: 1, userId: 1 }, { unique: true });
 
-export const TagModel = mongoose.model<Tag>("Tag", TagSchema);
+export const TagModel = mongoose.model<Tag>("Tag", TagSchema as any);

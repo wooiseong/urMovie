@@ -38,28 +38,32 @@ export const adminStatsResolvers = {
       });
       const journals = await JournalModel.find();
 
-      const journalsByUserId = journals.reduce((acc, journal) => {
-        if (!acc[journal.userId]) {
-          acc[journal.userId] = [];
-        }
-        acc[journal.userId].push(journal);
-        return acc;
-      }, {} as Record<string, Journal[]>);
+      const journalsByUserId: Record<string, Journal[]> = journals.reduce(
+        (acc: any, journal) => {
+          if (!acc[journal.userId]) {
+            acc[journal.userId] = [];
+          }
+          acc[journal.userId].push(journal);
+          return acc;
+        },
+        {}
+      );
 
       const usersWithStats = users.map((user) => {
-        const userJournals = journalsByUserId[user._id] || [];
+        const userJournals = journalsByUserId[user._id.toString()] || [];
 
         const journalCount = userJournals.length;
 
         const lastJournalDate =
           userJournals.length > 0
             ? userJournals.sort(
-                (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+                (a: Journal, b: Journal) =>
+                  b.updatedAt.getTime() - a.updatedAt.getTime()
               )[0].updatedAt
             : null;
 
-        const tags = userJournals.flatMap((j) =>
-          j.tag.filter((t) => t.selected).map((t) => t.name)
+        const tags = userJournals.flatMap((j: Journal) =>
+          j.tag.filter((t: any) => t.selected).map((t: any) => t.name)
         );
         const tagCounts: Record<string, number> = {};
         for (const tagName of tags) {

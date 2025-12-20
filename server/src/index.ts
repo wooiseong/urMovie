@@ -36,7 +36,7 @@ mongoose
     await seedAdminAccount();
 
     await server.start().then(() => {
-      server.applyMiddleware({ app, path: "/graphql" });
+      server.applyMiddleware({ app: app as any, path: "/graphql" });
 
       app.listen(PORT, () => {
         console.log(
