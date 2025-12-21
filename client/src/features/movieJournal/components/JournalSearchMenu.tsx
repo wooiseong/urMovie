@@ -99,14 +99,16 @@ const JournalSearchMenu = ({
           }}
         >
           <Typography variant="h6">{t("movieJournal.searchFilter")}</Typography>
-          <Button onClick={onClearFilters}>{t("movieJournal.clearFilters")}</Button>
+          <Button onClick={onClearFilters}>
+            {t("movieJournal.clearFilters")}
+          </Button>
         </Box>
         <Box>
           <CustomDropdown
             readonly
-            label={t("home.tag")}
+            label={t("global.tag")}
             icon={<LocalOfferIcon />}
-            placeholder={t("home.tag")}
+            placeholder={t("global.selectTagPlaceholder")}
             fullWidth
             tagList={formattedTags}
             onTagChange={handleTagChange}

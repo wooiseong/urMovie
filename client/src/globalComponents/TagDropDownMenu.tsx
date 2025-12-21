@@ -111,7 +111,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
 
   return (
     <Box sx={{ p: 2, width: 300 }}>
-      <Typography sx={{ fontWeight: 600, mb: 1 }}>{t("global.tagManagement")}</Typography>
+      <Typography sx={{ fontWeight: 600, mb: 1 }}>{t("global.tag")}</Typography>
 
       {readonly ? null : (
         <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>

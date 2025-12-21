@@ -161,6 +161,11 @@
   },
   "global": {
     "imageUploadError": "Please upload jpg, jpeg or png images",
-    "clickToUploadImage": "Click to upload image"
+    "clickToUploadImage": "Click to upload image",
+    "tag": "Tag",
+    "addTagPlaceholder": "Add new tag",
+    "selectTagPlaceholder": "Select a tag",
+    "add": "Add",
+    "delete": "Delete"
   }
 }

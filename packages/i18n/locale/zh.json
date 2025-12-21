@@ -162,6 +162,11 @@
   },
   "global": {
     "imageUploadError": "請上傳 jpg、jpeg 或 png 圖片",
-    "clickToUploadImage": "點擊上傳圖片"
+    "clickToUploadImage": "點擊上傳圖片",
+    "tag": "標籤",
+    "addTagPlaceholder": "新增標籤",
+    "selectTagPlaceholder": "選擇標簽",
+    "add": "新增",
+    "delete": "刪除"
   }
 }
