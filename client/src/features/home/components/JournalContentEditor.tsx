@@ -32,6 +32,7 @@ import LooksTwoIcon from "@mui/icons-material/LooksTwo";
 import Looks3Icon from "@mui/icons-material/Looks3";
 import { FontSize, TextStyle } from "@tiptap/extension-text-style";
 import CustomTextField from "src/globalComponents/CustomTextfield";
+import { useTranslation } from "react-i18next";
 
 interface JournalContentEditorProps {
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -42,11 +43,12 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
   setFormData,
   initialContent,
 }) => {
+  const { t } = useTranslation();
   const editor = useEditor({
     extensions: [
       StarterKit,
       TextStyle,
-      Placeholder.configure({ placeholder: "寫下你的影評、心得..." }),
+      Placeholder.configure({ placeholder: t("home.editorPlaceholder") }),
       Image,
       Highlight,
       Color,
@@ -77,7 +79,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
     setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
   const addImage = () => {
-    const url = window.prompt("貼上圖片網址");
+    const url = window.prompt(t("home.pasteImageUrl"));
     if (url) editor.chain().focus().setImage({ src: url }).run();
   };
 
@@ -175,7 +177,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
           />
 
           {/* Marks */}
-          <Tooltip title="粗體">
+          <Tooltip title={t("home.bold")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleBold().run()}
               color={editor.isActive("bold") ? "primary" : "default"}
@@ -183,7 +185,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatBoldIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="斜體">
+          <Tooltip title={t("home.italic")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
               color={editor.isActive("italic") ? "primary" : "default"}
@@ -191,7 +193,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatItalicIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="刪除線">
+          <Tooltip title={t("home.strike")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleStrike().run()}
               color={editor.isActive("strike") ? "primary" : "default"}
@@ -199,7 +201,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <StrikethroughSIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="清除格式">
+          <Tooltip title={t("home.clearFormat")}>
             <IconButton
               onClick={() =>
                 editor.chain().focus().unsetAllMarks().clearNodes().run()
@@ -210,7 +212,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
           </Tooltip>
 
           {/* Alignment */}
-          <Tooltip title="左對齊">
+          <Tooltip title={t("home.alignLeft")}>
             <IconButton
               onClick={() => editor.chain().focus().setTextAlign("left").run()}
               color={
@@ -220,7 +222,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatAlignLeftIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="置中">
+          <Tooltip title={t("home.alignCenter")}>
             <IconButton
               onClick={() =>
                 editor.chain().focus().setTextAlign("center").run()
@@ -232,7 +234,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatAlignCenterIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="右對齊">
+          <Tooltip title={t("home.alignRight")}>
             <IconButton
               onClick={() => editor.chain().focus().setTextAlign("right").run()}
               color={
@@ -244,7 +246,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
           </Tooltip>
 
           {/* Lists / Block */}
-          <Tooltip title="項目符號">
+          <Tooltip title={t("home.bulletList")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleBulletList().run()}
               color={editor.isActive("bulletList") ? "primary" : "default"}
@@ -252,7 +254,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatListBulletedIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="編號列表">
+          <Tooltip title={t("home.orderedList")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
               color={editor.isActive("orderedList") ? "primary" : "default"}
@@ -260,7 +262,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
               <FormatListNumberedIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="引用">
+          <Tooltip title={t("home.blockquote")}>
             <IconButton
               onClick={() => editor.chain().focus().toggleBlockquote().run()}
               color={editor.isActive("blockquote") ? "primary" : "default"}

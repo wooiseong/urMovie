@@ -89,10 +89,10 @@ const JournalModal: React.FC<JournalModalProps> = ({
               {journal?.movieName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              Director: {journal?.director?.join(", ")}
+              {t("home.director")}: {journal?.director?.join(", ")}
             </Typography>
             <Typography variant="subtitle2" color="text.secondary">
-              Actor: {journal?.actor?.join(", ")}
+              {t("home.actor")}: {journal?.actor?.join(", ")}
             </Typography>
             {journal?.tag && journal?.tag?.length > 0 && (
               <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -124,7 +124,7 @@ const JournalModal: React.FC<JournalModalProps> = ({
 
         {showExpandBtn && (
           <IconButton size="small" onClick={toggleExpand} sx={{ mt: 1 }}>
-            {expanded ? "Collapse" : "Expand"}
+            {expanded ? t("home.collapse") : t("home.expand")}
           </IconButton>
         )}
         {journal?.quote && journal.quote.length > 0 && (

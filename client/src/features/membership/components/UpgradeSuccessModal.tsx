@@ -11,6 +11,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { useTranslation } from "react-i18next";
 
 interface UpgradeSuccessModalProps {
   open: boolean;
@@ -50,6 +51,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
   open,
   onClose,
 }) => {
+  const { t } = useTranslation();
   return (
     <Modal
       open={open}
@@ -128,7 +130,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
         >
           <SwiperSlide style={swiperSlideStyle}>
             <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
-              Upgrade Successful!
+              {t("membership.modalUpgradeSuccessTitle")}
             </Typography>
             <img
               src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
@@ -141,13 +143,13 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
               }}
             />
             <Typography sx={{ color: "#555" }}>
-              Congratulations! You have successfully upgraded your membership.
+              {t("membership.modalUpgradeSuccessMessage")}
             </Typography>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
             <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
-              New Features Unlocked
+              {t("membership.modalNewFeaturesTitle")}
             </Typography>
             <img
               src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
@@ -160,13 +162,13 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
               }}
             />
             <Typography sx={{ color: "#555" }}>
-              Explore unlimited movie journal entries and more.
+              {t("membership.modalNewFeaturesMessage")}
             </Typography>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
             <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
-              Enjoy Your Premium Access
+              {t("membership.modalPremiumAccessTitle")}
             </Typography>
             <img
               src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
@@ -179,7 +181,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
               }}
             />
             <Typography sx={{ color: "#555", mb: 2 }}>
-              Start creating and exploring without limits.
+              {t("membership.modalPremiumAccessMessage")}
             </Typography>
             <Button
               variant="contained"
@@ -190,7 +192,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 "&:hover": { backgroundColor: "#4B0082" },
               }}
             >
-              Get Started
+              {t("membership.modalGetStartedButton")}
             </Button>
           </SwiperSlide>
         </Swiper>

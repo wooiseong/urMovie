@@ -77,7 +77,10 @@ const EditJournalPage = () => {
       });
 
       if (existingJournals) {
-        const updatedJournals = [newJournal, ...(existingJournals.journals ?? [])];
+        const updatedJournals = [
+          newJournal,
+          ...(existingJournals.journals ?? []),
+        ];
         // Keep only the first 10 journals
         const limitedJournals = updatedJournals.slice(0, 10);
 

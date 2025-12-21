@@ -6,6 +6,7 @@ import CustomTextField from "src/globalComponents/CustomTextfield";
 import { useState } from "react";
 import ColorPickerPopover from "./ColorPickerPopover";
 import { Quote } from "../pages/EditJournalPage";
+import { useTranslation } from "react-i18next";
 
 interface QuoteItemProps {
   quote: Quote;
@@ -21,6 +22,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
   readOnly,
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const { t } = useTranslation();
   const backgroundColor = readOnly
     ? quote.backgroundColor
     : quote.backgroundColor ?? "#1e1e1e";
@@ -58,7 +60,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
             zIndex: 2,
           }}
         >
-          <Tooltip title="更改顏色">
+          <Tooltip title={t("home.changeColor")}>
             <IconButton
               onClick={handleOpen}
               sx={{ "& svg": { cursor: "pointer" } }}
@@ -66,12 +68,12 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
               <ColorLensIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="更改內容">
+          <Tooltip title={t("home.changeContent")}>
             <IconButton sx={{ "& svg": { cursor: "pointer" } }}>
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="刪除臺詞">
+          <Tooltip title={t("home.deleteQuote")}>
             <IconButton
               sx={{ "& svg": { cursor: "pointer" } }}
               onClick={onDelete}
@@ -97,7 +99,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
         </Typography>
       ) : (
         <CustomTextField
-          placeholder="寫些什麽吧..."
+          placeholder={t("home.writeSomething")}
           sx={{
             flexGrow: 1,
             mt: 1,
@@ -128,7 +130,7 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
       ) : (
         <Box sx={{ position: "absolute", bottom: 0, right: 0 }}>
           <CustomTextField
-            placeholder="電影名字"
+            placeholder={t("home.movieTitle")}
             sx={{
               input: {
                 textAlign: "right",

@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { GetUsersWithStatsQuery } from "src/generated/graphql";
 import { useState, useMemo } from "react";
 import CustomSearchBar from "src/globalComponents/CustomSearchBar";
+import { useTranslation } from "react-i18next";
 
 interface UserStatsProps {
   getUsersWithStats: GetUsersWithStatsQuery["getUsersWithStats"];
@@ -28,6 +29,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const { t } = useTranslation();
 
   // Handle sort toggle
   const handleSort = (field: SortField) => {
@@ -133,7 +135,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
         }}
       >
         <Typography variant="h5">
-          User Details
+          {t("admin.userDetails")}
           <Typography
             component="span"
             variant="subtitle1"
@@ -143,10 +145,10 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
             {searchTerm.trim()
               ? filteredAndSortedUsers.length
               : getUsersWithStats.length}{" "}
-            users
+            {t("admin.users")}
             {searchTerm.trim() &&
               filteredAndSortedUsers.length !== getUsersWithStats.length && (
-                <> / {getUsersWithStats.length} total</>
+                <> / {getUsersWithStats.length} {t("admin.total")}</>
               )}
             )
           </Typography>
@@ -155,7 +157,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
           <CustomSearchBar
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search username, tags, or dates"
+            placeholder={t("admin.searchUserPlaceholder")}
           />
         </Box>
       </Box>
@@ -165,7 +167,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
             <TableRow>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  Username
+                  {t("admin.username")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("username")}
@@ -193,7 +195,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                     justifyContent: "flex-end",
                   }}
                 >
-                  Journals Created
+                  {t("admin.journalsCreated")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("journalCount")}
@@ -212,10 +214,10 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   </IconButton>
                 </Box>
               </TableCell>
-              <TableCell>Tags (name: count)</TableCell>
+              <TableCell>{t("admin.tags")}</TableCell>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  Last Publish
+                  {t("admin.lastPublish")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("lastJournalDate")}
@@ -236,7 +238,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
               </TableCell>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  Registration Date
+                  {t("admin.registrationDate")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("createdAt")}
@@ -265,7 +267,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   align="center"
                   sx={{ py: 4, color: "gray" }}
                 >
-                  No users found matching "{searchTerm}"
+                  {t("admin.noUsersFound")}"{searchTerm}"
                 </TableCell>
               </TableRow>
             ) : (
@@ -283,12 +285,12 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   <TableCell>
                     {user.lastJournalDate
                       ? dayjs(user.lastJournalDate).format("YYYY-MM-DD")
-                      : "N/A"}
+                      : t("admin.notAvailable")}
                   </TableCell>
                   <TableCell>
                     {user.createdAt
                       ? dayjs(user.createdAt).format("YYYY-MM-DD")
-                      : "N/A"}
+                      : t("admin.notAvailable")}
                   </TableCell>
                 </TableRow>
               ))

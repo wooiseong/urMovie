@@ -7,6 +7,8 @@ import { JournalFormData } from "../pages/EditJournalPage";
 import { Quote } from "src/generated/graphql";
 import InboxIcon from "@mui/icons-material/Inbox";
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+
 interface QuoteBoardProps {
   quote: Quote[];
   setFormData?: React.Dispatch<React.SetStateAction<JournalFormData>>;
@@ -19,6 +21,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
   readOnly,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { t } = useTranslation();
 
   // Filter quotes based on search term (search in name and content)
   const filteredQuotes = useMemo(() => {
@@ -85,23 +88,23 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ marginRight: "15px" }}>
             <Typography variant="subtitle1" fontSize="18px">
-              經典臺詞
+              {t("home.classicLines")}
             </Typography>
             <Typography variant="subtitle2">
-              共{" "}
+              {t("home.totalEntries")}{" "}
               <Box component="span" fontSize="20px">
                 {searchTerm.trim() ? filteredQuotes.length : quote.length}
               </Box>{" "}
-              篇内容
+              {t("home.entries")}
               {searchTerm.trim() && quote.length !== filteredQuotes.length && (
                 <Box component="span" sx={{ color: "#aaa", ml: 0.5 }}>
-                  (總共 {quote.length} 篇)
+                  ({t("home.totalEntries")} {quote.length} {t("home.entries")})
                 </Box>
               )}
             </Typography>
           </Box>
           {!readOnly && (
-            <Tooltip title="新增臺詞">
+            <Tooltip title={t("home.addQuote")}>
               <IconButton onClick={handleAddQuote}>
                 <AddCircleIcon />
               </IconButton>
@@ -111,7 +114,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         <CustomSearchBar
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="搜尋台詞標題或內容"
+          placeholder={t("home.searchQuotePlaceholder")}
         />
       </Box>
 
@@ -129,7 +132,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         >
           <InboxIcon sx={{ fontSize: 60, mb: 1 }} />
           <Typography variant="body1">
-            暫無內容，點擊上方「＋」新增台詞
+            {t("home.noContentYet")}
           </Typography>
         </Box>
       ) : filteredQuotes.length === 0 ? (
@@ -145,7 +148,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         >
           <InboxIcon sx={{ fontSize: 60, mb: 1 }} />
           <Typography variant="body1">
-            找不到符合「{searchTerm}」的台詞
+            {t("home.noMatchingQuotes")}{searchTerm}"
           </Typography>
         </Box>
       ) : (

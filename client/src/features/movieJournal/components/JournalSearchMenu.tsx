@@ -98,8 +98,8 @@ const JournalSearchMenu = ({
             alignItems: "bottom",
           }}
         >
-          <Typography variant="h6">{t("搜尋篩選")}</Typography>
-          <Button onClick={onClearFilters}>清除條件</Button>
+          <Typography variant="h6">{t("movieJournal.searchFilter")}</Typography>
+          <Button onClick={onClearFilters}>{t("movieJournal.clearFilters")}</Button>
         </Box>
         <Box>
           <CustomDropdown

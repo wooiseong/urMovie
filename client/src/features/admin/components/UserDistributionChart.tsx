@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Card, CardContent, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 // Register Chart.js components + plugin
 Chart.register(PieController, ArcElement, Tooltip, Legend, ChartDataLabels);
@@ -24,6 +25,7 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
 }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -36,7 +38,7 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
     const premiumUsers = totalPremiumUsers;
 
     const data = {
-      labels: ["Regular Users", "Premium Users"],
+      labels: [t("admin.regularUsers"), t("admin.premiumUsers")],
       datasets: [
         {
           data: [regularUsers, premiumUsers],
@@ -113,7 +115,7 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
     <Card>
       <CardContent>
         <Typography color="textSecondary" gutterBottom>
-          User Distribution
+          {t("admin.userDistribution")}
         </Typography>
         <div style={{ height: "300px", width: "100%" }}>
           <canvas ref={chartRef}></canvas>

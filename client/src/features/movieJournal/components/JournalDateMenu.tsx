@@ -109,8 +109,8 @@ const JournalDateMenu = ({ startDate, endDate, onDateChange }: JournalDateMenuPr
 
       <CustomTextField
         icon={<DateRangeIcon />}
-        label="日期範圍"
-        placeholder="選擇日期範圍"
+        label={t("movieJournal.dateRange")}
+        placeholder={t("movieJournal.selectDateRange")}
         value={
           selectedRange.from && selectedRange.to
             ? `${selectedRange.from.format("YYYY-MM-DD")} ~ ${selectedRange.to.format("YYYY-MM-DD")}`
@@ -146,28 +146,28 @@ const JournalDateMenu = ({ startDate, endDate, onDateChange }: JournalDateMenuPr
           {/* 左邊快捷選擇 */}
           <Stack spacing={1}>
             <Button variant="outlined" size="small" onClick={quickSelect.today}>
-              今天
+              {t("movieJournal.today")}
             </Button>
             <Button
               variant="outlined"
               size="small"
               onClick={quickSelect.yesterday}
             >
-              昨天
+              {t("movieJournal.yesterday")}
             </Button>
             <Button
               variant="outlined"
               size="small"
               onClick={quickSelect.lastWeek}
             >
-              過去 1 星期
+              {t("movieJournal.lastWeek")}
             </Button>
             <Button
               variant="outlined"
               size="small"
               onClick={quickSelect.lastMonth}
             >
-              過去 1 個月
+              {t("movieJournal.lastMonth")}
             </Button>
           </Stack>
 

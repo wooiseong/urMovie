@@ -13,6 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import React, { useState } from "react";
 import { formTag } from "src/features/home/pages/EditJournalPage";
+import { useTranslation } from "react-i18next";
 
 interface TagDropdownMenuProps {
   readonly?: boolean;
@@ -28,6 +29,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
   onClose,
 }) => {
   const [newTag, setNewTag] = useState("");
+  const { t } = useTranslation();
 
   /** --------------------
    * 新增 Tag
@@ -109,13 +111,13 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
 
   return (
     <Box sx={{ p: 2, width: 300 }}>
-      <Typography sx={{ fontWeight: 600, mb: 1 }}>標籤管理</Typography>
+      <Typography sx={{ fontWeight: 600, mb: 1 }}>{t("global.tagManagement")}</Typography>
 
       {readonly ? null : (
         <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1 }}>
           <TextField
             size="small"
-            placeholder="新增標籤..."
+            placeholder={t("global.addTagPlaceholder")}
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             onKeyDown={(e) => {
@@ -126,7 +128,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
             }}
             sx={{ flex: 1 }}
           />
-          <Tooltip title="新增">
+          <Tooltip title={t("global.add")}>
             <IconButton onClick={handleAddTag} size="small">
               <AddCircleIcon color="primary" />
             </IconButton>
@@ -160,7 +162,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
               {readonly ? null : (
                 <IconButton
                   edge="end"
-                  aria-label="delete"
+                  aria-label={t("global.delete")}
                   size="small"
                   onClick={(e) => handleDelete(tag.name, e)}
                   sx={{ color: tag.selected ? "#fff" : "#888" }}
