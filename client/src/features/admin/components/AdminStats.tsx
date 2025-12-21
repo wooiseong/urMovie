@@ -1,12 +1,14 @@
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 import { GetAdminStatsQuery } from "src/generated/graphql";
 import UserDistributionChart from "./UserDistributionChart";
+import { useTranslation } from "react-i18next";
 
 interface AdminStatsProps {
   getAdminStats: GetAdminStatsQuery["getAdminStats"];
 }
 
 const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
+  const { t } = useTranslation();
   if (!getAdminStats) {
     return null;
   }
@@ -14,14 +16,14 @@ const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        Admin Statistics
+        {t("admin.adminStatistics")}
       </Typography>
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                Total Members
+                {t("admin.totalMembers")}
               </Typography>
               <Typography variant="h5">{getAdminStats.totalMembers}</Typography>
             </CardContent>
@@ -31,7 +33,7 @@ const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                Regular Users
+                {t("admin.regularUsers")}
               </Typography>
               <Typography variant="h5">{getAdminStats.totalUsers}</Typography>
             </CardContent>
@@ -41,7 +43,7 @@ const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                Premium Users
+                {t("admin.premiumUsers")}
               </Typography>
               <Typography variant="h5">
                 {getAdminStats.totalPremiumUsers}
@@ -53,7 +55,7 @@ const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                Total Journals
+                {t("admin.totalJournals")}
               </Typography>
               <Typography variant="h5">
                 {getAdminStats.totalJournals}
@@ -65,7 +67,7 @@ const AdminStats = ({ getAdminStats }: AdminStatsProps) => {
           <Card>
             <CardContent>
               <Typography color="textSecondary" gutterBottom>
-                Estimated Salary
+                {t("admin.estimatedSalary")}
               </Typography>
               <Typography variant="h5">${getAdminStats.totalSalary}</Typography>
             </CardContent>

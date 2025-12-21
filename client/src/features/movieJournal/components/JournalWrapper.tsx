@@ -6,6 +6,7 @@ import WindowIcon from "@mui/icons-material/Window";
 import JournalSearchMenu from "./JournalSearchMenu";
 import { useNavigate } from "react-router-dom";
 import { JournalFilters } from "../pages/index";
+import { useTranslation } from "react-i18next";
 
 interface JournalWrapperProps {
   filters: JournalFilters;
@@ -25,13 +26,14 @@ const JournalWrapper = ({
   totalCount,
 }: JournalWrapperProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Box sx={{ marginBottom: "20px" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ marginRight: "15px" }}>
-            <CustomSectionTitle label={"收藏文章"}></CustomSectionTitle>
+            <CustomSectionTitle label={t("movieJournal.collectionArticles")}></CustomSectionTitle>
             <Box
               sx={{
                 display: "flex",
@@ -40,11 +42,11 @@ const JournalWrapper = ({
               }}
             >
               <Typography variant="subtitle2">
-                共
+                {t("movieJournal.total")}
                 <Box component="span" fontSize="20px">
                   {totalCount}
                 </Box>
-                篇内容
+                {t("movieJournal.articles")}
               </Typography>
               <IconButton
                 onClick={() => {
@@ -55,7 +57,7 @@ const JournalWrapper = ({
               </IconButton>
             </Box>
           </Box>
-          <Tooltip title="新增臺詞">
+          <Tooltip title={t("home.addQuote")}>
             <IconButton
             // onClick={handleAddQuote}
             >

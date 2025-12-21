@@ -23,7 +23,7 @@ const MembershipPage = () => {
         const { message, user } = data.upgradeToPremium;
 
         if (message.includes("success")) {
-          toast.success("Successfully upgraded!");
+          toast.success(t("membership.successfullyUpgraded"));
           if (user) {
             dispatch(setUser(user as any));
           }
@@ -41,21 +41,21 @@ const MembershipPage = () => {
 
   const plans = [
     {
-      title: "1星會員",
+      title: t("membership.tier1Title"),
       titleBackgroundColor: "#000",
       cardBackgroundColor: "#404040",
-      cardContent: ["10次金句使用次數", "限制8種顏色設定"],
+      cardContent: [t("membership.tier1Content1"), t("membership.tier1Content2")],
       buttonColor: "grey.400",
-      buttonTitle: "目前方案",
+      buttonTitle: t("membership.currentPlan"),
       planRole: "user",
     },
     {
-      title: "升級方案",
+      title: t("membership.upgradeTitle"),
       titleBackgroundColor: "#720e9e",
       cardBackgroundColor: "#4B0082",
-      cardContent: ["你可以自行改寫功能內容", "再增加更多會員功能"],
+      cardContent: [t("membership.upgradeContent1"), t("membership.upgradeContent2")],
       buttonColor: "#1976d2",
-      buttonTitle: "升級會員",
+      buttonTitle: t("membership.upgradeMember"),
       planRole: "premiumUser",
       onClick: handleUpgrade,
       loading,
@@ -67,7 +67,7 @@ const MembershipPage = () => {
       <CustomSectionTitle label={t("home.createEdit")} />
 
       <Typography variant="h5" textAlign="center" mb={4}>
-        已有30位會員升級，趕快解鎖以獲得更多功能吧！
+        {t("membership.upgradePrompt")}
       </Typography>
 
       <Box

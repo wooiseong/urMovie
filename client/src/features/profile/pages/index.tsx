@@ -90,7 +90,7 @@ const ProfilePage = () => {
           />
           <CustomTextField
             label={t("user.oldPassword")}
-            placeholder={t("home.movieName")}
+            placeholder={t("user.oldPassword")}
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
@@ -103,7 +103,7 @@ const ProfilePage = () => {
           <CustomTextField
             label={t("user.newPassword")}
             value={newPassword}
-            placeholder={t("home.movieName")}
+            placeholder={t("user.newPassword")}
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {

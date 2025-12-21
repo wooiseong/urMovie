@@ -15,8 +15,10 @@ import {
 
 import AdminStats from "../components/AdminStats";
 import UserStats from "../components/UserStats";
+import { useTranslation } from "react-i18next";
 
 const AdminStatisticsPage = () => {
+  const { t } = useTranslation();
   const {
     data: statsData,
     loading: statsLoading,
@@ -59,7 +61,7 @@ const AdminStatisticsPage = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Admin Panel
+        {t("admin.adminPanel")}
       </Typography>
 
       <Box sx={{ mb: 2 }}>
@@ -68,13 +70,13 @@ const AdminStatisticsPage = () => {
           onClick={() => setActiveView("adminstats")}
           sx={{ mr: 2 }}
         >
-          Admin Stats
+          {t("admin.adminStats")}
         </Button>
         <Button
           variant={activeView === "userstats" ? "contained" : "outlined"}
           onClick={() => setActiveView("userstats")}
         >
-          User Stats
+          {t("admin.userStats")}
         </Button>
       </Box>
 

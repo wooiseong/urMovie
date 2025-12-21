@@ -98,15 +98,17 @@ const JournalSearchMenu = ({
             alignItems: "bottom",
           }}
         >
-          <Typography variant="h6">{t("搜尋篩選")}</Typography>
-          <Button onClick={onClearFilters}>清除條件</Button>
+          <Typography variant="h6">{t("movieJournal.searchFilter")}</Typography>
+          <Button onClick={onClearFilters}>
+            {t("movieJournal.clearFilters")}
+          </Button>
         </Box>
         <Box>
           <CustomDropdown
             readonly
-            label={t("home.tag")}
+            label={t("global.tag")}
             icon={<LocalOfferIcon />}
-            placeholder={t("home.tag")}
+            placeholder={t("global.selectTagPlaceholder")}
             fullWidth
             tagList={formattedTags}
             onTagChange={handleTagChange}

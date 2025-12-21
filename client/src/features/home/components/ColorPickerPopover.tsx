@@ -46,7 +46,7 @@ const ColorPickerPopover = ({
       slotProps={{ paper: { sx: { p: 2 } } }}
     >
       <Box>
-        <Typography sx={{ fontWeight: 600, mb: 1 }}>請選擇背景顏色</Typography>
+        <Typography sx={{ fontWeight: 600, mb: 1 }}>{t("home.selectBgColor")}</Typography>
         <Grid container sx={{ my: isUser ? "20px" : undefined }}>
           {isUser ? (
             colors.map((color) => (
@@ -102,7 +102,7 @@ const ColorPickerPopover = ({
             <Typography
               sx={{ fontSize: "12px", color: "gray", marginRight: "10px" }}
             >
-              升級獲得更多顏色
+              {t("home.upgradeForMoreColors")}
             </Typography>
             <CustomActionButton
               onClick={onClose}

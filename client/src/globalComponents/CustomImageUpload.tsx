@@ -10,6 +10,7 @@ import { deepmerge } from "@mui/utils";
 import { ChangeEvent, useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import defaultImage from "../img/default_imageUpload2.png";
+import { useTranslation } from "react-i18next";
 
 interface CustomImageUploadProps {
   label?: string;
@@ -29,6 +30,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
   onUpload,
 }) => {
   const [image, setImage] = useState<string>(value);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setImage(value);
@@ -49,7 +51,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
       };
       reader.readAsDataURL(file);
     } else {
-      alert("請上傳 jpg、jpeg 或 png 圖片");
+      alert(t("global.imageUploadError"));
     }
   };
 
@@ -112,7 +114,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
                 color: "#aaa",
               }}
             >
-              點擊上傳圖片
+              {t("global.clickToUploadImage")}
             </Box>
           )}
         </label>
