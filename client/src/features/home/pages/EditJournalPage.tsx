@@ -11,6 +11,8 @@ import {
   useCreateJournalMutation,
   useGetTagsQuery,
   useUpdateJournalMutation,
+  GetJournalsDocument,
+  GetJournalsQuery,
 } from "src/generated/graphql";
 import toast from "react-hot-toast";
 import { useQueryWithLoader } from "src/globalHooks/useQueryWithLoader";
@@ -63,8 +65,32 @@ const EditJournalPage = () => {
     quote: [],
   });
 
-  const [createJournal, { loading: createLoading }] =
-    useCreateJournalMutation();
+  const [createJournal, { loading: createLoading }] = useCreateJournalMutation({
+    update(cache, result) {
+      const newJournal = result.data?.createJournal;
+      if (!newJournal) return;
+
+      // Update the query with limit: 10 (used in PreviousEditSection)
+      const existingJournals = cache.readQuery<GetJournalsQuery>({
+        query: GetJournalsDocument,
+        variables: { limit: 10 },
+      });
+
+      if (existingJournals) {
+        const updatedJournals = [newJournal, ...(existingJournals.journals ?? [])];
+        // Keep only the first 10 journals
+        const limitedJournals = updatedJournals.slice(0, 10);
+
+        cache.writeQuery({
+          query: GetJournalsDocument,
+          variables: { limit: 10 },
+          data: {
+            journals: limitedJournals,
+          },
+        });
+      }
+    },
+  });
   const [updateJournal, { loading: updateLoading }] =
     useUpdateJournalMutation();
 
