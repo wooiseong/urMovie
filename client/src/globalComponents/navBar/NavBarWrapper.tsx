@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import UserMenu from "./UserMenu";
 import { useMeQuery } from "src/generated/graphql";
 import { useEffect } from "react";
+import DefaultAvatar from "../../assets/images/default-avatar.png";
 
 const NavBarWrapper = () => {
   const userRole = useAppSelector((state) => state.user.role);
@@ -26,7 +27,7 @@ const NavBarWrapper = () => {
     return null;
   }
 
-  const currentUserAvatar = meData?.me?.avatar || "/img/default_avatar.jpg";
+  const currentUserAvatar = meData?.me?.avatar || DefaultAvatar;
   const currentUserName = meData?.me?.username || "";
   const currentUserRole = (meData?.me?.role || "user") as
     | "admin"
