@@ -53,7 +53,17 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
   };
 
   const handleDelete = () => {
-    deleteJournal({ variables: { id: journal.id } });
+    deleteJournal({
+      variables: { id: journal.id },
+      update(cache) {
+        const normalizedId = cache.identify({
+          id: journal.id,
+          __typename: "Journal",
+        });
+        cache.evict({ id: normalizedId });
+        cache.gc();
+      },
+    });
     handleClose();
   };
 

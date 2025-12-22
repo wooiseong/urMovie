@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
+import defaultBackground from "src/assets/images/default-background.png";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -65,7 +66,7 @@ const JournalItem = ({ journal, onClick }: JournalItemProps) => {
       <CardMedia
         component="img"
         height="160"
-        image={journal.image ?? undefined}
+        image={journal.image ?? defaultBackground}
         alt={journal.movieName}
       />
       <CardContent sx={{ flexGrow: 1, position: "relative" }}>

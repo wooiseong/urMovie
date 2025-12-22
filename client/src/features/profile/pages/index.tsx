@@ -9,6 +9,7 @@ import CustomActionButton from "src/globalComponents/CustomActionButton";
 import SendIcon from "@mui/icons-material/Send";
 import toast from "react-hot-toast";
 import { useAppSelector } from "src/store/hook";
+import defaultAvatar from "../../../assets/images/default-avatar.png";
 
 const ProfilePage = () => {
   const { t } = useTranslation();
@@ -67,7 +68,7 @@ const ProfilePage = () => {
     ? avatar
     : avatar
     ? `${process.env.REACT_APP_IMAGE_URL || ""}${avatar}`
-    : "";
+    : defaultAvatar;
 
   return (
     <Box sx={{ pb: "70px", position: "relative" }}>
