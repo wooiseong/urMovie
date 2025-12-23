@@ -10,12 +10,15 @@ import UserMenu from "./UserMenu";
 import { useMeQuery } from "src/generated/graphql";
 import { useEffect } from "react";
 import DefaultAvatar from "../../assets/images/default-avatar.png";
+import urMovieLogo from "../../assets/images/urMovieLogo.png";
+import { useNavigate } from "react-router-dom";
 
 const NavBarWrapper = () => {
   const userRole = useAppSelector((state) => state.user.role);
   const dispatch = useAppDispatch();
   const { data: meData, loading } = useMeQuery();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (meData?.me) {
@@ -50,12 +53,22 @@ const NavBarWrapper = () => {
         }
       >
         <Button
+          onClick={() => navigate("/")}
+          disableRipple // Remove the ripple effect
           sx={{
-            marginLeft: "30px",
+            marginLeft: "20px",
             //  color: "#fff"
+            "&:hover": {
+              backgroundColor: "transparent", // Remove background on hover
+            },
+            cursor: "pointer", // Ensure pointer cursor
           }}
         >
-          <Typography fontSize="20px">UrMovie</Typography>
+          <img
+            src={urMovieLogo}
+            alt="UrMovie"
+            style={{ width: "110px", height: "35px" }}
+          />
         </Button>
         <Box display="flex" ml={2} justifyContent="space-between">
           <CustomNavButton
