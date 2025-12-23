@@ -8,9 +8,10 @@ import { GetJournalsQuery, Journal } from "src/generated/graphql";
 
 interface JournalContainerProps {
   journals: NonNullable<GetJournalsQuery["journals"]>;
+  isListView: boolean;
 }
 
-const JournalContainer = ({ journals }: JournalContainerProps) => {
+const JournalContainer = ({ journals, isListView }: JournalContainerProps) => {
   const [selectedJournal, setSelectedJournal] = useState<Journal | null>(null);
 
   const handleOpenModal = (journal: Journal) => setSelectedJournal(journal);
@@ -19,11 +20,14 @@ const JournalContainer = ({ journals }: JournalContainerProps) => {
   return (
     <>
       <Box
-        display="grid"
-        gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+        display={isListView ? "flex" : "grid"}
+        flexDirection={isListView ? "column" : "unset"}
+        gridTemplateColumns={
+          isListView ? "unset" : "repeat(auto-fill, minmax(250px, 1fr))"
+        }
         gap={2}
         justifyContent="center"
-        justifyItems="center"
+        justifyItems={isListView ? "unset" : "center"}
         width="100%"
       >
         {journals.map((journal) => (
@@ -31,6 +35,7 @@ const JournalContainer = ({ journals }: JournalContainerProps) => {
             key={journal.id}
             journal={journal}
             onClick={() => handleOpenModal(journal)}
+            isListView={isListView}
           />
         ))}
       </Box>

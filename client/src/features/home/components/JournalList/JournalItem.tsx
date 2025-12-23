@@ -21,9 +21,10 @@ import JournalMenu from "./JournalMenu";
 interface JournalItemProps {
   journal: NonNullable<GetJournalsQuery["journals"]>[number];
   onClick?: () => void;
+  isListView?: boolean; // New prop for list view
 }
 
-const JournalItem = ({ journal, onClick }: JournalItemProps) => {
+const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [showExpandBtn, setShowExpandBtn] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -46,85 +47,116 @@ const JournalItem = ({ journal, onClick }: JournalItemProps) => {
     <Card
       onClick={onClick}
       sx={{
-        width: 280,
-        minHeight: 400,
-        maxHeight: 600,
+        width: isListView ? "100%" : 280,
+        minHeight: isListView ? 150 : "auto",
+        maxHeight: isListView ? 150 : 600,
         borderRadius: 3,
         position: "relative",
         boxShadow: 3,
         flexShrink: 0,
-        display: "flex",
-        flexDirection: "column",
         mb: 2,
         cursor: "pointer",
+        overflow: "visible", // Ensure popup is not clipped
       }}
     >
-      {/* setting icon */}
-      <JournalMenu journal={journal} />
-
-      {/* 圖片 */}
-      <CardMedia
-        component="img"
-        height="160"
-        image={journal.image ?? defaultBackground}
-        alt={journal.movieName}
-      />
-      <CardContent sx={{ flexGrow: 1, position: "relative" }}>
-        <Typography variant="h6" fontWeight={600}>
-          {journal.movieName}
-        </Typography>
-        <Typography variant="subtitle2" color="text.secondary">
-          {journal.director}
-        </Typography>
-        {journal.tag && journal.tag.length > 0 && (
-          <Chip
-            label={journal.tag?.map((t) => t.name).join(", ") ?? ""}
-            size="small"
-            sx={{ mt: 1, mb: 1, backgroundColor: "#404040" }}
-          />
-        )}
-
-        <Box
-          ref={contentRef}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: isListView ? "row" : "column",
+          height: "100%",
+          // To ensure the card keeps its shape in grid view
+          minHeight: isListView ? "100%" : 400,
+        }}
+      >
+        {/* 圖片 */}
+        <CardMedia
+          component="img"
+          height={isListView ? undefined : "160"}
           sx={{
-            display: "-webkit-box",
-            WebkitLineClamp: expanded ? "none" : 4,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
+            width: isListView ? "calc(2/12 * 100%)" : "100%",
+            objectFit: "cover",
+            flexShrink: 0,
+          }}
+          image={journal.image ?? defaultBackground}
+          alt={journal.movieName}
+        />
+        <CardContent
+          sx={{
+            flexGrow: 1,
+            position: "relative",
+            width: "100%", // Let flexbox handle the width
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: isListView ? undefined : "space-between",
+            p: 2,
           }}
         >
-          {journalContent}
-        </Box>
+          <Box>
+            <Typography variant="h6" fontWeight={600}>
+              {journal.movieName}
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              {journal.director}
+            </Typography>
+            {journal.tag && journal.tag.length > 0 && (
+              <Chip
+                label={journal.tag?.map((t) => t.name).join(", ") ?? ""}
+                size="small"
+                sx={{ mt: 1, mb: 1, backgroundColor: "#404040" }}
+              />
+            )}
 
-        {/* 展開/收起按鈕 */}
-        {showExpandBtn && (
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleExpand();
-            }}
+            <Box
+              ref={contentRef}
+              sx={{
+                display: "-webkit-box",
+                WebkitLineClamp: expanded ? "none" : 2, // Reduced lines for list view
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                maxHeight: "3rem", // fallback for non-webkit browsers
+              }}
+            >
+              {journalContent}
+            </Box>
+          </Box>
+
+          {/* 展開/收起按鈕 */}
+          {showExpandBtn &&
+            !isListView && ( // Hide expand button in list view for simplicity
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleExpand();
+                }}
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
+                {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            )}
+
+          {/* 日期 */}
+          <Box
             sx={{
-              position: "absolute",
-              bottom: 0,
-              left: "50%",
-              transform: "translateX(-50%)",
+              marginTop: isListView ? "auto" : undefined,
+              alignSelf: "flex-end", // Align date to bottom right in list view
+              mt: 1, // Margin top for spacing
             }}
+            textAlign="left"
           >
-            {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </IconButton>
-        )}
-
-        {/* 日期 */}
-        <Box
-          sx={{ position: "absolute", right: "3%", bottom: "1%" }}
-          textAlign="left"
-        >
-          <Typography variant="caption" color="text.disabled">
-            {journal.updatedAt}
-          </Typography>
-        </Box>
-      </CardContent>
+            <Typography variant="caption" color="text.disabled">
+              {dayjs(journal.updatedAt).format("YYYY-MM-DD")}
+            </Typography>
+          </Box>
+        </CardContent>
+      </Box>
+      {/* setting icon */}
+      <JournalMenu journal={journal} />
     </Card>
   );
 };

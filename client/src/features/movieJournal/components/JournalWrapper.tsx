@@ -7,7 +7,7 @@ import JournalSearchMenu from "./JournalSearchMenu";
 import { useNavigate } from "react-router-dom";
 import { JournalFilters } from "../pages/index";
 import { useTranslation } from "react-i18next";
-
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 interface JournalWrapperProps {
   filters: JournalFilters;
   searchTerm: string;
@@ -15,6 +15,8 @@ interface JournalWrapperProps {
   onFilterChange: (filters: Partial<JournalFilters>) => void;
   onClearFilters: () => void;
   totalCount: number;
+  isListView: boolean;
+  onToggleView: () => void;
 }
 
 const JournalWrapper = ({
@@ -24,6 +26,8 @@ const JournalWrapper = ({
   onFilterChange,
   onClearFilters,
   totalCount,
+  isListView,
+  onToggleView,
 }: JournalWrapperProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -33,7 +37,9 @@ const JournalWrapper = ({
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ marginRight: "15px" }}>
-            <CustomSectionTitle label={t("movieJournal.collectionArticles")}></CustomSectionTitle>
+            <CustomSectionTitle
+              label={t("movieJournal.collectionArticles")}
+            ></CustomSectionTitle>
             <Box
               sx={{
                 display: "flex",
@@ -80,8 +86,9 @@ const JournalWrapper = ({
               width: 40,
               height: 40,
             }}
+            onClick={onToggleView}
           >
-            <WindowIcon />
+            {isListView ? <FormatListBulletedIcon /> : <WindowIcon />}
           </IconButton>
         </Box>
       </Box>
