@@ -16,6 +16,7 @@ export interface JournalFilters {
 const MovieJournalPage = () => {
   const [filters, setFilters] = useState<JournalFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [isListView, setIsListView] = useState(false); // New state for list view
 
   const {
     data: journalData,
@@ -81,6 +82,10 @@ const MovieJournalPage = () => {
     setSearchTerm(value);
   };
 
+  const handleToggleView = () => {
+    setIsListView((prev) => !prev);
+  };
+
   return (
     <Box>
       <JournalWrapper
@@ -90,8 +95,10 @@ const MovieJournalPage = () => {
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
         totalCount={filteredJournals.length}
+        isListView={isListView}
+        onToggleView={handleToggleView}
       />
-      <JournalContainer journals={filteredJournals} />
+      <JournalContainer journals={filteredJournals} isListView={isListView} />
     </Box>
   );
 };

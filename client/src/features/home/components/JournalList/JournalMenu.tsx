@@ -89,6 +89,7 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
             position: "absolute",
             top: 8,
             right: 8,
+            zIndex: 1,
             "&:hover": { backgroundColor: "rgba(0,0,0,0.1)" },
           }}
           onClick={(e) => {
