@@ -144,20 +144,24 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              bgcolor: tag.selected ? "#1976d2" : "transparent",
-              color: tag.selected ? "#fff" : "inherit",
+              bgcolor: tag.selected ? "primary.main" : "transparent",
+              color: tag.selected ? "primary.contrastText" : "inherit",
               borderRadius: 1,
               mb: 0.5,
               px: 1,
               py: 0.5,
               cursor: "pointer",
-              "&:hover": { bgcolor: tag.selected ? "#1565c0" : "#f5f5f5" },
+              "&:hover": {
+                bgcolor: tag.selected ? "primary.dark" : "action.hover",
+              },
             }}
             onClick={() => handleToggle(tag.name)}
           >
             <ListItemText primary={tag.name} />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              {tag.selected && <CheckCircleIcon sx={{ color: "#fff" }} />}
+              {tag.selected && (
+                <CheckCircleIcon sx={{ color: "primary.contrastText" }} />
+              )}
 
               {readonly ? null : (
                 <IconButton
@@ -165,7 +169,11 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
                   aria-label={t("global.delete")}
                   size="small"
                   onClick={(e) => handleDelete(tag.name, e)}
-                  sx={{ color: tag.selected ? "#fff" : "#888" }}
+                  sx={{
+                    color: tag.selected
+                      ? "primary.contrastText"
+                      : "text.secondary",
+                  }}
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>

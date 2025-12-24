@@ -122,7 +122,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
       icon: <OfflineBoltIcon />,
       label: t("navBar.upgrade"),
       to: "/membership",
-      sx: { color: "#FCF55F" },
+      sx: { color: "secondary.main" },
     },
     {
       icon: <ExitToAppIcon />,
@@ -140,17 +140,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
             component="img"
             src={avatar || "/img/default_avatar.jpg"}
             alt="User Avatar"
-            sx={{
+            sx={(theme) => ({
               boxShadow:
                 userRole === "premiumUser"
-                  ? "0 0 8px 2px rgba(225, 229, 113, 0.97)"
+                  ? `0 0 8px 2px ${theme.palette.secondary.main}`
                   : "none",
               marginX: "10px",
               width: 40,
               height: 40,
               borderRadius: "50%",
               objectFit: "cover",
-            }}
+            })}
           />
         </IconButton>
 

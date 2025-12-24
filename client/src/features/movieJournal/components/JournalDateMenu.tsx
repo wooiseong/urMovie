@@ -119,7 +119,7 @@ const JournalDateMenu = ({ startDate, endDate, onDateChange }: JournalDateMenuPr
         sx={{
           paddingLeft: "10px",
           "& .MuiOutlinedInput-root": {
-            backgroundColor: "#404040",
+            backgroundColor: "background.paper",
           },
         }}
         onClick={handleOpen}

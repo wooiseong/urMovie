@@ -46,8 +46,8 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         {
           name: "",
           content: "",
-          backgroundColor: "#1e1e1e",
-          textColor: "#ffffff",
+          backgroundColor: "background.paper",
+          textColor: "text.primary",
         },
       ],
     }));
@@ -74,7 +74,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
   return (
     <Box
       sx={{
-        backgroundColor: "#404040",
+        backgroundColor: "background.paper",
         marginTop: "30px",
         px: "20px",
         pt: "10px",
@@ -97,7 +97,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
               </Box>{" "}
               {t("home.entries")}
               {searchTerm.trim() && quote.length !== filteredQuotes.length && (
-                <Box component="span" sx={{ color: "#aaa", ml: 0.5 }}>
+                <Box component="span" sx={{ color: "text.secondary", ml: 0.5 }}>
                   ({t("home.totalEntries")} {quote.length} {t("home.entries")})
                 </Box>
               )}
@@ -126,7 +126,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            color: "gray",
+            color: "text.secondary",
             height: "165px",
           }}
         >
@@ -142,7 +142,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            color: "gray",
+            color: "text.secondary",
             height: "165px",
           }}
         >
@@ -194,7 +194,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
           bottom: "-3%",
           left: "50%",
           transform: "translateX(-50%)",
-          backgroundColor: "#606060",
+          backgroundColor: "background.default",
           padding: "0px 10px",
           borderRadius: "8px",
         }}

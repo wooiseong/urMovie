@@ -69,7 +69,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
       width: 260,
       height: 250,
       borderRadius: "4px",
-      backgroundColor: "#404040",
+      backgroundColor: "background.paper",
       overflow: "hidden",
       cursor: "pointer",
       img: {
@@ -111,7 +111,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#aaa",
+                color: "text.secondary",
               }}
             >
               {t("global.clickToUploadImage")}
@@ -127,9 +127,9 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
               position: "absolute",
               top: 4,
               right: 4,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              color: "#fff",
-              "&:hover": { backgroundColor: "rgba(0,0,0,0.8)" },
+              backgroundColor: "background.default",
+              color: "text.primary",
+              "&:hover": { backgroundColor: "background.paper" },
             }}
             onClick={(e) => {
               e.preventDefault(); // 避免觸發 input 點擊

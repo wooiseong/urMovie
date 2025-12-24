@@ -36,23 +36,23 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
 }) => {
   // 預設樣式
   const defaultSx: SxProps<Theme> = {
-    color: "#fff",
+    color: "text.primary",
     "& .MuiOutlinedInput-root": {
       "& fieldset": { border: "none" },
       "&:hover fieldset": { border: "none" },
       "&.Mui-focused fieldset": { border: "none" },
     },
     input: {
-      color: "#fff",
+      color: "text.primary",
       backgroundColor: "transparent",
       padding: "8px 12px",
     },
     textarea: {
-      color: "#fff",
+      color: "text.primary",
       lineHeight: 1.6,
     },
     "& .MuiInputBase-input::placeholder": {
-      color: "#aaa",
+      color: "text.secondary",
       opacity: 1,
     },
   };

@@ -42,8 +42,8 @@ const MembershipPage = () => {
   const plans = [
     {
       title: t("membership.tier1Title"),
-      titleBackgroundColor: "#000",
-      cardBackgroundColor: "#404040",
+      titleBackgroundColor: "background.paper",
+      cardBackgroundColor: "background.default",
       cardContent: [t("membership.tier1Content1"), t("membership.tier1Content2")],
       buttonColor: "grey.400",
       buttonTitle: t("membership.currentPlan"),
@@ -51,10 +51,10 @@ const MembershipPage = () => {
     },
     {
       title: t("membership.upgradeTitle"),
-      titleBackgroundColor: "#720e9e",
-      cardBackgroundColor: "#4B0082",
+      titleBackgroundColor: "secondary.main",
+      cardBackgroundColor: "secondary.dark",
       cardContent: [t("membership.upgradeContent1"), t("membership.upgradeContent2")],
-      buttonColor: "#1976d2",
+      buttonColor: "primary.main",
       buttonTitle: t("membership.upgradeMember"),
       planRole: "premiumUser",
       onClick: handleUpgrade,

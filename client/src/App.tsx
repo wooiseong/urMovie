@@ -32,13 +32,44 @@ function AppWithTheme() {
       createTheme({
         palette: {
           mode,
-          // ...(mode === "light"
-          //   ? {
-          //       background: { default: "#fff" },
-          //     }
-          //   : {
-          //       background: { default: "#121212" },
-          //     }),
+          primary: {
+            main: "#0075f9",
+          },
+          ...(mode === "light"
+            ? {
+                secondary: {
+                  main: "#720e9e",
+                  dark: "#4B0082",
+                },
+                success: {
+                  main: "#3EB380",
+                },
+                background: {
+                  default: "#f5f5f5",
+                  paper: "#ffffff",
+                },
+                text: {
+                  primary: "#333333",
+                  secondary: "#555555",
+                },
+              }
+            : {
+                secondary: {
+                  main: "#FCF55F",
+                  dark: "#FAD02E",
+                },
+                success: {
+                  main: "#3EB380",
+                },
+                background: {
+                  default: "#121212",
+                  paper: "#1e1e1e",
+                },
+                text: {
+                  primary: "#ffffff",
+                  secondary: "#a8a8a8",
+                },
+              }),
         },
       }),
     [mode]

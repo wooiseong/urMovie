@@ -58,9 +58,9 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
 
   const mergedSx = deepmerge(
     {
-      backgroundColor: "#404040",
+      backgroundColor: "background.paper",
       borderRadius: "8px",
-      color: "#fff",
+      color: "text.primary",
       minHeight: 48,
       px: 1,
       py: 0.5,
@@ -69,7 +69,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       flexWrap: "wrap",
       gap: 0.5,
       cursor: "text",
-      "&:hover": { backgroundColor: "#505050" },
+      "&:hover": { backgroundColor: "background.default" },
     },
     sx
   );
@@ -90,19 +90,19 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
             key={tag.name}
             label={tag.name}
             onDelete={() => handleRemoveTag(tag.name)}
-            deleteIcon={<CloseIcon sx={{ color: "#fff" }} />}
+            deleteIcon={<CloseIcon sx={{ color: "text.primary" }} />}
             sx={{
-              backgroundColor: "#616161",
-              color: "#fff",
+              backgroundColor: "background.default",
+              color: "text.primary",
               height: 26,
-              "& .MuiChip-deleteIcon": { color: "#fff" },
+              "& .MuiChip-deleteIcon": { color: "text.primary" },
             }}
           />
         ))}
 
         {/* ✅ placeholder 在沒有選中 tag 時顯示 */}
         {selectedTags.length === 0 && (
-          <Typography sx={{ color: "#aaa", fontSize: 14 }}>
+          <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
             {placeholder}
           </Typography>
         )}

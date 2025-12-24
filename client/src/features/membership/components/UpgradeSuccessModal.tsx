@@ -63,7 +63,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
         <style>
           {`
             .swiper-pagination-bullet {
-              background-color: #aaa !important;
+              background-color: #555555 !important;
               width: 8px;
               height: 8px;
               opacity: 0.8;
@@ -79,7 +79,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 z-index: 10;
                 cursor: pointer;
                 color: #720e9e;
-                background-color: rgba(255,255,255,0.5);
+                background-color: #f5f5f5;
                 border-radius: 50%;
                 width: 32px;
                 height: 32px;
@@ -88,7 +88,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 justify-content: center;
             }
             .swiper-button-prev-custom:hover, .swiper-button-next-custom:hover {
-                background-color: rgba(255,255,255,0.8);
+                background-color: #e0e0e0;
             }
             .swiper-button-prev-custom {
                 left: 15px;
@@ -129,7 +129,7 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
           style={{ width: "100%", height: "100%" }} // <-- Fill modal
         >
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
+            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
               {t("membership.modalUpgradeSuccessTitle")}
             </Typography>
             <img
@@ -142,13 +142,13 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 marginBottom: "16px",
               }}
             />
-            <Typography sx={{ color: "#555" }}>
+            <Typography sx={{ color: "text.secondary" }}>
               {t("membership.modalUpgradeSuccessMessage")}
             </Typography>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
+            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
               {t("membership.modalNewFeaturesTitle")}
             </Typography>
             <img
@@ -161,13 +161,13 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 marginBottom: "16px",
               }}
             />
-            <Typography sx={{ color: "#555" }}>
+            <Typography sx={{ color: "text.secondary" }}>
               {t("membership.modalNewFeaturesMessage")}
             </Typography>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "#333" }}>
+            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
               {t("membership.modalPremiumAccessTitle")}
             </Typography>
             <img
@@ -180,16 +180,16 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 marginBottom: "16px",
               }}
             />
-            <Typography sx={{ color: "#555", mb: 2 }}>
+            <Typography sx={{ color: "text.secondary", mb: 2 }}>
               {t("membership.modalPremiumAccessMessage")}
             </Typography>
             <Button
               variant="contained"
               onClick={onClose}
               sx={{
-                backgroundColor: "#720e9e",
+                backgroundColor: "secondary.main",
                 mt: 1,
-                "&:hover": { backgroundColor: "#4B0082" },
+                "&:hover": { backgroundColor: "secondary.dark" },
               }}
             >
               {t("membership.modalGetStartedButton")}
