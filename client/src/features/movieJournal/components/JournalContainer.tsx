@@ -23,9 +23,15 @@ const JournalContainer = ({ journals, isListView }: JournalContainerProps) => {
         display={isListView ? "flex" : "grid"}
         flexDirection={isListView ? "column" : "unset"}
         gridTemplateColumns={
-          isListView ? "unset" : "repeat(auto-fill, minmax(250px, 1fr))"
+          isListView
+            ? "unset"
+            : {
+                xs: "1fr",
+                sm: "repeat(auto-fill, minmax(200px, 1fr))",
+                md: "repeat(auto-fill, minmax(250px, 1fr))",
+              }
         }
-        gap={2}
+        gap={{ xs: 1.5, sm: 2 }}
         justifyContent="center"
         justifyItems={isListView ? "unset" : "center"}
         width="100%"

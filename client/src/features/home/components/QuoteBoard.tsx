@@ -75,24 +75,33 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
     <Box
       sx={{
         backgroundColor: "background.paper",
-        marginTop: "30px",
-        px: "20px",
-        pt: "10px",
-        pb: "30px",
-        borderRadius: "10px",
+        marginTop: 3,
+        px: { xs: 2, sm: 2.5, md: 3 },
+        pt: 2,
+        pb: 4,
+        borderRadius: 2,
         position: "relative",
+        boxShadow: 2,
       }}
     >
-      {/* 標題區 */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ marginRight: "15px" }}>
-            <Typography variant="subtitle1" fontSize="18px">
+      {/* Title and Search Section */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          gap: 2,
+          mb: 2,
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="subtitle1" fontSize={{ xs: "16px", md: "18px" }} fontWeight={600}>
               {t("home.classicLines")}
             </Typography>
-            <Typography variant="subtitle2">
+            <Typography variant="subtitle2" sx={{ fontSize: { xs: "0.75rem", md: "0.875rem" } }}>
               {t("home.totalEntries")}{" "}
-              <Box component="span" fontSize="20px">
+              <Box component="span" fontSize={{ xs: "18px", md: "20px" }} fontWeight="bold">
                 {searchTerm.trim() ? filteredQuotes.length : quote.length}
               </Box>{" "}
               {t("home.entries")}
@@ -105,17 +114,19 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
           </Box>
           {!readOnly && (
             <Tooltip title={t("home.addQuote")}>
-              <IconButton onClick={handleAddQuote}>
+              <IconButton onClick={handleAddQuote} color="primary" size="small">
                 <AddCircleIcon />
               </IconButton>
             </Tooltip>
           )}
         </Box>
-        <CustomSearchBar
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder={t("home.searchQuotePlaceholder")}
-        />
+        <Box sx={{ width: { xs: "100%", md: "300px" }, minWidth: { xs: "100%", md: "250px" } }}>
+          <CustomSearchBar
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={t("home.searchQuotePlaceholder")}
+          />
+        </Box>
       </Box>
 
       {/* 內容區 */}
@@ -168,8 +179,14 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
               <Box
                 key={originalIndex}
                 sx={{
-                  width: "32%",
-                  minWidth: "280px",
+                  width: {
+                    xs: "100%",
+                    sm: "calc(50% - 8px)",
+                    md: "calc(33.333% - 11px)",
+                    lg: "calc(33.333% - 11px)",
+                  },
+                  minWidth: { xs: "100%", sm: "250px" },
+                  maxWidth: { xs: "100%", sm: "none" },
                   boxSizing: "border-box",
                 }}
               >

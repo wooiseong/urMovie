@@ -63,19 +63,27 @@ const MembershipPage = () => {
   ];
 
   return (
-    <Box sx={{ pb: "70px", position: "relative" }}>
+    <Box sx={{ pb: { xs: 4, md: 8 }, position: "relative" }}>
       <CustomSectionTitle label={t("home.createEdit")} />
 
-      <Typography variant="h5" textAlign="center" mb={4}>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        mb={4}
+        sx={{ fontSize: { xs: "1.25rem", md: "1.5rem" }, px: 2 }}
+      >
         {t("membership.upgradePrompt")}
       </Typography>
 
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "center",
-          gap: 3,
+          alignItems: { xs: "center", sm: "flex-start" },
+          gap: { xs: 2, sm: 3 },
           mt: 4,
+          px: { xs: 0, sm: 2 },
         }}
       >
         {plans.map((plan, index) => (

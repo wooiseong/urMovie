@@ -13,27 +13,37 @@ const AuthPage = () => {
   return (
     <Box
       display="flex"
-      // bgcolor="#282828"
       width="100%"
-      // height="100vh"
+      minHeight="100vh"
       alignItems="center"
       justifyContent="center"
-      overflow="hidden"
+      sx={{
+        px: { xs: 2, sm: 3 },
+        py: { xs: 3, md: 4 },
+      }}
     >
       <Grid
         container
         sx={{
-          height: "90%",
-          width: "80%",
-          // backgroundColor: "#eee",
-          borderRadius: "10px",
+          maxWidth: "1200px",
+          width: "100%",
+          backgroundColor: "background.paper",
+          borderRadius: { xs: 2, md: 3 },
+          boxShadow: 3,
+          overflow: "hidden",
         }}
-        p={3}
       >
-        <Grid item xs={12} md={6}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: { xs: "none", md: "block" },
+          }}
+        >
           <AuthLeftSide />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} sx={{ p: { xs: 3, sm: 4, md: 5 } }}>
           <AuthRightSide mode={currentMode} setCurrentMode={setCurrentMode} />
         </Grid>
       </Grid>

@@ -21,6 +21,15 @@ import { useDelayedLoading } from "src/globalHooks/useDelayedLoading";
 import FullScreenLoader from "../FullScreenLoader";
 import { useNavigate } from "react-router-dom";
 import DynamicMenu, { DynamicMenuItem } from "../DynamicMenuItem";
+import {
+  getRoleAvatarStyle,
+  getRoleChipColor,
+  getRoleLabel,
+  getRoleIcon,
+  getRoleDescription,
+  RoleBadge,
+  UserRole,
+} from "src/utils/roleUtils";
 
 // UserMenu
 interface UserMenuProps {
@@ -135,23 +144,23 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
     <>
       {delayedLoading && <FullScreenLoader />}
       <Box>
-        <IconButton onClick={handleOpen}>
-          <Box
-            component="img"
-            src={avatar || "/img/default_avatar.jpg"}
-            alt="User Avatar"
-            sx={(theme) => ({
-              boxShadow:
-                userRole === "premiumUser"
-                  ? `0 0 8px 2px ${theme.palette.secondary.main}`
-                  : "none",
-              marginX: "10px",
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              objectFit: "cover",
-            })}
-          />
+        <IconButton onClick={handleOpen} aria-label="user menu">
+          <Box sx={{ position: "relative", display: "inline-block" }}>
+            <Box
+              component="img"
+              src={avatar || "/img/default_avatar.jpg"}
+              alt="User Avatar"
+              sx={{
+                marginX: "10px",
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                objectFit: "cover",
+                ...getRoleAvatarStyle(role as UserRole),
+              }}
+            />
+            <RoleBadge role={role as UserRole} size="small" />
+          </Box>
         </IconButton>
 
         <Menu
@@ -169,34 +178,56 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
             },
           }}
         >
-          {/* user info */}
-          <Box px={2} py={1} textAlign="center">
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
+          {/* User info section - Enhanced with role styling */}
+          <Box px={2} py={2} textAlign="center">
+            {/* Avatar with role badge */}
+            <Box sx={{ position: "relative", display: "inline-block", mb: 1.5 }}>
               <Box
                 component="img"
                 src={avatar || "/img/default_avatar.jpg"}
                 alt="User Avatar"
                 sx={{
-                  width: 40,
-                  height: 40,
+                  width: 60,
+                  height: 60,
                   borderRadius: "50%",
                   objectFit: "cover",
+                  ...getRoleAvatarStyle(role as UserRole),
                 }}
               />
-              <Box>
-                <Typography fontSize="20px" fontWeight="bold">
-                  {username}
-                </Typography>
-                <Chip label={role} color="primary" size="small" />
-              </Box>
+              <RoleBadge role={role as UserRole} size="medium" />
             </Box>
-            <Typography fontSize="0.8rem" sx={{ mt: "10px" }}>
+
+            {/* Username */}
+            <Typography fontSize="18px" fontWeight="bold" sx={{ mb: 0.5 }}>
+              {username}
+            </Typography>
+
+            {/* Role chip with color coding and icon */}
+            <Chip
+              label={getRoleLabel(role as UserRole)}
+              color={getRoleChipColor(role as UserRole)}
+              size="small"
+              icon={getRoleIcon(role as UserRole) as React.ReactElement | undefined}
+              sx={{ mb: 1 }}
+            />
+
+            {/* Role description */}
+            <Typography
+              fontSize="0.75rem"
+              color={
+                role === "admin"
+                  ? "error.main"
+                  : role === "premiumUser"
+                  ? "secondary.main"
+                  : "text.secondary"
+              }
+              sx={{ mb: 1.5, fontWeight: 500 }}
+            >
+              {getRoleDescription(role as UserRole)}
+            </Typography>
+
+            {/* Quote usage */}
+            <Typography fontSize="0.8rem">
               <Box
                 component="span"
                 sx={{ fontSize: "1.5rem", fontWeight: "bold", mx: "5px" }}

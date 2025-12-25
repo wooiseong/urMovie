@@ -4,20 +4,23 @@ import NavBarWrapper from "src/globalComponents/navBar/NavBarWrapper";
 
 const MainLayout = () => {
   return (
-    <div>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <NavBarWrapper />
       <Box
         component="main"
         sx={{
-          maxWidth: "1300px",
+          maxWidth: "1400px",
+          width: "100%",
           mx: "auto",
-          px: 3,
-          minHeight: "100vh",
+          px: { xs: 2, sm: 3, md: 4 },
+          py: { xs: 2, md: 3 },
+          minHeight: "calc(100vh - 64px)",
+          flex: 1,
         }}
       >
         <Outlet />
       </Box>
-    </div>
+    </Box>
   );
 };
 
