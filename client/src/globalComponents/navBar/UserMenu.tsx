@@ -181,7 +181,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
           {/* User info section - Enhanced with role styling */}
           <Box px={2} py={2} textAlign="center">
             {/* Avatar with role badge */}
-            <Box sx={{ position: "relative", display: "inline-block", mb: 1.5 }}>
+            <Box
+              sx={{ position: "relative", display: "inline-block", mb: 1.5 }}
+            >
               <Box
                 component="img"
                 src={avatar || "/img/default_avatar.jpg"}
@@ -207,7 +209,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
               label={getRoleLabel(role as UserRole)}
               color={getRoleChipColor(role as UserRole)}
               size="small"
-              icon={getRoleIcon(role as UserRole) as React.ReactElement | undefined}
+              icon={
+                getRoleIcon(role as UserRole) as React.ReactElement | undefined
+              }
               sx={{ mb: 1 }}
             />
 

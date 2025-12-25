@@ -32,7 +32,14 @@ const CustomActionButton: React.FC<CustomActionButtonProps> = ({
         ...sx,
       }}
     >
-      {loading ? <CircularProgress size={24} sx={{ color: 'white', marginRight: '8px' }} /> : icon}
+      {loading ? (
+        <CircularProgress
+          size={24}
+          sx={{ color: "white", marginRight: "8px" }}
+        />
+      ) : (
+        icon
+      )}
       <Typography sx={{ marginLeft: "5px" }}> {label}</Typography>
     </Button>
   );

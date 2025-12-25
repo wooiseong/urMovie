@@ -1,4 +1,14 @@
-import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CustomSearchBar from "src/globalComponents/CustomSearchBar";
 import QuoteItem from "./QuoteItem";
@@ -6,8 +16,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { JournalFormData } from "../pages/EditJournalPage";
 import { Quote } from "src/generated/graphql";
 import InboxIcon from "@mui/icons-material/Inbox";
+import OfflineBoltIcon from "@mui/icons-material/OfflineBolt";
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "src/store/hook";
 
 interface QuoteBoardProps {
   quote: Quote[];
@@ -21,7 +34,10 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
   readOnly,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const userRole = useAppSelector((state) => state.user.role);
 
   // Filter quotes based on search term (search in name and content)
   const filteredQuotes = useMemo(() => {
@@ -39,6 +55,13 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
 
   const handleAddQuote = () => {
     if (!setFormData) return;
+
+    // Check if user role is "user" and limit to 3 quotes
+    if (userRole === "user" && quote.length >= 3) {
+      setShowLimitWarning(true);
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       quote: [
@@ -96,12 +119,23 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="subtitle1" fontSize={{ xs: "16px", md: "18px" }} fontWeight={600}>
+            <Typography
+              variant="subtitle1"
+              fontSize={{ xs: "16px", md: "18px" }}
+              fontWeight={600}
+            >
               {t("home.classicLines")}
             </Typography>
-            <Typography variant="subtitle2" sx={{ fontSize: { xs: "0.75rem", md: "0.875rem" } }}>
+            <Typography
+              variant="subtitle2"
+              sx={{ fontSize: { xs: "0.75rem", md: "0.875rem" } }}
+            >
               {t("home.totalEntries")}{" "}
-              <Box component="span" fontSize={{ xs: "18px", md: "20px" }} fontWeight="bold">
+              <Box
+                component="span"
+                fontSize={{ xs: "18px", md: "20px" }}
+                fontWeight="bold"
+              >
                 {searchTerm.trim() ? filteredQuotes.length : quote.length}
               </Box>{" "}
               {t("home.entries")}
@@ -120,7 +154,12 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             </Tooltip>
           )}
         </Box>
-        <Box sx={{ width: { xs: "100%", md: "300px" }, minWidth: { xs: "100%", md: "250px" } }}>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "300px" },
+            minWidth: { xs: "100%", md: "250px" },
+          }}
+        >
           <CustomSearchBar
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -142,9 +181,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
           }}
         >
           <InboxIcon sx={{ fontSize: 60, mb: 1 }} />
-          <Typography variant="body1">
-            {t("home.noContentYet")}
-          </Typography>
+          <Typography variant="body1">{t("home.noContentYet")}</Typography>
         </Box>
       ) : filteredQuotes.length === 0 ? (
         <Box
@@ -159,7 +196,8 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         >
           <InboxIcon sx={{ fontSize: 60, mb: 1 }} />
           <Typography variant="body1">
-            {t("home.noMatchingQuotes")}{searchTerm}"
+            {t("home.noMatchingQuotes")}
+            {searchTerm}"
           </Typography>
         </Box>
       ) : (
@@ -218,6 +256,56 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
       >
         <KeyboardArrowDownIcon fontSize="medium" />
       </IconButton>
+
+      {/* Quote Limit Warning Modal */}
+      <Dialog
+        open={showLimitWarning}
+        onClose={() => setShowLimitWarning(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            p: 1,
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{ textAlign: "center", fontWeight: 600, fontSize: "1.25rem" }}
+        >
+          {t("home.quoteLimitTitle")}
+        </DialogTitle>
+        <DialogContent>
+          <Typography
+            variant="body1"
+            sx={{ textAlign: "center", color: "text.secondary", mb: 2 }}
+          >
+            {t("home.quoteLimitReached")}
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", pb: 3, gap: 1 }}>
+          <Button variant="outlined" onClick={() => setShowLimitWarning(false)}>
+            {t("global.cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<OfflineBoltIcon />}
+            onClick={() => {
+              setShowLimitWarning(false);
+              navigate("/membership");
+            }}
+            sx={{
+              color: "white",
+              backgroundColor: "secondary.main",
+              "&:hover": {
+                backgroundColor: "secondary.dark",
+              },
+            }}
+          >
+            {t("navBar.upgrade")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

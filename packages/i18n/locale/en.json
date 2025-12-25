@@ -122,7 +122,9 @@
     "changeContent": "Change Content",
     "deleteQuote": "Delete Quote",
     "writeSomething": "Write something...",
-    "movieTitle": "Movie Title"
+    "movieTitle": "Movie Title",
+    "quoteLimitTitle": "Quote Limit Reached",
+    "quoteLimitReached": "You've reached the limit of 3 quotes for regular users. Upgrade to premium membership to add unlimited quotes!"
   },
   "admin": {
     "adminStatistics": "Admin Statistics",
@@ -167,6 +169,7 @@
     "addTagPlaceholder": "Add new tag",
     "selectTagPlaceholder": "Select a tag",
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }
