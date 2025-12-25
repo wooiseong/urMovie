@@ -123,7 +123,9 @@
     "changeContent": "更改內容",
     "deleteQuote": "刪除臺詞",
     "writeSomething": "寫些什麽吧...",
-    "movieTitle": "電影名字"
+    "movieTitle": "電影名字",
+    "quoteLimitTitle": "金句數量已達上限",
+    "quoteLimitReached": "您已達到普通用戶3條金句的限制，升級高級會員即可添加無限金句！"
   },
   "admin": {
     "adminStatistics": "管理員數據",
@@ -168,6 +170,7 @@
     "addTagPlaceholder": "新增標籤",
     "selectTagPlaceholder": "選擇標簽",
     "add": "新增",
-    "delete": "刪除"
+    "delete": "刪除",
+    "cancel": "取消"
   }
 }
