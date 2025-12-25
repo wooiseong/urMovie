@@ -41,18 +41,18 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
   // 預設樣式
   const { t } = useTranslation();
   const defaultSx: SxProps<Theme> = {
-    color: "#fff",
+    color: "text.primary",
     input: {
-      color: "#fff",
+      color: "text.primary",
       backgroundColor: "transparent",
       padding: "8px 12px",
     },
     textarea: {
-      color: "#fff",
+      color: "text.primary",
       lineHeight: 1.6,
     },
     "& .MuiInputBase-input::placeholder": {
-      color: "#aaa",
+      color: "text.secondary",
       opacity: 1,
     },
     margin: "10px",
@@ -90,13 +90,7 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
           startAdornment: (
             <InputAdornment position="start">
               <Tooltip title="">
-                <SearchIcon
-                  sx={
-                    {
-                      // color: "#a8a8a8"
-                    }
-                  }
-                />
+                <SearchIcon sx={{ color: "text.secondary" }} />
               </Tooltip>
             </InputAdornment>
           ),

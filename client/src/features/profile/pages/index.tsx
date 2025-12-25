@@ -82,9 +82,10 @@ const ProfilePage = () => {
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "	#404040",
+                backgroundColor: "background.paper",
                 opacity: 0.8,
-                border: "1px solid #fff",
+                border: "1px solid",
+                borderColor: "text.primary",
               },
             }}
             inputProps={{ readOnly: true }}
@@ -95,7 +96,7 @@ const ProfilePage = () => {
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
             value={oldPassword}
@@ -108,7 +109,7 @@ const ProfilePage = () => {
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
             onChange={(e) => setNewPassword(e.target.value)}

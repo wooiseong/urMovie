@@ -30,11 +30,11 @@ const FullScreenLoader = ({ text }: FullScreenLoaderProps) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          bgcolor: "#fff",
+          bgcolor: "background.paper",
           position: "relative",
         }}
       >
-        <CircularProgress size={180} sx={{ color: "#1B5CD8" }} />
+        <CircularProgress size={180} sx={{ color: "primary.main" }} />
 
         <Typography
           fontSize="20px"
@@ -42,7 +42,7 @@ const FullScreenLoader = ({ text }: FullScreenLoaderProps) => {
             position: "absolute",
             textAlign: "center",
             fontWeight: "bold",
-            color: "#1B5CD8",
+            color: "primary.main",
           }}
         >
           {text ?? t("operation.loading")}

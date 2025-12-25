@@ -100,7 +100,7 @@ const ColorPickerPopover = ({
             }}
           >
             <Typography
-              sx={{ fontSize: "12px", color: "gray", marginRight: "10px" }}
+              sx={{ fontSize: "12px", color: "text.secondary", marginRight: "10px" }}
             >
               {t("home.upgradeForMoreColors")}
             </Typography>
@@ -109,8 +109,8 @@ const ColorPickerPopover = ({
               icon={<BoltIcon />}
               label={t("operation.submit")}
               sx={{
-                backgroundColor: "#FFD700",
-                color: "#000",
+                backgroundColor: "secondary.main",
+                color: "text.primary",
                 padding: "6px 12px",
               }}
             />

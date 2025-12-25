@@ -79,7 +79,7 @@ const DynamicMenu: React.FC<DynamicMenuProps> = ({
             {item.isActive && (
               <CheckCircleIcon
                 sx={{
-                  color: "#3EB380",
+                  color: "success.main",
                   ml: 1,
                   fontSize: 20,
                 }}

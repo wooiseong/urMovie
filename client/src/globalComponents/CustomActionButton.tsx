@@ -19,13 +19,13 @@ const CustomActionButton: React.FC<CustomActionButtonProps> = ({
     <Button
       onClick={onClick}
       disabled={loading}
+      variant="contained"
+      color="primary"
       sx={{
         px: 2,
         py: 1,
         borderRadius: "10px",
         textTransform: "none",
-        color: "#fff",
-        backgroundColor: "#0075F9",
         "&: hover": {
           opacity: "0.9",
         },

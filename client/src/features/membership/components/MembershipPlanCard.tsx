@@ -34,16 +34,18 @@ const MembershipCardPlan = ({
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         width: 260,
         p: 3,
         borderRadius: 3,
-        boxShadow: showShadow ? "0 0 12px 4px rgba(233, 240, 240, 1)" : "none",
+        boxShadow: showShadow
+          ? `0 0 12px 4px ${theme.palette.primary.main}`
+          : "none",
         backgroundColor: cardBackgroundColor,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-      }}
+      })}
     >
       {/* 標題 */}
       <Typography
@@ -81,7 +83,7 @@ const MembershipCardPlan = ({
         sx={{
           borderRadius: 2,
           backgroundColor: buttonColor,
-          color: "#000",
+          color: "text.primary",
           cursor: isDisabled ? "default" : "pointer",
           "&:hover": {
             backgroundColor: buttonColor,

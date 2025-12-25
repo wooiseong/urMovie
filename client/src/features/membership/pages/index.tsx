@@ -42,8 +42,8 @@ const MembershipPage = () => {
   const plans = [
     {
       title: t("membership.tier1Title"),
-      titleBackgroundColor: "#000",
-      cardBackgroundColor: "#404040",
+      titleBackgroundColor: "background.paper",
+      cardBackgroundColor: "background.default",
       cardContent: [t("membership.tier1Content1"), t("membership.tier1Content2")],
       buttonColor: "grey.400",
       buttonTitle: t("membership.currentPlan"),
@@ -51,10 +51,10 @@ const MembershipPage = () => {
     },
     {
       title: t("membership.upgradeTitle"),
-      titleBackgroundColor: "#720e9e",
-      cardBackgroundColor: "#4B0082",
+      titleBackgroundColor: "secondary.main",
+      cardBackgroundColor: "secondary.dark",
       cardContent: [t("membership.upgradeContent1"), t("membership.upgradeContent2")],
-      buttonColor: "#1976d2",
+      buttonColor: "primary.main",
       buttonTitle: t("membership.upgradeMember"),
       planRole: "premiumUser",
       onClick: handleUpgrade,
@@ -63,19 +63,27 @@ const MembershipPage = () => {
   ];
 
   return (
-    <Box sx={{ pb: "70px", position: "relative" }}>
+    <Box sx={{ pb: { xs: 4, md: 8 }, position: "relative" }}>
       <CustomSectionTitle label={t("home.createEdit")} />
 
-      <Typography variant="h5" textAlign="center" mb={4}>
+      <Typography
+        variant="h5"
+        textAlign="center"
+        mb={4}
+        sx={{ fontSize: { xs: "1.25rem", md: "1.5rem" }, px: 2 }}
+      >
         {t("membership.upgradePrompt")}
       </Typography>
 
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
           justifyContent: "center",
-          gap: 3,
+          alignItems: { xs: "center", sm: "flex-start" },
+          gap: { xs: 2, sm: 3 },
           mt: 4,
+          px: { xs: 0, sm: 2 },
         }}
       >
         {plans.map((plan, index) => (
