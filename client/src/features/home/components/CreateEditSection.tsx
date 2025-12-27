@@ -35,7 +35,10 @@ const CreateEditSelection = () => {
       });
 
       if (existingJournals) {
-        const updatedJournals = [newJournal, ...(existingJournals.journals ?? [])];
+        const updatedJournals = [
+          newJournal,
+          ...(existingJournals.journals ?? []),
+        ];
         // Keep only the first 10 journals
         const limitedJournals = updatedJournals.slice(0, 10);
 
@@ -109,7 +112,7 @@ const CreateEditSelection = () => {
       <Box
         sx={{
           position: "relative",
-          backgroundColor: "#282828",
+          backgroundColor: "background.paper",
           p: 2,
           borderRadius: 2,
         }}
@@ -128,7 +131,7 @@ const CreateEditSelection = () => {
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
           />

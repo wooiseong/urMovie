@@ -24,7 +24,6 @@ const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
   return (
     <Box
       position="relative"
-      padding={3}
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -32,11 +31,15 @@ const AuthRightSide = ({ mode, setCurrentMode }: AuthRightSideProps) => {
       <Button
         onClick={toggleLanguage}
         variant="outlined"
-        sx={{ position: "absolute", right: "0", top: "0" }}
+        sx={{ position: "absolute", right: "0", top: "-2%" }}
       >
         {currentLang === "zh-TW" ? "中文" : "English"}
       </Button>
-      <Typography fontSize={"2.5rem"} fontWeight={"bold"}>
+      <Typography
+        fontSize={"2.2rem"}
+        fontWeight={"bold"}
+        sx={{ paddingTop: "40px" }}
+      >
         {t(mode === "login" ? "auth.loginAccount" : "auth.registerAccount")}
       </Typography>
       <AuthForm mode={mode} setCurrentMode={setCurrentMode} />

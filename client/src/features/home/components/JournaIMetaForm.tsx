@@ -41,7 +41,7 @@ const JournalMetaForm = ({
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
             value={formData.movieName}
@@ -54,7 +54,7 @@ const JournalMetaForm = ({
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
             value={formData.director.join(",")}
@@ -69,7 +69,7 @@ const JournalMetaForm = ({
             sx={{
               paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#404040",
+                backgroundColor: "background.paper",
               },
             }}
             value={formData.actor.join(",")}
@@ -92,7 +92,7 @@ const JournalMetaForm = ({
           sx={{
             paddingLeft: "10px",
             "& .MuiOutlinedInput-root": {
-              backgroundColor: "#404040",
+              backgroundColor: "background.paper",
             },
           }}
           value={formData.image}

@@ -178,7 +178,7 @@ const AuthForm = ({ mode, setCurrentMode }: AuthFormProps) => {
     <>
       {showLoading && <FullScreenLoader />}
       <form onSubmit={handleSubmit(onFormSubmit)} style={{ marginTop: "20px" }}>
-        <Box sx={{ height: "270px" }}>
+        <Box sx={{ height: "240px" }}>
           <TextField
             {...register("username")}
             name="username"

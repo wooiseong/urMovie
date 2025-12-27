@@ -50,13 +50,17 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
         width: isListView ? "100%" : 280,
         minHeight: isListView ? 150 : "auto",
         maxHeight: isListView ? 150 : 600,
-        borderRadius: 3,
+        borderRadius: 1.5,
         position: "relative",
-        boxShadow: 3,
+        boxShadow: 2,
         flexShrink: 0,
         mb: 2,
         cursor: "pointer",
         overflow: "visible", // Ensure popup is not clipped
+        transition: "box-shadow 0.2s ease-in-out",
+        "&:hover": {
+          boxShadow: 4,
+        },
       }}
     >
       <Box
@@ -66,20 +70,32 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
           height: "100%",
           // To ensure the card keeps its shape in grid view
           minHeight: isListView ? "100%" : 400,
+          p: isListView ? 1.5 : 1.5,
+          gap: isListView ? 2 : 0,
         }}
       >
-        {/* 圖片 */}
-        <CardMedia
-          component="img"
-          height={isListView ? undefined : "160"}
+        {/* 圖片 - Framed */}
+        <Box
           sx={{
-            width: isListView ? "calc(2/12 * 100%)" : "100%",
-            objectFit: "cover",
+            width: isListView ? "150px" : "100%",
+            height: isListView ? "120px" : "180px",
             flexShrink: 0,
+            borderRadius: 1,
+            overflow: "hidden",
           }}
-          image={journal.image ?? defaultBackground}
-          alt={journal.movieName}
-        />
+        >
+          <CardMedia
+            component="img"
+            sx={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              display: "block",
+            }}
+            image={journal.image ?? defaultBackground}
+            alt={journal.movieName}
+          />
+        </Box>
         <CardContent
           sx={{
             flexGrow: 1,
@@ -88,7 +104,11 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
             display: "flex",
             flexDirection: "column",
             justifyContent: isListView ? undefined : "space-between",
-            p: 2,
+            p: isListView ? 1.5 : 2,
+            pt: isListView ? 1.5 : 2,
+            "&:last-child": {
+              pb: isListView ? 1.5 : 2,
+            },
           }}
         >
           <Box>
@@ -102,7 +122,17 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
               <Chip
                 label={journal.tag?.map((t) => t.name).join(", ") ?? ""}
                 size="small"
-                sx={{ mt: 1, mb: 1, backgroundColor: "#404040" }}
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.08)"
+                      : "rgba(0, 0, 0, 0.06)",
+                  color: "text.primary",
+                  fontWeight: 500,
+                  borderRadius: 1,
+                }}
               />
             )}
 

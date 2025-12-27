@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
+  useTheme,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CustomSearchBar from "src/globalComponents/CustomSearchBar";
@@ -38,6 +39,7 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const userRole = useAppSelector((state) => state.user.role);
+  const theme = useTheme();
 
   // Filter quotes based on search term (search in name and content)
   const filteredQuotes = useMemo(() => {
@@ -62,6 +64,12 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
       return;
     }
 
+    // Set default colors based on theme mode
+    const defaultBgColor =
+      theme.palette.mode === "dark" ? "#606060" : "#e0e0e0";
+    const defaultTextColor =
+      theme.palette.mode === "dark" ? "#FFFFFF" : "#000000";
+
     setFormData((prev) => ({
       ...prev,
       quote: [
@@ -69,8 +77,8 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
         {
           name: "",
           content: "",
-          backgroundColor: "background.paper",
-          textColor: "text.primary",
+          backgroundColor: defaultBgColor,
+          textColor: defaultTextColor,
         },
       ],
     }));
