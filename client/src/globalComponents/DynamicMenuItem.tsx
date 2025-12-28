@@ -97,6 +97,7 @@ const DynamicMenu: React.FC<DynamicMenuProps> = ({
                 borderRadius: "12px",
                 minWidth: 160,
                 boxShadow: 3,
+                bgcolor: "background.paper",
               }}
               onMouseEnter={() => setOpenSubMenu(index)}
             >

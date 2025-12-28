@@ -17,7 +17,10 @@ import {
 import toast from "react-hot-toast";
 import { useQueryWithLoader } from "src/globalHooks/useQueryWithLoader";
 import { useAppSelector, useAppDispatch } from "src/store/hook";
-import { setSelectedJournal } from "src/store/modules/journalSlice";
+import {
+  setSelectedJournal,
+  setDraftJournal,
+} from "src/store/modules/journalSlice";
 
 export interface Quote {
   name?: string | null;
@@ -50,7 +53,9 @@ export interface JournalFormData {
 
 const EditJournalPage = () => {
   const { t } = useTranslation();
-  const { selectedJournal } = useAppSelector((state) => state.journal);
+  const { selectedJournal, draftJournal } = useAppSelector(
+    (state) => state.journal
+  );
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<JournalFormData>({
     movieName: "",
@@ -64,7 +69,7 @@ const EditJournalPage = () => {
     },
     quote: [],
   });
-
+  console.log(draftJournal);
   const [createJournal, { loading: createLoading }] = useCreateJournalMutation({
     update(cache, result) {
       const newJournal = result.data?.createJournal;
@@ -98,6 +103,19 @@ const EditJournalPage = () => {
     useUpdateJournalMutation();
 
   const { data: tagData, loader, error } = useQueryWithLoader(useGetTagsQuery);
+
+  // Load draft data once on mount and clear it immediately
+  useEffect(() => {
+    if (draftJournal && !selectedJournal) {
+      setFormData((prev) => ({
+        ...prev,
+        movieName: draftJournal.movieName,
+        content: draftJournal.content,
+      }));
+      // Clear draft immediately after loading
+      dispatch(setDraftJournal(null));
+    }
+  }, []); // Empty dependency array - only run once on mount
 
   useEffect(() => {
     // 當 tagData 載入後，如果是「新增」模式，則初始化 tag
@@ -161,11 +179,7 @@ const EditJournalPage = () => {
         quote: selectedJournal.quote ?? [],
       });
     }
-
-    return () => {
-      // No cleanup for selectedJournal here, as it's handled in a separate effect for unmount.
-    };
-  }, [selectedJournal, tagData, dispatch]);
+  }, [selectedJournal, tagData]);
 
   const handleSubmit = async () => {
     try {

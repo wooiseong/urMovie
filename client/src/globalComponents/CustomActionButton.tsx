@@ -6,6 +6,7 @@ interface CustomActionButtonProps {
   sx?: SxProps<Theme>;
   onClick?: () => void;
   loading?: boolean;
+  color?: "primary" | "secondary" | "error" | "warning" | "info" | "success";
 }
 
 const CustomActionButton: React.FC<CustomActionButtonProps> = ({
@@ -14,13 +15,14 @@ const CustomActionButton: React.FC<CustomActionButtonProps> = ({
   sx,
   onClick,
   loading,
+  color = "primary",
 }) => {
   return (
     <Button
       onClick={onClick}
       disabled={loading}
       variant="contained"
-      color="primary"
+      color={color}
       sx={{
         px: 2,
         py: 1,

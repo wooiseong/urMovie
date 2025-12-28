@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
 import { useState, useMemo } from "react";
 import { useGetJournalsQuery } from "src/generated/graphql";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "src/store";
+import { setViewMode } from "src/store/modules/journalSlice";
 import JournalContainer from "../components/JournalContainer";
 import JournalWrapper from "../components/JournalWrapper";
 
@@ -14,9 +17,12 @@ export interface JournalFilters {
 }
 
 const MovieJournalPage = () => {
+  const dispatch = useDispatch();
+  const viewMode = useSelector((state: RootState) => state.journal.viewMode);
+  const isListView = viewMode === "list";
+
   const [filters, setFilters] = useState<JournalFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
-  const [isListView, setIsListView] = useState(false); // New state for list view
 
   const {
     data: journalData,
@@ -83,7 +89,7 @@ const MovieJournalPage = () => {
   };
 
   const handleToggleView = () => {
-    setIsListView((prev) => !prev);
+    dispatch(setViewMode(isListView ? "grid" : "list"));
   };
 
   return (

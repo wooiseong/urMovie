@@ -7,7 +7,10 @@ import SendIcon from "@mui/icons-material/Send";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "src/store/hook";
-import { setSelectedJournal } from "src/store/modules/journalSlice";
+import {
+  setSelectedJournal,
+  setDraftJournal,
+} from "src/store/modules/journalSlice";
 import { useState } from "react";
 import {
   useCreateJournalMutation,
@@ -118,30 +121,64 @@ const CreateEditSelection = () => {
         }}
       >
         {/* movie name */}
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={2}
-        >
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <CustomTextField
             placeholder={t("home.movieName")}
             value={movieName}
             onChange={(e) => setMovieName(e.target.value)}
             sx={{
-              paddingLeft: "10px",
+              minWidth: "200px",
+              flexGrow: 1,
+              maxWidth: "100%",
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "background.paper",
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "dark"
+                    ? "rgba(255, 255, 255, 0.05)"
+                    : "rgba(0, 0, 0, 0.02)",
+                padding: "10px 10px 10px 15px",
+              },
+              "& .MuiOutlinedInput-input": {
+                fontSize: "1.25rem",
+                fontWeight: 600,
+                padding: 0,
+              },
+              "& .MuiOutlinedInput-input::placeholder": {
+                fontSize: "1.25rem",
+                fontWeight: 600,
+                opacity: 1,
               },
             }}
           />
           <IconButton
             onClick={() => {
               dispatch(setSelectedJournal(null));
+              // Save draft data if there's any content
+              if (movieName || content) {
+                const contentData = content
+                  ? {
+                      type: "doc",
+                      content: [
+                        {
+                          type: "paragraph",
+                          content: [
+                            {
+                              type: "text",
+                              text: content,
+                            },
+                          ],
+                        },
+                      ],
+                    }
+                  : {
+                      type: "doc",
+                      content: [],
+                    };
+                dispatch(setDraftJournal({ movieName, content: contentData }));
+              }
               navigate("editJournal");
             }}
           >
-            <EditIcon sx={{ color: "#fff" }} />
+            <EditIcon />
           </IconButton>
         </Box>
 

@@ -8,8 +8,10 @@ import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import JournalItem from "./JournalItem";
-import JournalModal from "./JournalModal";
 import { GetJournalsQuery } from "src/generated/graphql";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "src/store/hook";
+import { setSelectedJournal } from "src/store/modules/journalSlice";
 
 interface JournalListProps {
   journals: NonNullable<GetJournalsQuery["journals"]>;
@@ -18,25 +20,17 @@ interface JournalListProps {
 const JournalList = ({ journals }: JournalListProps) => {
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   // indicate begin or end of the list
   const [isAtBeginning, setIsAtBeginning] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
 
-  // Modal states
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedJournal, setSelectedJournal] = useState<any>(null);
-
-  // Open modal handler
-  const handleOpenModal = (journal: any) => {
-    setSelectedJournal(journal);
-    setOpenModal(true);
-  };
-
-  // Close modal handler
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedJournal(null);
+  // Navigate to journal details
+  const handleJournalClick = (journal: any) => {
+    dispatch(setSelectedJournal(journal));
+    navigate("/journalDetails");
   };
 
   return (
@@ -47,7 +41,7 @@ const JournalList = ({ journals }: JournalListProps) => {
         className="journal-prev-btn"
         sx={{
           position: "absolute",
-          left: -8,
+          left: -15,
           top: "50%",
           transform: "translateY(-50%)",
           zIndex: 2,
@@ -68,7 +62,7 @@ const JournalList = ({ journals }: JournalListProps) => {
         className="journal-next-btn"
         sx={{
           position: "absolute",
-          right: -8,
+          right: -15,
           top: "50%",
           transform: "translateY(-50%)",
           zIndex: 2,
@@ -130,19 +124,12 @@ const JournalList = ({ journals }: JournalListProps) => {
           >
             <JournalItem
               journal={journal}
-              onClick={() => handleOpenModal(journal)}
+              onClick={() => handleJournalClick(journal)}
+              isListView={false}
             />
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* Journal Modal */}
-      <JournalModal
-        open={openModal}
-        onClose={handleCloseModal}
-        journal={selectedJournal}
-        onEdit={() => console.log("Edit", selectedJournal?.id)}
-      />
     </Box>
   );
 };

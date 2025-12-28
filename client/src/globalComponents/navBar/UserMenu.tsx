@@ -144,7 +144,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
     <>
       {delayedLoading && <FullScreenLoader />}
       <Box>
-        <IconButton onClick={handleOpen} aria-label="user menu">
+        <IconButton
+          onClick={handleOpen}
+          aria-label="user menu"
+          disableRipple
+          sx={{
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <Box sx={{ position: "relative", display: "inline-block" }}>
             <Box
               component="img"
@@ -212,34 +221,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ avatar, username, role }) => {
               icon={
                 getRoleIcon(role as UserRole) as React.ReactElement | undefined
               }
-              sx={{ mb: 1 }}
             />
-
-            {/* Role description */}
-            <Typography
-              fontSize="0.75rem"
-              color={
-                role === "admin"
-                  ? "error.main"
-                  : role === "premiumUser"
-                  ? "secondary.main"
-                  : "text.secondary"
-              }
-              sx={{ mb: 1.5, fontWeight: 500 }}
-            >
-              {getRoleDescription(role as UserRole)}
-            </Typography>
-
-            {/* Quote usage */}
-            <Typography fontSize="0.8rem">
-              <Box
-                component="span"
-                sx={{ fontSize: "1.5rem", fontWeight: "bold", mx: "5px" }}
-              >
-                1/10
-              </Box>
-              {t("navBar.quoteUsage")} {t("navBar.used")}
-            </Typography>
           </Box>
 
           {/* menu items */}

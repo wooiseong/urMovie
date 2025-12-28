@@ -33,12 +33,12 @@ function AppWithTheme() {
     const colorPalettes = {
       light: {
         primary: { main: "#2d9d78", light: "#5bc4a0", dark: "#1d7a5c" },
-        secondary: { main: "#8b5cf6", dark: "#7c3aed", light: "#a78bfa" },
+        secondary: { main: "#f2c200", light: "#ffef9a", dark: "#c9a100" },
         accent: { main: "#10b981", light: "#34d399", dark: "#059669" },
       },
       dark: {
         primary: { main: "#34d399", light: "#6ee7b7", dark: "#10b981" },
-        secondary: { main: "#fbbf24", dark: "#f59e0b", light: "#fcd34d" },
+        secondary: { main: "#f2c200", light: "#ffef9a", dark: "#c9a100" },
         accent: { main: "#5eead4", light: "#99f6e4", dark: "#2dd4bf" },
       },
     };
