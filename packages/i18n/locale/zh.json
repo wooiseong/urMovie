@@ -39,7 +39,7 @@
     "username": "用戶名",
     "oldPassword": "舊密碼",
     "newPassword": "新密碼",
-    "avatar": "頭像"
+    "avatar": "個人頭像"
   },
   "membership": {
     "title": "會員設定",
@@ -48,10 +48,10 @@
     "tier1Content2": "限制8種顏色設定",
     "currentPlan": "目前方案",
     "upgradeTitle": "升級方案",
-    "upgradeContent1": "你可以自行改寫功能內容",
-    "upgradeContent2": "再增加更多會員功能",
+    "upgradeContent1": "無限金句使用次數",
+    "upgradeContent2": "無限制顏色設定",
     "upgradeMember": "升級會員",
-    "upgradePrompt": "已有30位會員升級，趕快解鎖以獲得更多功能吧！",
+    "upgradePrompt": "趕快解鎖以獲得更多功能吧！",
     "successfullyUpgraded": "升級成功！",
     "modalUpgradeSuccessTitle": "升級成功！",
     "modalUpgradeSuccessMessage": "恭喜您！您的會員資格已成功升級。",

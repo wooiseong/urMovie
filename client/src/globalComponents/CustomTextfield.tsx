@@ -62,9 +62,18 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
   return (
     <Box display="flex" alignItems="center">
       {(label || icon) && (
-        <Box sx={{ display: "flex", alignItems: "center", marginRight: "12px", minWidth: "fit-content" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginRight: "12px",
+            minWidth: "fit-content",
+          }}
+        >
           {icon}
-          <Typography sx={{ mx: "5px", whiteSpace: "nowrap" }}>{label}</Typography>
+          <Typography sx={{ mx: "5px", whiteSpace: "nowrap" }}>
+            {label}
+          </Typography>
         </Box>
       )}
       <TextField
