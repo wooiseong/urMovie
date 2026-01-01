@@ -32,7 +32,7 @@ const JournalMetaForm = ({
   return (
     <Grid container spacing={1}>
       {/* <Grid item xs={1} /> */}
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <Stack spacing={3}>
           <CustomTextField
             label="電影"
@@ -40,6 +40,7 @@ const JournalMetaForm = ({
             placeholder={t("home.movieName")}
             sx={{
               paddingLeft: "10px",
+              width: { xs: "80%", md: "70%" },
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
               },
@@ -53,6 +54,7 @@ const JournalMetaForm = ({
             placeholder={t("home.movieName")}
             sx={{
               paddingLeft: "10px",
+              width: { xs: "80%", md: "70%" },
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
               },
@@ -68,6 +70,7 @@ const JournalMetaForm = ({
             placeholder={t("home.movieName")}
             sx={{
               paddingLeft: "10px",
+              width: { xs: "80%", md: "70%" },
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
               },
@@ -80,12 +83,14 @@ const JournalMetaForm = ({
             icon={<LocalOfferIcon />}
             placeholder={t("home.movieName")}
             fullWidth
+            sx={{ marginLeft: "10px" }}
             tagList={formData.tag}
             onTagChange={(updatedTags) => handleChange("tag", updatedTags)}
+            popoverPosition="below"
           />
         </Stack>
       </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={12} md={5} sx={{ mt: { xs: 4, md: 0 } }}>
         <CustomImageUpload
           label="電影"
           icon={<ImageIcon />}

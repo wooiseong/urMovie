@@ -40,7 +40,7 @@ const CreateEditSelection = () => {
       if (existingJournals) {
         const updatedJournals = [
           newJournal,
-          ...(existingJournals.journals ?? []),
+          ...(existingJournals.journals?.journals ?? []),
         ];
         // Keep only the first 10 journals
         const limitedJournals = updatedJournals.slice(0, 10);
@@ -49,7 +49,10 @@ const CreateEditSelection = () => {
           query: GetJournalsDocument,
           variables: { limit: 10 },
           data: {
-            journals: limitedJournals,
+            journals: {
+              journals: limitedJournals,
+              totalCount: (existingJournals.journals?.totalCount ?? 0) + 1,
+            },
           },
         });
       }

@@ -31,12 +31,8 @@ const CustomNavButton: React.FC<CustomNavButtonProps> = ({
         borderRadius: "10px",
         color: (theme) => (theme.palette.mode === 'dark' ? '#fff' : '#000'),
         ...(isActive && {
-          backgroundColor: "primary.main",
-          color: "primary.contrastText",
-          "&:hover": {
-            backgroundColor: "primary.dark",
-            color: "primary.contrastText",
-          },
+          color: "primary.main",
+          fontWeight: "bold",
         }),
         textTransform: "none",
         "&:hover": {

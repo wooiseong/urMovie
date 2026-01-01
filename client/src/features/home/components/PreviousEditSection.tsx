@@ -17,7 +17,7 @@ const PreviousEditSelection = () => {
   return (
     <Box mb={2}>
       <CustomSectionTitle label={t("home.recentEdit")} />
-      <JournalList journals={journalData?.journals ?? []} />
+      <JournalList journals={journalData?.journals?.journals ?? []} />
     </Box>
   );
 };

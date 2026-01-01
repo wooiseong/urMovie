@@ -27,19 +27,25 @@ interface QuoteBoardProps {
   quote: Quote[];
   setFormData?: React.Dispatch<React.SetStateAction<JournalFormData>>;
   readOnly?: boolean;
+  limitDisplay?: boolean; // If true, limit to 6 quotes with "更多" button. Defaults to true for readOnly, false for edit mode
 }
 
 const QuoteBoard: React.FC<QuoteBoardProps> = ({
   quote,
   setFormData,
   readOnly,
+  limitDisplay,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showLimitWarning, setShowLimitWarning] = useState(false);
+  const [showAllQuotesModal, setShowAllQuotesModal] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const userRole = useAppSelector((state) => state.user.role);
   const theme = useTheme();
+
+  // Default behavior: limit display for readOnly mode, show all for edit mode
+  const shouldLimitDisplay = limitDisplay ?? readOnly ?? false;
 
   // Filter quotes based on search term (search in name and content)
   const filteredQuotes = useMemo(() => {
@@ -54,6 +60,18 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
       return matchesName || matchesContent;
     });
   }, [quote, searchTerm]);
+
+  // Limit displayed quotes to 6 when there are more than 6 (only if shouldLimitDisplay is true)
+  const displayedQuotes = useMemo(() => {
+    if (!shouldLimitDisplay) {
+      return filteredQuotes;
+    }
+    return filteredQuotes.length > 6
+      ? filteredQuotes.slice(0, 6)
+      : filteredQuotes;
+  }, [filteredQuotes, shouldLimitDisplay]);
+
+  const hasMoreQuotes = shouldLimitDisplay && filteredQuotes.length > 6;
 
   const handleAddQuote = () => {
     if (!setFormData) return;
@@ -209,61 +227,66 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
           </Typography>
         </Box>
       ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 2,
-            mt: 2,
-            justifyContent: "flex-start",
-          }}
-        >
-          {filteredQuotes.map((item, index) => {
-            // Find the original index in the quote array
-            const originalIndex = quote.findIndex((q) => q === item);
-            return (
-              <Box
-                key={originalIndex}
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              mt: 2,
+              justifyContent: "flex-start",
+            }}
+          >
+            {displayedQuotes.map((item, index) => {
+              // Find the original index in the quote array
+              const originalIndex = quote.findIndex((q) => q === item);
+              return (
+                <Box
+                  key={originalIndex}
+                  sx={{
+                    width: {
+                      xs: "100%",
+                      sm: "calc(50% - 8px)",
+                      md: "calc(33.333% - 11px)",
+                      lg: "calc(33.333% - 11px)",
+                    },
+                    minWidth: { xs: "100%", sm: "250px" },
+                    maxWidth: { xs: "100%", sm: "none" },
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <QuoteItem
+                    quote={item}
+                    onUpdate={(updatedQuote) =>
+                      handleUpdateQuote(originalIndex, updatedQuote)
+                    }
+                    onDelete={() => handleDeleteQuote(originalIndex)}
+                    readOnly={readOnly}
+                  />
+                </Box>
+              );
+            })}
+          </Box>
+          {hasMoreQuotes && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+              <Button
+                variant="outlined"
+                onClick={() => setShowAllQuotesModal(true)}
+                endIcon={<KeyboardArrowDownIcon />}
                 sx={{
-                  width: {
-                    xs: "100%",
-                    sm: "calc(50% - 8px)",
-                    md: "calc(33.333% - 11px)",
-                    lg: "calc(33.333% - 11px)",
-                  },
-                  minWidth: { xs: "100%", sm: "250px" },
-                  maxWidth: { xs: "100%", sm: "none" },
-                  boxSizing: "border-box",
+                  borderRadius: 2,
+                  px: 4,
+                  py: 1,
+                  textTransform: "none",
+                  fontWeight: 500,
                 }}
               >
-                <QuoteItem
-                  quote={item}
-                  onUpdate={(updatedQuote) =>
-                    handleUpdateQuote(originalIndex, updatedQuote)
-                  }
-                  onDelete={() => handleDeleteQuote(originalIndex)}
-                  readOnly={readOnly}
-                />
-              </Box>
-            );
-          })}
-        </Box>
+                更多 ({filteredQuotes.length - 6})
+              </Button>
+            </Box>
+          )}
+        </>
       )}
-
-      {/* 展開按鈕 */}
-      <IconButton
-        sx={{
-          position: "absolute",
-          bottom: "-3%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          backgroundColor: "background.default",
-          padding: "0px 10px",
-          borderRadius: "8px",
-        }}
-      >
-        <KeyboardArrowDownIcon fontSize="medium" />
-      </IconButton>
 
       {/* Quote Limit Warning Modal */}
       <Dialog
@@ -311,6 +334,112 @@ const QuoteBoard: React.FC<QuoteBoardProps> = ({
             }}
           >
             {t("navBar.upgrade")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* All Quotes Modal */}
+      <Dialog
+        open={showAllQuotesModal}
+        onClose={() => setShowAllQuotesModal(false)}
+        maxWidth="lg"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            minWidth: { xs: "300px", sm: "480px" },
+            maxWidth: "1200px",
+            width: "100%",
+            maxHeight: "85vh",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            pb: 1,
+          }}
+        >
+          <Typography variant="h6" component="span" fontWeight={600}>
+            {t("home.classicLines")} ({filteredQuotes.length})
+          </Typography>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            px: 3,
+            pt: 2,
+            pb: 3,
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "background.default",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "action.hover",
+              borderRadius: "4px",
+              "&:hover": {
+                backgroundColor: "action.selected",
+              },
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              justifyContent: "flex-start",
+            }}
+          >
+            {filteredQuotes.map((item, index) => {
+              // Find the original index in the quote array
+              const originalIndex = quote.findIndex((q) => q === item);
+              return (
+                <Box
+                  key={originalIndex}
+                  sx={{
+                    width: {
+                      xs: "100%",
+                      sm: "calc(50% - 8px)",
+                      md: "calc(33.333% - 11px)",
+                      lg: "calc(33.333% - 11px)",
+                    },
+                    minWidth: { xs: "100%", sm: "250px" },
+                    maxWidth: { xs: "100%", sm: "none" },
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <QuoteItem
+                    quote={item}
+                    onUpdate={(updatedQuote) =>
+                      handleUpdateQuote(originalIndex, updatedQuote)
+                    }
+                    onDelete={() => handleDeleteQuote(originalIndex)}
+                    readOnly={readOnly}
+                  />
+                </Box>
+              );
+            })}
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2.5, pt: 2 }}>
+          <Button
+            onClick={() => setShowAllQuotesModal(false)}
+            variant="contained"
+            size="large"
+            sx={{
+              borderRadius: 1.5,
+              textTransform: "none",
+              fontWeight: 500,
+              px: 3,
+            }}
+          >
+            {t("global.close") || "關閉"}
           </Button>
         </DialogActions>
       </Dialog>

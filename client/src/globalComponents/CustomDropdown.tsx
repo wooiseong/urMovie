@@ -26,6 +26,7 @@ interface CustomDropdownProps {
   sx?: SxProps<Theme>;
   tagList: formTag[];
   onTagChange: (tags: formTag[]) => void;
+  popoverPosition?: "right" | "below";
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -37,6 +38,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
   tagList,
   onTagChange,
   sx = {},
+  popoverPosition = "right",
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
@@ -69,17 +71,28 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
       flexWrap: "wrap",
       gap: 0.5,
       cursor: "text",
-      "&:hover": { backgroundColor: "background.default" },
+      width: { xs: "78%", md: "67.5%" },
     },
     sx
   );
 
   return (
-    <Box>
+    <Box display="flex" alignItems="center">
       {(label || icon) && (
-        <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginRight: "12px",
+            minWidth: "fit-content",
+          }}
+        >
           {icon}
-          {label && <Typography sx={{ ml: 1 }}>{label}</Typography>}
+          {label && (
+            <Typography sx={{ mx: "5px", whiteSpace: "nowrap" }}>
+              {label}
+            </Typography>
+          )}
         </Box>
       )}
 
@@ -118,9 +131,38 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "left" }}
-        PaperProps={{ sx: { p: 0 } }}
+        anchorOrigin={
+          popoverPosition === "below"
+            ? { vertical: "bottom", horizontal: "left" }
+            : { vertical: "top", horizontal: "right" }
+        }
+        transformOrigin={
+          popoverPosition === "below"
+            ? { vertical: "top", horizontal: "left" }
+            : { vertical: "top", horizontal: "left" }
+        }
+        PaperProps={{
+          sx: {
+            p: 0,
+            maxWidth: "300px",
+            maxHeight: "400px",
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "background.default",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "action.hover",
+              borderRadius: "4px",
+              "&:hover": {
+                backgroundColor: "action.selected",
+              },
+            },
+          },
+        }}
       >
         <TagDropdownMenu
           readonly={readonly}

@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import ConfirmDialog from "src/globalComponents/ConfirmDialog";
 
 interface JournalMenuProps {
-  journal: NonNullable<GetJournalsQuery["journals"]>[number];
+  journal: NonNullable<GetJournalsQuery["journals"]["journals"]>[number];
 }
 
 const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {

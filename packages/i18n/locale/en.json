@@ -139,8 +139,8 @@
     "total": "total",
     "searchUserPlaceholder": "Search username, tags, or dates",
     "username": "Username",
-    "journalsCreated": "Journals Created",
-    "tags": "Tags (name: count)",
+    "journalsCreated": "Journals",
+    "tags": "Tags",
     "lastPublish": "Last Publish",
     "registrationDate": "Registration Date",
     "noUsersFound": "No users found matching ",
@@ -150,8 +150,8 @@
     "userStats": "User Stats"
   },
   "movieJournal": {
-    "dateRange": "Date Range",
-    "selectDateRange": "Select Date Range",
+    "dateRange": "Date",
+    "selectDateRange": "Select Date",
     "today": "Today",
     "yesterday": "Yesterday",
     "lastWeek": "Last 1 Week",

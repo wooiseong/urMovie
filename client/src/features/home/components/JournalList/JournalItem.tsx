@@ -16,7 +16,7 @@ import JournalMenu from "./JournalMenu";
 import { useLocation } from "react-router-dom";
 
 interface JournalItemProps {
-  journal: NonNullable<GetJournalsQuery["journals"]>[number];
+  journal: NonNullable<GetJournalsQuery["journals"]["journals"]>[number];
   onClick?: () => void;
   isListView?: boolean; // New prop for list view
 }
@@ -66,6 +66,7 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
             flexShrink: 0,
             borderRadius: 1,
             overflow: "hidden",
+            mt: isListView ? 0 : 2,
           }}
         >
           <CardMedia
@@ -104,7 +105,7 @@ const JournalItem = ({ journal, onClick, isListView }: JournalItemProps) => {
             </Typography>
             {journal.tag && journal.tag.length > 0 && (
               <Chip
-                label={journal.tag?.map((t) => t.name).join(", ") ?? ""}
+                label={journal.tag?.map((t: any) => t.name).join(", ") ?? ""}
                 size="small"
                 sx={{
                   mt: 1,

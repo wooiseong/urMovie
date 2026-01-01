@@ -139,9 +139,9 @@
     "users": "用戶",
     "total": "總共",
     "searchUserPlaceholder": "搜索用戶名、標籤或日期",
-    "username": "用戶名",
-    "journalsCreated": "創建日誌數",
-    "tags": "標籤 (名稱: 數量)",
+    "username": "用戶名字",
+    "journalsCreated": "日誌數量",
+    "tags": "使用標籤",
     "lastPublish": "最後發佈",
     "registrationDate": "註冊日期",
     "noUsersFound": "沒有找到符合條件的用戶 ",
@@ -151,8 +151,8 @@
     "userStats": "用戶統計"
   },
   "movieJournal": {
-    "dateRange": "日期範圍",
-    "selectDateRange": "選擇日期範圍",
+    "dateRange": "日期",
+    "selectDateRange": "選擇日期",
     "today": "今天",
     "yesterday": "昨天",
     "lastWeek": "過去 1 星期",

@@ -136,7 +136,28 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
         </Box>
       )}
 
-      <List dense sx={{ maxHeight: 240, overflow: "auto", p: 0 }}>
+      <List
+        dense
+        sx={{
+          maxHeight: 240,
+          overflow: "auto",
+          p: 0,
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "background.default",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "action.hover",
+            borderRadius: "4px",
+            "&:hover": {
+              backgroundColor: "action.selected",
+            },
+          },
+        }}
+      >
         {visibleTags.map((tag) => (
           <ListItem
             key={tag.id ?? tag.name}
@@ -144,23 +165,27 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              bgcolor: tag.selected ? "primary.main" : "transparent",
-              color: tag.selected ? "primary.contrastText" : "inherit",
               borderRadius: 1,
               mb: 0.5,
               px: 1,
               py: 0.5,
               cursor: "pointer",
+              borderColor: tag.selected ? "text.primary" : "transparent",
               "&:hover": {
-                bgcolor: tag.selected ? "primary.dark" : "action.hover",
+                bgcolor: tag.selected ? "action.selected" : "action.hover",
               },
             }}
             onClick={() => handleToggle(tag.name)}
           >
-            <ListItemText primary={tag.name} />
+            <ListItemText
+              primary={tag.name}
+              primaryTypographyProps={{
+                fontWeight: tag.selected ? 600 : 400,
+              }}
+            />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               {tag.selected && (
-                <CheckCircleIcon sx={{ color: "primary.contrastText" }} />
+                <CheckCircleIcon sx={{ color: "text.primary", fontSize: 20 }} />
               )}
 
               {readonly ? null : (
@@ -170,9 +195,7 @@ const TagDropdownMenu: React.FC<TagDropdownMenuProps> = ({
                   size="small"
                   onClick={(e) => handleDelete(tag.name, e)}
                   sx={{
-                    color: tag.selected
-                      ? "primary.contrastText"
-                      : "text.secondary",
+                    color: "text.secondary",
                   }}
                 >
                   <DeleteIcon fontSize="small" />

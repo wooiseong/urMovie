@@ -110,7 +110,7 @@ const NavBarWrapper = () => {
         {/* Left: Logo + Menu Button (Mobile) / Nav Buttons (Desktop) */}
         <Box
           display="flex"
-          justifyContent="space-between"
+          // justifyContent="space-between"
           width="100%"
           alignItems="center"
           gap={1}
@@ -210,20 +210,11 @@ const NavBarWrapper = () => {
                 selected={location.pathname === item.to}
                 sx={{
                   "&.Mui-selected": {
-                    backgroundColor: "primary.main",
-                    color: "primary.contrastText",
-                    "&:hover": {
-                      backgroundColor: "primary.dark",
-                    },
-                    "& .MuiListItemIcon-root": {
-                      color: "primary.contrastText",
-                    },
+                    color: "primary.main",
+                    fontWeight: "bold",
                   },
                 }}
               >
-                {/* <ListItemIcon sx={{ color: "inherit" }}>
-                  {item.icon}
-                </ListItemIcon> */}
                 <ListItemText primary={item.label} />
               </ListItemButton>
             </ListItem>

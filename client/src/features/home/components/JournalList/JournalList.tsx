@@ -14,7 +14,7 @@ import { useAppDispatch } from "src/store/hook";
 import { setSelectedJournal } from "src/store/modules/journalSlice";
 
 interface JournalListProps {
-  journals: NonNullable<GetJournalsQuery["journals"]>;
+  journals: NonNullable<GetJournalsQuery["journals"]["journals"]>;
 }
 
 const JournalList = ({ journals }: JournalListProps) => {

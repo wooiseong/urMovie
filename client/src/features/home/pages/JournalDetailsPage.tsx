@@ -93,7 +93,6 @@ const JournalDetailsPage: React.FC = () => {
       sx={{
         maxWidth: 1200,
         margin: "0 auto",
-        p: { xs: 2, sm: 3, md: 4 },
       }}
     >
       {/* Header with back, edit and delete buttons */}
@@ -102,7 +101,8 @@ const JournalDetailsPage: React.FC = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 4,
+          pt: 1,
+          pb: 3,
         }}
       >
         <IconButton
@@ -113,7 +113,7 @@ const JournalDetailsPage: React.FC = () => {
         >
           <ArrowBackIcon />
         </IconButton>
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 2 }}>
           <CustomActionButton
             icon={<EditIcon />}
             label={t("home.edit")}

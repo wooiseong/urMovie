@@ -25,7 +25,7 @@ const journalResolvers = {
         const { limit, offset, startDate, endDate, tag, orderBy, order } = args;
 
         // Use nullish coalescing to provide default values for nullable arguments.
-        const finalLimit = limit ?? 20;
+        const finalLimit = limit ?? 10;
         const finalOffset = offset ?? 0;
         const finalOrderBy = orderBy ?? "updatedAt";
         const finalOrder = order ?? "desc";
@@ -49,10 +49,16 @@ const journalResolvers = {
         const sortOrder = finalOrder.toLowerCase() === "asc" ? 1 : -1;
         const sort: any = { [finalOrderBy]: sortOrder };
 
-        return await JournalModel.find(filters)
+        const totalCount = await JournalModel.countDocuments(filters);
+        const journals = await JournalModel.find(filters)
           .sort(sort)
           .skip(finalOffset)
           .limit(finalLimit);
+
+        return {
+          journals,
+          totalCount,
+        };
       } catch (error) {
         console.error("Fetch Journals Error:", error);
         throw new GraphQLError("Failed to fetch journals", {

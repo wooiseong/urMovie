@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { GetJournalsQuery } from "src/generated/graphql";
 
-type Journal = NonNullable<GetJournalsQuery["journals"]>[number];
+type Journal = NonNullable<GetJournalsQuery["journals"]["journals"]>[number];
 
 export interface DraftJournal {
   movieName: string;

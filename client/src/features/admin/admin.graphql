@@ -5,19 +5,23 @@ query GetAdminStats {
     totalPremiumUsers
     totalJournals
     totalSalary
+    salaryPercentageChange
   }
 }
 
-query GetUsersWithStats {
-  getUsersWithStats {
-    _id
-    username
-    journalCount
-    tags {
-      name
-      count
+query GetUsersWithStats($limit: Int, $offset: Int) {
+  getUsersWithStats(limit: $limit, offset: $offset) {
+    users {
+      _id
+      username
+      journalCount
+      tags {
+        name
+        count
+      }
+      lastJournalDate
+      createdAt
     }
-    lastJournalDate
-    createdAt
+    totalCount
   }
 }

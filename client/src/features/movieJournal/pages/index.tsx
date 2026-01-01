@@ -1,11 +1,12 @@
 import { Box } from "@mui/material";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useGetJournalsQuery } from "src/generated/graphql";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "src/store";
 import { setViewMode } from "src/store/modules/journalSlice";
 import JournalContainer from "../components/JournalContainer";
 import JournalWrapper from "../components/JournalWrapper";
+import CustomPagination from "src/globalComponents/CustomPagination";
 
 export interface JournalFilters {
   movieName?: string;
@@ -23,6 +24,8 @@ const MovieJournalPage = () => {
 
   const [filters, setFilters] = useState<JournalFilters>({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const {
     data: journalData,
@@ -30,6 +33,8 @@ const MovieJournalPage = () => {
     error,
   } = useGetJournalsQuery({
     variables: {
+      limit: itemsPerPage,
+      offset: (currentPage - 1) * itemsPerPage,
       startDate: filters.startDate,
       endDate: filters.endDate,
       tag: filters.tag && filters.tag.length > 0 ? filters.tag : undefined,
@@ -38,16 +43,19 @@ const MovieJournalPage = () => {
     },
   });
 
+  const journals = journalData?.journals?.journals || [];
+  const totalCount = journalData?.journals?.totalCount || 0;
+
   // Filter journals client-side based on search term
   const filteredJournals = useMemo(() => {
-    if (!journalData?.journals) return [];
+    if (!journals) return [];
 
     if (!searchTerm.trim()) {
-      return journalData.journals;
+      return journals;
     }
 
     const lowerSearch = searchTerm.toLowerCase();
-    return journalData.journals.filter((journal) => {
+    return journals.filter((journal) => {
       // Check movie name
       const matchesMovieName = journal.movieName
         ?.toLowerCase()
@@ -73,7 +81,12 @@ const MovieJournalPage = () => {
         matchesMovieName || matchesDirector || matchesActor || matchesContent
       );
     });
-  }, [journalData?.journals, searchTerm]);
+  }, [journals, searchTerm]);
+
+  // Reset page when filters or search term change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters, searchTerm]);
 
   const handleFilterChange = (newFilters: Partial<JournalFilters>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -100,11 +113,19 @@ const MovieJournalPage = () => {
         onSearchChange={handleSearchChange}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
-        totalCount={filteredJournals.length}
+        totalCount={searchTerm.trim() ? filteredJournals.length : totalCount}
         isListView={isListView}
         onToggleView={handleToggleView}
       />
       <JournalContainer journals={filteredJournals} isListView={isListView} />
+      {!searchTerm.trim() && (
+        <CustomPagination
+          currentPage={currentPage}
+          totalItems={totalCount}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
+      )}
     </Box>
   );
 };

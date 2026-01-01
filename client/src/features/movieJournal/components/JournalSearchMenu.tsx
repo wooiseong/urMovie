@@ -84,9 +84,11 @@ const JournalSearchMenu = ({
         }}
         PaperProps={{
           sx: {
-            p: 2, // padding
+            p: 3, // padding
+            pt: 2,
             borderRadius: 2,
             width: 400, // 想要可以調整
+            backgroundColor: "background.default",
           },
         }}
       >
@@ -96,6 +98,7 @@ const JournalSearchMenu = ({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "bottom",
+            pb: 1,
           }}
         >
           <Typography variant="h6">{t("movieJournal.searchFilter")}</Typography>
@@ -104,6 +107,13 @@ const JournalSearchMenu = ({
           </Button>
         </Box>
         <Box>
+          <JournalDateMenu
+            startDate={filters.startDate}
+            endDate={filters.endDate}
+            onDateChange={(startDate, endDate) =>
+              onFilterChange({ startDate, endDate })
+            }
+          />
           <CustomDropdown
             readonly
             label={t("global.tag")}
@@ -112,13 +122,7 @@ const JournalSearchMenu = ({
             fullWidth
             tagList={formattedTags}
             onTagChange={handleTagChange}
-          />
-          <JournalDateMenu
-            startDate={filters.startDate}
-            endDate={filters.endDate}
-            onDateChange={(startDate, endDate) =>
-              onFilterChange({ startDate, endDate })
-            }
+            popoverPosition="below"
           />
         </Box>
       </Popover>

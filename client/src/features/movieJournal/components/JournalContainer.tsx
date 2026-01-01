@@ -6,7 +6,7 @@ import { useAppDispatch } from "src/store/hook";
 import { setSelectedJournal } from "src/store/modules/journalSlice";
 
 interface JournalContainerProps {
-  journals: NonNullable<GetJournalsQuery["journals"]>;
+  journals: NonNullable<GetJournalsQuery["journals"]["journals"]>;
   isListView: boolean;
 }
 

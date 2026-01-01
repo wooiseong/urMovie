@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CircularProgress,
   Container,
@@ -16,9 +16,13 @@ import {
 import AdminStats from "../components/AdminStats";
 import UserStats from "../components/UserStats";
 import { useTranslation } from "react-i18next";
+import CustomSectionTitle from "src/globalComponents/CustomSectionTitle";
 
 const AdminStatisticsPage = () => {
   const { t } = useTranslation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const {
     data: statsData,
     loading: statsLoading,
@@ -28,11 +32,21 @@ const AdminStatisticsPage = () => {
     data: usersData,
     loading: usersLoading,
     error: usersError,
-  } = useGetUsersWithStatsQuery();
+  } = useGetUsersWithStatsQuery({
+    variables: {
+      limit: itemsPerPage,
+      offset: (currentPage - 1) * itemsPerPage,
+    },
+  });
 
   const [activeView, setActiveView] = useState<"adminstats" | "userstats">(
     "adminstats"
   );
+
+  // Reset page when switching views
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeView]);
 
   if (statsLoading || usersLoading) {
     return (
@@ -59,12 +73,9 @@ const AdminStatisticsPage = () => {
   const { getUsersWithStats } = usersData || {};
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        {t("admin.adminPanel")}
-      </Typography>
-
-      <Box sx={{ mb: 2 }}>
+    <Box>
+      <CustomSectionTitle label={t("admin.adminPanel")} />
+      <Box sx={{ mb: 3 }}>
         <Button
           variant={activeView === "adminstats" ? "contained" : "outlined"}
           onClick={() => setActiveView("adminstats")}
@@ -84,9 +95,14 @@ const AdminStatisticsPage = () => {
         <AdminStats getAdminStats={statsData.getAdminStats} />
       )}
       {activeView === "userstats" && usersData?.getUsersWithStats && (
-        <UserStats getUsersWithStats={usersData?.getUsersWithStats} />
+        <UserStats
+          getUsersWithStatsResponse={usersData.getUsersWithStats}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
       )}
-    </Container>
+    </Box>
   );
 };
 
