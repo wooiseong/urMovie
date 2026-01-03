@@ -65,6 +65,11 @@ const CreateEditSelection = () => {
       return;
     }
 
+    if (!content.trim()) {
+      toast.error("日誌內容不能為空");
+      return;
+    }
+
     try {
       const input = {
         movieName: movieName,

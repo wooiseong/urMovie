@@ -14,6 +14,8 @@ import {
   useUpdateJournalMutation,
   GetJournalsDocument,
   GetJournalsQuery,
+  GetTagsDocument,
+  GetTagsQuery,
 } from "src/generated/graphql";
 import toast from "react-hot-toast";
 import { useQueryWithLoader } from "src/globalHooks/useQueryWithLoader";
@@ -107,6 +109,93 @@ const EditJournalPage = () => {
           },
         });
       }
+
+      // Update the query used by MovieJournalPage (with offset)
+      const movieJournalQuery = cache.readQuery<GetJournalsQuery>({
+        query: GetJournalsDocument,
+        variables: { limit: 10, offset: 0 },
+      });
+
+      if (movieJournalQuery) {
+        const updatedJournals = [
+          newJournal,
+          ...(movieJournalQuery.journals?.journals ?? []),
+        ];
+        const limitedJournals = updatedJournals.slice(0, 10);
+
+        cache.writeQuery({
+          query: GetJournalsDocument,
+          variables: { limit: 10, offset: 0 },
+          data: {
+            journals: {
+              journals: limitedJournals,
+              totalCount: (movieJournalQuery.journals?.totalCount ?? 0) + 1,
+            },
+          },
+        });
+      }
+
+      // Update tags cache based on tag operations
+      const existingTagsCache = cache.readQuery<GetTagsQuery>({
+        query: GetTagsDocument,
+      });
+
+      if (existingTagsCache) {
+        let updatedTagsList = [...(existingTagsCache.getTags ?? [])];
+
+        // Handle deleted tags - remove from cache
+        const deletedTags = formData.tag.filter((t) => t.isDeleted && !t.isNew);
+        deletedTags.forEach((deletedTag) => {
+          updatedTagsList = updatedTagsList.filter(
+            (t) => t.id !== deletedTag.id
+          );
+        });
+
+        // Handle edited tags - update names in cache
+        const editedTags = formData.tag.filter((t) => t.isEdited && !t.isNew);
+        editedTags.forEach((editedTag) => {
+          const index = updatedTagsList.findIndex((t) => t.id === editedTag.id);
+          if (index !== -1) {
+            updatedTagsList[index] = {
+              ...updatedTagsList[index],
+              name: editedTag.name,
+            };
+          }
+        });
+
+        // Handle new tags - add to cache
+        const newTagsFromForm = formData.tag.filter(
+          (t) => t.isNew && t.selected
+        );
+        if (newTagsFromForm.length > 0) {
+          const existingTagIds = new Set(updatedTagsList.map((t) => t.id));
+          const responseTags = newJournal.tag ?? [];
+
+          // Match new tags by name and add to cache if not already there
+          const tagsToAdd = responseTags.filter((responseTag: any) => {
+            const wasNew = newTagsFromForm.some(
+              (formTag) => formTag.name === responseTag.name
+            );
+            return wasNew && !existingTagIds.has(responseTag.id);
+          });
+
+          tagsToAdd.forEach((tag: any) => {
+            updatedTagsList.push({
+              __typename: "Tag" as const,
+              id: tag.id,
+              name: tag.name,
+            });
+          });
+        }
+
+        // Write updated tags back to cache
+        cache.writeQuery({
+          query: GetTagsDocument,
+          data: {
+            getTags: updatedTagsList,
+          },
+        });
+      }
     },
   });
   const [updateJournal, { loading: updateLoading }] = useUpdateJournalMutation({
@@ -128,6 +217,68 @@ const EditJournalPage = () => {
       // This ensures the updated journal appears correctly in all views
       cache.evict({ fieldName: "journals" });
       cache.gc();
+
+      // Update tags cache based on tag operations
+      const existingTagsCache = cache.readQuery<GetTagsQuery>({
+        query: GetTagsDocument,
+      });
+
+      if (existingTagsCache) {
+        let updatedTagsList = [...(existingTagsCache.getTags ?? [])];
+
+        // Handle deleted tags - remove from cache
+        const deletedTags = formData.tag.filter((t) => t.isDeleted && !t.isNew);
+        deletedTags.forEach((deletedTag) => {
+          updatedTagsList = updatedTagsList.filter(
+            (t) => t.id !== deletedTag.id
+          );
+        });
+
+        // Handle edited tags - update names in cache
+        const editedTags = formData.tag.filter((t) => t.isEdited && !t.isNew);
+        editedTags.forEach((editedTag) => {
+          const index = updatedTagsList.findIndex((t) => t.id === editedTag.id);
+          if (index !== -1) {
+            updatedTagsList[index] = {
+              ...updatedTagsList[index],
+              name: editedTag.name,
+            };
+          }
+        });
+
+        // Handle new tags - add to cache
+        const newTagsFromForm = formData.tag.filter(
+          (t) => t.isNew && t.selected
+        );
+        if (newTagsFromForm.length > 0) {
+          const existingTagIds = new Set(updatedTagsList.map((t) => t.id));
+          const responseTags = updatedJournal.tag ?? [];
+
+          // Match new tags by name and add to cache if not already there
+          const tagsToAdd = responseTags.filter((responseTag: any) => {
+            const wasNew = newTagsFromForm.some(
+              (formTag) => formTag.name === responseTag.name
+            );
+            return wasNew && !existingTagIds.has(responseTag.id);
+          });
+
+          tagsToAdd.forEach((tag: any) => {
+            updatedTagsList.push({
+              __typename: "Tag" as const,
+              id: tag.id,
+              name: tag.name,
+            });
+          });
+        }
+
+        // Write updated tags back to cache
+        cache.writeQuery({
+          query: GetTagsDocument,
+          data: {
+            getTags: updatedTagsList,
+          },
+        });
+      }
     },
   });
 
@@ -283,6 +434,31 @@ const EditJournalPage = () => {
 
   const handleSubmit = async () => {
     try {
+      // Validate movie name
+      if (!formData.movieName.trim()) {
+        toast.error("電影名稱不能為空");
+        return;
+      }
+
+      // Validate content (check if content array is empty or has no meaningful content)
+      const hasContent =
+        formData.content?.content &&
+        Array.isArray(formData.content.content) &&
+        formData.content.content.length > 0 &&
+        formData.content.content.some((node: any) => {
+          // Check if node has text content
+          if (node.type === "paragraph" || node.type === "heading") {
+            return node.content && node.content.length > 0;
+          }
+          // For other node types (image, code block, etc.)
+          return true;
+        });
+
+      if (!hasContent) {
+        toast.error("日誌內容不能為空");
+        return;
+      }
+
       isSubmitting.current = true;
       const submitTag = formData.tag
         .filter((t) => t.selected)
