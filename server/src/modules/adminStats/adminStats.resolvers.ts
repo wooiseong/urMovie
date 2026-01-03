@@ -20,18 +20,40 @@ export const adminStatsResolvers = {
 
       const totalSalary = totalPremiumUsers * 200;
 
+      // Calculate salary percentage change compared to last week
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+      const premiumUsersLastWeek = await UserModel.countDocuments({
+        role: "premiumUser",
+        createdAt: { $lt: oneWeekAgo },
+      });
+
+      const salaryLastWeek = premiumUsersLastWeek * 200;
+      let salaryPercentageChange = 0;
+
+      if (salaryLastWeek > 0) {
+        salaryPercentageChange =
+          ((totalSalary - salaryLastWeek) / salaryLastWeek) * 100;
+      } else if (totalSalary > 0) {
+        salaryPercentageChange = 100;
+      }
+
       return {
         totalMembers,
         totalUsers,
         totalPremiumUsers,
         totalJournals,
         totalSalary,
+        salaryPercentageChange: parseFloat(salaryPercentageChange.toFixed(2)),
       };
     },
-    getUsersWithStats: async (_: any, __: any, context: Context) => {
+    getUsersWithStats: async (_: any, args: any, context: Context) => {
       if (!context.user || context.user.role !== "admin") {
         throw new Error("Unauthorized");
       }
+
+      const { limit = 10, offset = 0 } = args;
 
       const users = await UserModel.find({
         role: { $in: ["user", "premiumUser"] },
@@ -87,7 +109,13 @@ export const adminStatsResolvers = {
         };
       });
 
-      return usersWithStats;
+      const totalCount = usersWithStats.length;
+      const paginatedUsers = usersWithStats.slice(offset, offset + limit);
+
+      return {
+        users: paginatedUsers,
+        totalCount,
+      };
     },
   },
 };

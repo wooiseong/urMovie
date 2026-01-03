@@ -42,7 +42,10 @@ query GetJournals(
     orderBy: $orderBy
     order: $order
   ) {
-    ...JournalFields
+    journals {
+      ...JournalFields
+    }
+    totalCount
   }
 }
 

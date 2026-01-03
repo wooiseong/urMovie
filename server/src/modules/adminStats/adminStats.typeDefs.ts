@@ -7,6 +7,7 @@ export const adminStatsTypeDefs = gql`
     totalPremiumUsers: Int!
     totalJournals: Int!
     totalSalary: Int!
+    salaryPercentageChange: Float!
   }
 
   type TagUsage {
@@ -23,8 +24,13 @@ export const adminStatsTypeDefs = gql`
     createdAt: String
   }
 
+  type UserStatsResponse {
+    users: [UserStats!]!
+    totalCount: Int!
+  }
+
   extend type Query {
     getAdminStats: AdminStats!
-    getUsersWithStats: [UserStats!]!
+    getUsersWithStats(limit: Int, offset: Int): UserStatsResponse!
   }
 `;

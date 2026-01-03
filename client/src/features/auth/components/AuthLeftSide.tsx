@@ -18,10 +18,6 @@ const AuthLeftSide = () => {
       icon: <BookmarkIcon sx={{ fontSize: 24 }} />,
       title: t("auth.features.track", "Track & Journal"),
     },
-    {
-      icon: <GroupsIcon sx={{ fontSize: 24 }} />,
-      title: t("auth.features.share", "Share & Connect"),
-    },
   ];
 
   return (
@@ -31,7 +27,7 @@ const AuthLeftSide = () => {
         height: "100%",
         background: "linear-gradient(135deg, #34D399 0%, #059669 100%)",
         borderRadius: "10px 0 0 10px",
-        padding: "32px 28px",
+        padding: "28px 28px",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -52,7 +48,15 @@ const AuthLeftSide = () => {
       }}
     >
       {/* Logo Section */}
-      <Box sx={{ position: "relative", zIndex: 1, mb: 3 }}>
+      <Box
+        sx={{
+          position: "relative",
+          left: "50%",
+          transform: "translateX(-16%)",
+          zIndex: 1,
+          mb: 2,
+        }}
+      >
         <img
           src={urMovieLogo}
           alt="UrMovie Logo"
@@ -67,7 +71,7 @@ const AuthLeftSide = () => {
           zIndex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 2.5,
+          // gap: 2.5,
         }}
       >
         {/* Main Headline */}
@@ -78,7 +82,7 @@ const AuthLeftSide = () => {
               color: "white",
               fontFamily: "Montserrat, sans-serif",
               fontWeight: 700,
-              fontSize: "1.85rem",
+              fontSize: "1.7rem",
               lineHeight: 1.2,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)",
             }}
@@ -97,7 +101,7 @@ const AuthLeftSide = () => {
           >
             {t(
               "auth.hero_subtitle",
-              "Track, discover, and share your cinematic journey"
+              "Track and discover your cinematic journey"
             )}
           </Typography>
         </Stack>
@@ -115,7 +119,7 @@ const AuthLeftSide = () => {
             alt="cover"
             style={{
               width: "55%",
-              maxWidth: "250px",
+              maxWidth: "230px",
               display: "block",
               filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.2))",
             }}

@@ -20,6 +20,7 @@ export type Scalars = {
 
 export type AdminStats = {
   __typename?: 'AdminStats';
+  salaryPercentageChange: Scalars['Float']['output'];
   totalJournals: Scalars['Int']['output'];
   totalMembers: Scalars['Int']['output'];
   totalPremiumUsers: Scalars['Int']['output'];
@@ -55,6 +56,12 @@ export type Journal = {
   quote?: Maybe<Array<Quote>>;
   tag?: Maybe<Array<Tag>>;
   updatedAt: Scalars['Date']['output'];
+};
+
+export type JournalsResponse = {
+  __typename?: 'JournalsResponse';
+  journals: Array<Journal>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type LoginInput = {
@@ -115,10 +122,16 @@ export type Query = {
   _empty?: Maybe<Scalars['String']['output']>;
   getAdminStats: AdminStats;
   getTags?: Maybe<Array<Tag>>;
-  getUsersWithStats: Array<UserStats>;
+  getUsersWithStats: UserStatsResponse;
   journal?: Maybe<Journal>;
-  journals?: Maybe<Array<Journal>>;
+  journals: JournalsResponse;
   me: User;
+};
+
+
+export type QueryGetUsersWithStatsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -215,6 +228,12 @@ export type UserStats = {
   username: Scalars['String']['output'];
 };
 
+export type UserStatsResponse = {
+  __typename?: 'UserStatsResponse';
+  totalCount: Scalars['Int']['output'];
+  users: Array<UserStats>;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -293,10 +312,12 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateJournalInput: CreateJournalInput;
   Date: ResolverTypeWrapper<Scalars['Date']['output']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
   Journal: ResolverTypeWrapper<Journal>;
+  JournalsResponse: ResolverTypeWrapper<JournalsResponse>;
   LoginInput: LoginInput;
   MemberMutationResponse: ResolverTypeWrapper<MemberMutationResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
@@ -312,6 +333,7 @@ export type ResolversTypes = {
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   UserStats: ResolverTypeWrapper<UserStats>;
+  UserStatsResponse: ResolverTypeWrapper<UserStatsResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -321,10 +343,12 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   CreateJournalInput: CreateJournalInput;
   Date: Scalars['Date']['output'];
+  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
   Journal: Journal;
+  JournalsResponse: JournalsResponse;
   LoginInput: LoginInput;
   MemberMutationResponse: MemberMutationResponse;
   Mutation: Record<PropertyKey, never>;
@@ -340,9 +364,11 @@ export type ResolversParentTypes = {
   UpdateUserInput: UpdateUserInput;
   User: User;
   UserStats: UserStats;
+  UserStatsResponse: UserStatsResponse;
 };
 
 export type AdminStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AdminStats'] = ResolversParentTypes['AdminStats']> = {
+  salaryPercentageChange?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   totalJournals?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalMembers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalPremiumUsers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -376,6 +402,11 @@ export type JournalResolvers<ContextType = any, ParentType extends ResolversPare
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
 };
 
+export type JournalsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['JournalsResponse'] = ResolversParentTypes['JournalsResponse']> = {
+  journals?: Resolver<Array<ResolversTypes['Journal']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
 export type MemberMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberMutationResponse'] = ResolversParentTypes['MemberMutationResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -395,9 +426,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   getAdminStats?: Resolver<ResolversTypes['AdminStats'], ParentType, ContextType>;
   getTags?: Resolver<Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
-  getUsersWithStats?: Resolver<Array<ResolversTypes['UserStats']>, ParentType, ContextType>;
+  getUsersWithStats?: Resolver<ResolversTypes['UserStatsResponse'], ParentType, ContextType, Partial<QueryGetUsersWithStatsArgs>>;
   journal?: Resolver<Maybe<ResolversTypes['Journal']>, ParentType, ContextType, RequireFields<QueryJournalArgs, 'id'>>;
-  journals?: Resolver<Maybe<Array<ResolversTypes['Journal']>>, ParentType, ContextType, Partial<QueryJournalsArgs>>;
+  journals?: Resolver<ResolversTypes['JournalsResponse'], ParentType, ContextType, Partial<QueryJournalsArgs>>;
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
 };
 
@@ -436,12 +467,18 @@ export type UserStatsResolvers<ContextType = any, ParentType extends ResolversPa
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type UserStatsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserStatsResponse'] = ResolversParentTypes['UserStatsResponse']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['UserStats']>, ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   AdminStats?: AdminStatsResolvers<ContextType>;
   AuthPayload?: AuthPayloadResolvers<ContextType>;
   Date?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
   Journal?: JournalResolvers<ContextType>;
+  JournalsResponse?: JournalsResponseResolvers<ContextType>;
   MemberMutationResponse?: MemberMutationResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
@@ -450,5 +487,6 @@ export type Resolvers<ContextType = any> = {
   TagUsage?: TagUsageResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserStats?: UserStatsResolvers<ContextType>;
+  UserStatsResponse?: UserStatsResponseResolvers<ContextType>;
 };
 

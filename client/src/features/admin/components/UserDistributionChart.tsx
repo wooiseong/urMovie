@@ -8,7 +8,7 @@ import {
   type TooltipItem,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 // Register Chart.js components + plugin
@@ -26,6 +26,7 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
   const { t } = useTranslation();
+  const theme = useTheme();
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -47,6 +48,13 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
       ],
     };
 
+    // Determine legend position based on screen width
+    const isMobile = window.innerWidth < 900;
+
+    // Get the text color based on theme mode
+    const legendTextColor =
+      theme.palette.mode === "dark" ? "#ffffff" : "#333333";
+
     chartInstance.current = new Chart(chartRef.current, {
       type: "pie",
       data,
@@ -56,8 +64,11 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
         plugins: {
           // ✔️ Legend shows "name + number"
           legend: {
-            position: "top",
+            position: isMobile ? "bottom" : "bottom",
             labels: {
+              padding: 20,
+              boxWidth: 20,
+              boxHeight: 20,
               generateLabels(chart) {
                 const dataset = chart.data.datasets[0];
 
@@ -68,7 +79,7 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
                   text: `${label} — ${dataset.data[idx]}`,
                   fillStyle: bgColors[idx],
                   strokeStyle: bgColors[idx],
-                  fontColor: "#ffffff",
+                  fontColor: legendTextColor,
                   index: idx,
                 }));
               },
@@ -106,10 +117,28 @@ const UserDistributionChart: React.FC<UserDistributionChartProps> = ({
       },
     });
 
+    // Handle window resize to update legend position
+    const handleResize = () => {
+      if (chartInstance.current) {
+        const shouldBeMobile = window.innerWidth < 900;
+        const currentPosition =
+          chartInstance.current.options.plugins?.legend?.position;
+        const newPosition = shouldBeMobile ? "bottom" : "bottom";
+
+        if (currentPosition !== newPosition) {
+          chartInstance.current.options.plugins!.legend!.position = newPosition;
+          chartInstance.current.update();
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
       if (chartInstance.current) chartInstance.current.destroy();
     };
-  }, [totalUsers, totalPremiumUsers]);
+  }, [totalUsers, totalPremiumUsers, t, theme.palette.mode]);
 
   return (
     <Card>

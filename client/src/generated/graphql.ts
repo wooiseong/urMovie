@@ -21,6 +21,7 @@ export type Scalars = {
 
 export type AdminStats = {
   __typename?: 'AdminStats';
+  salaryPercentageChange: Scalars['Float']['output'];
   totalJournals: Scalars['Int']['output'];
   totalMembers: Scalars['Int']['output'];
   totalPremiumUsers: Scalars['Int']['output'];
@@ -56,6 +57,12 @@ export type Journal = {
   quote?: Maybe<Array<Quote>>;
   tag?: Maybe<Array<Tag>>;
   updatedAt: Scalars['Date']['output'];
+};
+
+export type JournalsResponse = {
+  __typename?: 'JournalsResponse';
+  journals: Array<Journal>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type LoginInput = {
@@ -116,10 +123,16 @@ export type Query = {
   _empty?: Maybe<Scalars['String']['output']>;
   getAdminStats: AdminStats;
   getTags?: Maybe<Array<Tag>>;
-  getUsersWithStats: Array<UserStats>;
+  getUsersWithStats: UserStatsResponse;
   journal?: Maybe<Journal>;
-  journals?: Maybe<Array<Journal>>;
+  journals: JournalsResponse;
   me: User;
+};
+
+
+export type QueryGetUsersWithStatsArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -216,15 +229,24 @@ export type UserStats = {
   username: Scalars['String']['output'];
 };
 
+export type UserStatsResponse = {
+  __typename?: 'UserStatsResponse';
+  totalCount: Scalars['Int']['output'];
+  users: Array<UserStats>;
+};
+
 export type GetAdminStatsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminStatsQuery = { __typename?: 'Query', getAdminStats: { __typename?: 'AdminStats', totalMembers: number, totalUsers: number, totalPremiumUsers: number, totalJournals: number, totalSalary: number } };
+export type GetAdminStatsQuery = { __typename?: 'Query', getAdminStats: { __typename?: 'AdminStats', totalMembers: number, totalUsers: number, totalPremiumUsers: number, totalJournals: number, totalSalary: number, salaryPercentageChange: number } };
 
-export type GetUsersWithStatsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUsersWithStatsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 
-export type GetUsersWithStatsQuery = { __typename?: 'Query', getUsersWithStats: Array<{ __typename?: 'UserStats', _id: string, username: string, journalCount: number, lastJournalDate?: string | null, createdAt?: string | null, tags: Array<{ __typename?: 'TagUsage', name: string, count: number }> }> };
+export type GetUsersWithStatsQuery = { __typename?: 'Query', getUsersWithStats: { __typename?: 'UserStatsResponse', totalCount: number, users: Array<{ __typename?: 'UserStats', _id: string, username: string, journalCount: number, lastJournalDate?: string | null, createdAt?: string | null, tags: Array<{ __typename?: 'TagUsage', name: string, count: number }> }> } };
 
 export type RegisterUserMutationVariables = Exact<{
   input: RegisterInput;
@@ -255,7 +277,7 @@ export type GetJournalsQueryVariables = Exact<{
 }>;
 
 
-export type GetJournalsQuery = { __typename?: 'Query', journals?: Array<{ __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> | null };
+export type GetJournalsQuery = { __typename?: 'Query', journals: { __typename?: 'JournalsResponse', totalCount: number, journals: Array<{ __typename?: 'Journal', id: string, movieName: string, director?: Array<string> | null, actor?: Array<string> | null, image?: string | null, content: any, date: any, updatedAt: any, tag?: Array<{ __typename?: 'Tag', id: string, name: string, selected: boolean }> | null, quote?: Array<{ __typename?: 'Quote', name?: string | null, content?: string | null, backgroundColor?: string | null, textColor?: string | null }> | null }> } };
 
 export type GetJournalQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -360,6 +382,7 @@ export const GetAdminStatsDocument = gql`
     totalPremiumUsers
     totalJournals
     totalSalary
+    salaryPercentageChange
   }
 }
     `;
@@ -391,17 +414,20 @@ export type GetAdminStatsQueryHookResult = ReturnType<typeof useGetAdminStatsQue
 export type GetAdminStatsLazyQueryHookResult = ReturnType<typeof useGetAdminStatsLazyQuery>;
 export type GetAdminStatsQueryResult = Apollo.QueryResult<GetAdminStatsQuery, GetAdminStatsQueryVariables>;
 export const GetUsersWithStatsDocument = gql`
-    query GetUsersWithStats {
-  getUsersWithStats {
-    _id
-    username
-    journalCount
-    tags {
-      name
-      count
+    query GetUsersWithStats($limit: Int, $offset: Int) {
+  getUsersWithStats(limit: $limit, offset: $offset) {
+    users {
+      _id
+      username
+      journalCount
+      tags {
+        name
+        count
+      }
+      lastJournalDate
+      createdAt
     }
-    lastJournalDate
-    createdAt
+    totalCount
   }
 }
     `;
@@ -418,6 +444,8 @@ export const GetUsersWithStatsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUsersWithStatsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
@@ -519,7 +547,10 @@ export const GetJournalsDocument = gql`
     orderBy: $orderBy
     order: $order
   ) {
-    ...JournalFields
+    journals {
+      ...JournalFields
+    }
+    totalCount
   }
 }
     ${JournalFieldsFragmentDoc}`;

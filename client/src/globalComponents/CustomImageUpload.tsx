@@ -5,6 +5,8 @@ import {
   TextField,
   Theme,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { deepmerge } from "@mui/utils";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -31,6 +33,8 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
 }) => {
   const [image, setImage] = useState<string>(value);
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     setImage(value);
@@ -66,8 +70,8 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
   const mergedSx: SxProps<Theme> = deepmerge(
     {
       position: "relative", // ✅ 為取消按鈕定位
-      width: 260,
-      height: 250,
+      width: isSmDown ? 200 : 260,
+      height: isSmDown ? 200 : 250,
       borderRadius: "4px",
       backgroundColor: "background.paper",
       overflow: "hidden",
@@ -75,7 +79,7 @@ const CustomImageUpload: React.FC<CustomImageUploadProps> = ({
       img: {
         width: "100%",
         height: "100%",
-        objectFit: "cover",
+        objectFit: "contain",
       },
     },
     sx

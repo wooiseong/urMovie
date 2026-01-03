@@ -66,6 +66,11 @@ const journalTypeDefs = gql`
     quote: [QuoteInput!]
   }
 
+  type JournalsResponse {
+    journals: [Journal!]!
+    totalCount: Int!
+  }
+
   type Query {
     journals(
       limit: Int
@@ -75,7 +80,7 @@ const journalTypeDefs = gql`
       tag: [String!]
       orderBy: String
       order: String
-    ): [Journal!]
+    ): JournalsResponse!
     journal(id: ID!): Journal
   }
 

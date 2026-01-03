@@ -1,4 +1,11 @@
-import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  TextField,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
@@ -23,10 +30,15 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const { t } = useTranslation();
-  const backgroundColor = readOnly
-    ? quote.backgroundColor
-    : quote.backgroundColor ?? "#1e1e1e";
-  const textColor = readOnly ? quote.textColor : quote.textColor ?? "#FFFFFF";
+  const theme = useTheme();
+
+  // Default background color that's visible in both light and dark modes
+  const defaultBgColor = theme.palette.mode === "dark" ? "#606060" : "#e0e0e0";
+  const defaultTextColor =
+    theme.palette.mode === "dark" ? "#FFFFFF" : "#000000";
+
+  const backgroundColor = quote.backgroundColor ?? defaultBgColor;
+  const textColor = quote.textColor ?? defaultTextColor;
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -149,8 +161,8 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
           open={open}
           anchorEl={anchorEl}
           onClose={handleClose}
-          backgroundColor={backgroundColor ?? "#1e1e1e"}
-          textColor={textColor ?? "#ffffff"}
+          backgroundColor={backgroundColor}
+          textColor={textColor}
           onColorChange={(bg, text) => {
             onUpdate?.({ backgroundColor: bg, textColor: text });
           }}

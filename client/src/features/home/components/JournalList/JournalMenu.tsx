@@ -17,13 +17,15 @@ import { setSelectedJournal } from "src/store/modules/journalSlice";
 
 import { useGraphQLErrorMessage } from "src/globalHooks/useGraphQLErrorMessage";
 import toast from "react-hot-toast";
+import ConfirmDialog from "src/globalComponents/ConfirmDialog";
 
 interface JournalMenuProps {
-  journal: NonNullable<GetJournalsQuery["journals"]>[number];
+  journal: NonNullable<GetJournalsQuery["journals"]["journals"]>[number];
 }
 
 const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   const { t } = useTranslation();
   const getGraphQLErrorMessage = useGraphQLErrorMessage();
@@ -53,6 +55,11 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
   };
 
   const handleDelete = () => {
+    setConfirmDialogOpen(true);
+    handleClose();
+  };
+
+  const handleConfirmDelete = () => {
     deleteJournal({
       variables: { id: journal.id },
       update(cache) {
@@ -64,7 +71,11 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
         cache.gc();
       },
     });
-    handleClose();
+    setConfirmDialogOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmDialogOpen(false);
   };
 
   const menuItems: DynamicMenuItem[] = [
@@ -120,6 +131,20 @@ const JournalMenu: React.FC<JournalMenuProps> = ({ journal }) => {
           <DynamicMenu menuItems={menuItems} onClose={handleClose} />
         </Menu>
       </Box>
+
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        title={t("home.deleteJournalTitle") || "Delete Journal"}
+        message={
+          t("home.deleteJournalMessage") ||
+          "Are you sure you want to delete this journal? This action cannot be undone."
+        }
+        confirmText={t("home.delete") || "Delete"}
+        cancelText={t("home.cancel") || "Cancel"}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        confirmColor="error"
+      />
     </>
   );
 };

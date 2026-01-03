@@ -25,10 +25,12 @@ import { useMeQuery } from "src/generated/graphql";
 import { useEffect, useState } from "react";
 import DefaultAvatar from "../../assets/images/default-avatar.png";
 import urMovieLogo from "../../assets/images/urMovieLogo.png";
+import urMovieLogoDark from "../../assets/images/urMovieLogoDark.png";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const NavBarWrapper = () => {
   const userRole = useAppSelector((state) => state.user.role);
+  const currentTheme = useAppSelector((state) => state.setting.theme);
   const dispatch = useAppDispatch();
   const { data: meData, loading } = useMeQuery();
   const { t } = useTranslation();
@@ -61,10 +63,24 @@ const NavBarWrapper = () => {
     | "premiumUser";
 
   const navItems = [
-    { icon: <HomeIcon />, label: t("navBar.home"), to: "/" },
-    { icon: <CollectionsBookmarkIcon />, label: t("navBar.movieJournal"), to: "/movieJournal" },
+    {
+      // icon: <HomeIcon />,
+      label: t("navBar.home"),
+      to: "/",
+    },
+    {
+      // icon: <CollectionsBookmarkIcon />,
+      label: t("navBar.movieJournal"),
+      to: "/movieJournal",
+    },
     ...(userRole === "admin"
-      ? [{ icon: <AssessmentIcon />, label: t("navBar.adminStatistics"), to: "/admin/adminStatistics" }]
+      ? [
+          {
+            // icon: <AssessmentIcon />,
+            label: t("navBar.adminStatistics"),
+            to: "/admin/adminStatistics",
+          },
+        ]
       : []),
   ];
 
@@ -81,7 +97,7 @@ const NavBarWrapper = () => {
           justifyContent: "space-between",
           alignItems: "center",
           px: { xs: 1, sm: 2, md: 3 },
-          py: 1.5,
+          py: 0.5,
           borderBottom: "1px solid",
           borderColor: "divider",
           backgroundColor: "background.paper",
@@ -92,7 +108,13 @@ const NavBarWrapper = () => {
         }}
       >
         {/* Left: Logo + Menu Button (Mobile) / Nav Buttons (Desktop) */}
-        <Box display="flex" alignItems="center" gap={1}>
+        <Box
+          display="flex"
+          // justifyContent="space-between"
+          width="100%"
+          alignItems="center"
+          gap={1}
+        >
           {isMobile && (
             <IconButton
               onClick={handleDrawerToggle}
@@ -107,7 +129,8 @@ const NavBarWrapper = () => {
             onClick={() => navigate("/")}
             disableRipple
             sx={{
-              p: 1,
+              mb: 0.8,
+              px: 1,
               minWidth: "auto",
               "&:hover": {
                 backgroundColor: "transparent",
@@ -115,7 +138,7 @@ const NavBarWrapper = () => {
             }}
           >
             <img
-              src={urMovieLogo}
+              src={currentTheme === "dark" ? urMovieLogo : urMovieLogoDark}
               alt="UrMovie"
               style={{
                 width: isMobile ? "90px" : "110px",
@@ -125,11 +148,11 @@ const NavBarWrapper = () => {
           </Button>
 
           {!isMobile && (
-            <Box display="flex" ml={2} gap={1}>
+            <Box display="flex" gap={1}>
               {navItems.map((item) => (
                 <CustomNavButton
                   key={item.to}
-                  icon={item.icon}
+                  // icon={item.icon}
                   label={item.label}
                   to={item.to}
                 />
@@ -159,8 +182,19 @@ const NavBarWrapper = () => {
           },
         }}
       >
-        <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <img src={urMovieLogo} alt="UrMovie" style={{ width: "100px", height: "32px" }} />
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={currentTheme === "dark" ? urMovieLogo : urMovieLogoDark}
+            alt="UrMovie"
+            style={{ width: "100px", height: "32px" }}
+          />
           <IconButton onClick={handleDrawerToggle}>
             <CloseIcon />
           </IconButton>
@@ -176,18 +210,11 @@ const NavBarWrapper = () => {
                 selected={location.pathname === item.to}
                 sx={{
                   "&.Mui-selected": {
-                    backgroundColor: "primary.main",
-                    color: "primary.contrastText",
-                    "&:hover": {
-                      backgroundColor: "primary.dark",
-                    },
-                    "& .MuiListItemIcon-root": {
-                      color: "primary.contrastText",
-                    },
+                    color: "primary.main",
+                    fontWeight: "bold",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.label} />
               </ListItemButton>
             </ListItem>

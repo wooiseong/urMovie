@@ -14,22 +14,39 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import dayjs from "dayjs";
 import { GetUsersWithStatsQuery } from "src/generated/graphql";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import CustomSearchBar from "src/globalComponents/CustomSearchBar";
+import CustomPagination from "src/globalComponents/CustomPagination";
 import { useTranslation } from "react-i18next";
 
 interface UserStatsProps {
-  getUsersWithStats: GetUsersWithStatsQuery["getUsersWithStats"];
+  getUsersWithStatsResponse: GetUsersWithStatsQuery["getUsersWithStats"];
+  currentPage: number;
+  itemsPerPage: number;
+  onPageChange: (page: number) => void;
 }
 
 type SortField = "username" | "journalCount" | "lastJournalDate" | "createdAt";
 type SortOrder = "asc" | "desc";
 
-const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
+const UserStats = ({
+  getUsersWithStatsResponse,
+  currentPage,
+  itemsPerPage,
+  onPageChange,
+}: UserStatsProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const { t } = useTranslation();
+
+  const getUsersWithStats = getUsersWithStatsResponse?.users || [];
+  const totalCount = getUsersWithStatsResponse?.totalCount || 0;
+
+  // Reset page when search term or sorting changes
+  useEffect(() => {
+    onPageChange(1);
+  }, [searchTerm, sortField, sortOrder]);
 
   // Handle sort toggle
   const handleSort = (field: SortField) => {
@@ -37,9 +54,9 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
       // Toggle sort order
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
-      // Set new field and default to ascending
+      // Set new field and default to descending for immediate visible change
       setSortField(field);
-      setSortOrder("asc");
+      setSortOrder("desc");
     }
   };
 
@@ -131,7 +148,7 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 2,
+          mb: 3,
         }}
       >
         <Typography variant="h5">
@@ -144,11 +161,14 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
             (
             {searchTerm.trim()
               ? filteredAndSortedUsers.length
-              : getUsersWithStats.length}{" "}
+              : totalCount}{" "}
             {t("admin.users")}
             {searchTerm.trim() &&
-              filteredAndSortedUsers.length !== getUsersWithStats.length && (
-                <> / {getUsersWithStats.length} {t("admin.total")}</>
+              filteredAndSortedUsers.length !== totalCount && (
+                <>
+                  {" "}
+                  / {totalCount} {t("admin.total")}
+                </>
               )}
             )
           </Typography>
@@ -161,22 +181,43 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
           />
         </Box>
       </Box>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          overflow: "auto",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "background.default",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "action.hover",
+            borderRadius: "4px",
+            "&:hover": {
+              backgroundColor: "action.selected",
+            },
+          },
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <TableCell align="center" sx={{ width: "27.33%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {t("admin.username")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("username")}
-                    sx={{
-                      color:
-                        sortField === "username"
-                          ? "primary.main"
-                          : "text.secondary",
-                    }}
                   >
                     {sortField === "username" && sortOrder === "desc" ? (
                       <ArrowDownwardIcon fontSize="small" />
@@ -186,25 +227,20 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   </IconButton>
                 </Box>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center" sx={{ width: "14.33%" }}>
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "center",
                     gap: 1,
-                    justifyContent: "flex-end",
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
                   {t("admin.journalsCreated")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("journalCount")}
-                    sx={{
-                      color:
-                        sortField === "journalCount"
-                          ? "primary.main"
-                          : "text.secondary",
-                    }}
                   >
                     {sortField === "journalCount" && sortOrder === "desc" ? (
                       <ArrowDownwardIcon fontSize="small" />
@@ -214,19 +250,23 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   </IconButton>
                 </Box>
               </TableCell>
-              <TableCell>{t("admin.tags")}</TableCell>
-              <TableCell>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <TableCell align="center" sx={{ width: "30.67%" }}>
+                {t("admin.tags")}
+              </TableCell>
+              <TableCell align="center" sx={{ width: "13.33%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {t("admin.lastPublish")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("lastJournalDate")}
-                    sx={{
-                      color:
-                        sortField === "lastJournalDate"
-                          ? "primary.main"
-                          : "text.secondary",
-                    }}
                   >
                     {sortField === "lastJournalDate" && sortOrder === "desc" ? (
                       <ArrowDownwardIcon fontSize="small" />
@@ -236,18 +276,20 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
                   </IconButton>
                 </Box>
               </TableCell>
-              <TableCell>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <TableCell align="center" sx={{ width: "13.33%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    flexDirection: { xs: "column", sm: "row" },
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   {t("admin.registrationDate")}
                   <IconButton
                     size="small"
                     onClick={() => handleSort("createdAt")}
-                    sx={{
-                      color:
-                        sortField === "createdAt"
-                          ? "primary.main"
-                          : "text.secondary",
-                    }}
                   >
                     {sortField === "createdAt" && sortOrder === "desc" ? (
                       <ArrowDownwardIcon fontSize="small" />
@@ -273,21 +315,21 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
             ) : (
               filteredAndSortedUsers.map((user: any) => (
                 <TableRow key={user._id}>
-                  <TableCell component="th" scope="row">
+                  <TableCell align="center" component="th" scope="row">
                     {user.username}
                   </TableCell>
-                  <TableCell align="right">{user.journalCount}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">{user.journalCount}</TableCell>
+                  <TableCell align="center">
                     {user.tags
                       .map((t: any) => `${t.name}: ${t.count}`)
                       .join(", ")}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     {user.lastJournalDate
                       ? dayjs(user.lastJournalDate).format("YYYY-MM-DD")
                       : t("admin.notAvailable")}
                   </TableCell>
-                  <TableCell>
+                  <TableCell align="center">
                     {user.createdAt
                       ? dayjs(user.createdAt).format("YYYY-MM-DD")
                       : t("admin.notAvailable")}
@@ -298,6 +340,14 @@ const UserStats = ({ getUsersWithStats }: UserStatsProps) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {!searchTerm.trim() && (
+        <CustomPagination
+          currentPage={currentPage}
+          totalItems={totalCount}
+          itemsPerPage={itemsPerPage}
+          onPageChange={onPageChange}
+        />
+      )}
     </>
   );
 };

@@ -55,7 +55,6 @@ const CustomSearchBar: React.FC<CustomSearchBarProps> = ({
       color: "text.secondary",
       opacity: 1,
     },
-    margin: "10px",
     width: "100%",
     borderRadius: "10px",
     "& .MuiOutlinedInput-root": {

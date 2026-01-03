@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 
 interface MembershipCardPlanProps {
   title: string;
-  titleBackgroundColor: string;
+  titleBackgroundColor?: string;
   cardBackgroundColor: string;
   cardContent: string[];
   buttonColor: string;
@@ -10,6 +10,7 @@ interface MembershipCardPlanProps {
   userRole: "user" | "premiumUser" | "admin";
   planRole: "user" | "premiumuser" | string;
   index: number;
+  price: number;
   onClick?: () => void;
 }
 
@@ -22,25 +23,19 @@ const MembershipCardPlan = ({
   buttonTitle,
   userRole,
   planRole,
+  price,
   onClick,
 }: MembershipCardPlanProps) => {
   const isDisabled =
     userRole === "admin" || userRole === "premiumUser" || userRole === planRole;
 
-  // boxShadow 規則：
-  // - admin -> 沒陰影
-  // - 只有當 userRole === planRole 時顯示陰影（代表現在的方案）
-  const showShadow = userRole !== "admin" && userRole === planRole;
-
   return (
     <Box
       sx={(theme) => ({
         width: 260,
+        height: 340,
         p: 3,
-        borderRadius: 3,
-        boxShadow: showShadow
-          ? `0 0 12px 4px ${theme.palette.primary.main}`
-          : "none",
+        borderRadius: 2,
         backgroundColor: cardBackgroundColor,
         display: "flex",
         flexDirection: "column",
@@ -53,27 +48,74 @@ const MembershipCardPlan = ({
         fontWeight="bold"
         textAlign="center"
         sx={{
-          backgroundColor: titleBackgroundColor,
+          backgroundColor: titleBackgroundColor || "transparent",
           py: 1,
-          px: 2,
-          borderRadius: 4,
+          borderRadius: titleBackgroundColor ? 4 : 0,
           mb: 1,
         }}
       >
         {title}
       </Typography>
 
-      {/* 內容 */}
-      {cardContent.map((item, idx) => (
+      {/* 價格 */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "baseline",
+          my: 2,
+        }}
+      >
         <Typography
-          key={idx}
-          variant="body1"
-          textAlign="center"
-          sx={{ mb: idx === cardContent.length - 1 ? 3 : 1 }}
+          variant="body2"
+          sx={{
+            fontSize: "1.125rem",
+            fontWeight: 600,
+            mr: 0.5,
+          }}
         >
-          ・{item}
+          $
         </Typography>
-      ))}
+        <Typography
+          sx={{
+            fontSize: "3rem",
+            lineHeight: 1,
+          }}
+        >
+          {price}
+        </Typography>
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "1rem",
+            fontWeight: 500,
+            ml: 1,
+          }}
+        >
+          NTD/月
+        </Typography>
+      </Box>
+
+      {/* 內容容器 - 使用 flex: 1 來占據剩餘空間並垂直居中 */}
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+          width: "100%",
+        }}
+      >
+        {cardContent.map((item, idx) => (
+          <Typography
+            key={idx}
+            variant="body1"
+            textAlign="center"
+            sx={{ mb: idx === cardContent.length - 1 ? 0 : 1 }}
+          >
+            ・{item}
+          </Typography>
+        ))}
+      </Box>
 
       {/* 按鈕 */}
       <Button
@@ -81,6 +123,7 @@ const MembershipCardPlan = ({
         fullWidth
         disabled={isDisabled}
         sx={{
+          mt: 2,
           borderRadius: 2,
           backgroundColor: buttonColor,
           color: "text.primary",

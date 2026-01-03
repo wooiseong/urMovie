@@ -15,6 +15,7 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
+  useTheme,
 } from "@mui/material";
 
 import FormatBoldIcon from "@mui/icons-material/FormatBold";
@@ -44,6 +45,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
   initialContent,
 }) => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -89,7 +91,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
     <Box sx={{ marginTop: "30px" }}>
       <Box
         sx={{
-          background: "#404040",
+          background: theme.palette.mode === "dark" ? "#404040" : "#e5e5e5",
           padding: "12px",
           borderRadius: "8px",
         }}
@@ -277,11 +279,11 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
           editor={editor}
           // data-placeholder="寫下你的影評、心得..."
           style={{
-            background: "#1e1e1e",
+            background: theme.palette.mode === "dark" ? "#1e1e1e" : "#ffffff",
             minHeight: "200px",
             padding: "10px 30px",
             borderRadius: "6px",
-            color: "white",
+            color: theme.palette.text.primary,
             border: "none",
           }}
         />
@@ -297,7 +299,7 @@ const JournalContentEditor: React.FC<JournalContentEditorProps> = ({
 
             /* placeholder style */
             .ProseMirror p.is-editor-empty:first-child::before {
-              color: #aaa; /* 淺灰色，Tailwind gray-400 */
+              color: ${theme.palette.text.secondary}; /* 淺灰色，Tailwind gray-400 */
               content: attr(data-placeholder);
               float: left;
               pointer-events: none;

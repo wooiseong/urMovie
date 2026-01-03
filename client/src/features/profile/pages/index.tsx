@@ -71,8 +71,25 @@ const ProfilePage = () => {
     : defaultAvatar;
 
   return (
-    <Box sx={{ pb: "70px", position: "relative" }}>
-      <CustomSectionTitle label={t("membership.title")} />
+    <Box sx={{ maxWidth: 1200, margin: "0 auto", pb: "70px" }}>
+      {/* Header with title and submit button */}
+      <Box
+        sx={{
+          pb: 3,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "background.default",
+        }}
+      >
+        <CustomSectionTitle label={t("membership.title")} />
+        <CustomActionButton
+          icon={<SendIcon />}
+          label={t("operation.submit")}
+          loading={loading}
+          onClick={handleSubmit}
+        />
+      </Box>
       <form onSubmit={handleSubmit}>
         <Stack spacing={3} sx={{ maxWidth: "600px", margin: "auto" }}>
           <CustomTextField
@@ -80,7 +97,6 @@ const ProfilePage = () => {
             value={username}
             placeholder={t("home.movieName")}
             sx={{
-              paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
                 opacity: 0.8,
@@ -94,7 +110,6 @@ const ProfilePage = () => {
             label={t("user.oldPassword")}
             placeholder={t("user.oldPassword")}
             sx={{
-              paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
               },
@@ -107,7 +122,6 @@ const ProfilePage = () => {
             value={newPassword}
             placeholder={t("user.newPassword")}
             sx={{
-              paddingLeft: "10px",
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "background.paper",
               },
@@ -118,15 +132,8 @@ const ProfilePage = () => {
             label={t("user.avatar")}
             value={avatarPreview}
             onUpload={(url) => setAvatar(url)}
+            sx={{ mr: "10px" }}
           />
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <CustomActionButton
-              icon={<SendIcon />}
-              label={t("operation.submit")}
-              loading={loading}
-              onClick={handleSubmit}
-            />
-          </Box>
         </Stack>
       </form>
     </Box>

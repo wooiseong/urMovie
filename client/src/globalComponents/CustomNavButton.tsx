@@ -3,7 +3,7 @@ import { Button, SxProps, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 interface CustomNavButtonProps {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   label: string;
   isActive?: boolean;
   to?: string;
@@ -29,21 +29,20 @@ const CustomNavButton: React.FC<CustomNavButtonProps> = ({
       sx={{
         mx: "auto",
         borderRadius: "10px",
-        // color: "#fff",
+        color: (theme) => (theme.palette.mode === 'dark' ? '#fff' : '#000'),
         ...(isActive && {
-          borderRadius: "10px",
-          // color: "#fff",
-          // backgroundColor: "	#404040",
-          // "&:hover": {
-          //   backgroundColor: "#404040",
-          // },
+          color: "primary.main",
+          fontWeight: "bold",
         }),
         textTransform: "none",
+        "&:hover": {
+          color: "primary.main",
+        },
         ...sx,
       }}
     >
       {icon}
-      <Typography sx={{ marginLeft: "5px" }}> {label}</Typography>
+      <Typography sx={{ marginLeft: "5px", color: "inherit" }}> {label}</Typography>
     </Button>
   );
 };
