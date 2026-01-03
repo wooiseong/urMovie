@@ -170,6 +170,7 @@
     "selectTagPlaceholder": "Select a tag",
     "add": "Add",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close"
   }
 }

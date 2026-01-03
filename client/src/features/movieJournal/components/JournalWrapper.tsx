@@ -55,6 +55,7 @@ const JournalWrapper = ({
                 {t("movieJournal.articles")}
               </Typography>
               <IconButton
+                color="primary"
                 onClick={() => {
                   navigate("/editJournal");
                 }}
@@ -64,11 +65,7 @@ const JournalWrapper = ({
             </Box>
           </Box>
           <Tooltip title={t("home.addQuote")}>
-            <IconButton
-            // onClick={handleAddQuote}
-            >
-              {/* <AddCircleIcon /> */}
-            </IconButton>
+            <IconButton></IconButton>
           </Tooltip>
         </Box>
         <Box display="flex" alignItems="center">

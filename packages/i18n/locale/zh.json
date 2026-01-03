@@ -171,6 +171,7 @@
     "selectTagPlaceholder": "選擇標簽",
     "add": "新增",
     "delete": "刪除",
-    "cancel": "取消"
+    "cancel": "取消",
+    "close": "關閉"
   }
 }

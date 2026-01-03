@@ -51,7 +51,7 @@ const JournalMetaForm = ({
           <CustomTextField
             label="導演"
             icon={<VideoCameraFrontIcon />}
-            placeholder={t("home.movieName")}
+            placeholder={t("home.director")}
             sx={{
               paddingLeft: "10px",
               width: { xs: "80%", md: "70%" },
@@ -67,7 +67,7 @@ const JournalMetaForm = ({
           <CustomTextField
             label="演員"
             icon={<AccountCircleIcon />}
-            placeholder={t("home.movieName")}
+            placeholder={t("home.actor")}
             sx={{
               paddingLeft: "10px",
               width: { xs: "80%", md: "70%" },
@@ -81,7 +81,7 @@ const JournalMetaForm = ({
           <CustomDropdown
             label="標籤"
             icon={<LocalOfferIcon />}
-            placeholder={t("home.movieName")}
+            placeholder={t("home.tags")}
             fullWidth
             sx={{ marginLeft: "10px" }}
             tagList={formData.tag}
