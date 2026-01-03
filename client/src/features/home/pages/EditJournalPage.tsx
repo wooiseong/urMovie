@@ -62,7 +62,7 @@ const EditJournalPage = () => {
   );
   const dispatch = useAppDispatch();
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isSubmitting = useRef(false);
   const hasUnsavedChanges = useRef(true);
   const [formData, setFormData] = useState<JournalFormData>({
     movieName: "",
@@ -109,8 +109,27 @@ const EditJournalPage = () => {
       }
     },
   });
-  const [updateJournal, { loading: updateLoading }] =
-    useUpdateJournalMutation();
+  const [updateJournal, { loading: updateLoading }] = useUpdateJournalMutation({
+    update(cache, result) {
+      const updatedJournal = result.data?.updateJournal;
+      if (!updatedJournal) return;
+
+      // Update the cache by modifying the specific journal
+      cache.modify({
+        fields: {
+          journals(existingJournalsRef, { readField }) {
+            // Update all cached queries that contain this journal
+            return existingJournalsRef;
+          },
+        },
+      });
+
+      // Alternatively, update specific cached queries
+      // This ensures the updated journal appears correctly in all views
+      cache.evict({ fieldName: "journals" });
+      cache.gc();
+    },
+  });
 
   const { data: tagData, loader, error } = useQueryWithLoader(useGetTagsQuery);
   const location = useLocation();
@@ -121,7 +140,7 @@ const EditJournalPage = () => {
   // Handle browser back/refresh/close
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges.current && !isSubmitting) {
+      if (hasUnsavedChanges.current && !isSubmitting.current) {
         e.preventDefault();
         e.returnValue = "";
         return "";
@@ -130,14 +149,14 @@ const EditJournalPage = () => {
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [isSubmitting]);
+  }, []);
 
   // Block navigation when there are unsaved changes
   useEffect(() => {
-    if (!hasUnsavedChanges.current || isSubmitting) return;
+    if (!hasUnsavedChanges.current || isSubmitting.current) return;
 
     const handlePopState = (e: PopStateEvent) => {
-      if (hasUnsavedChanges.current && !isSubmitting) {
+      if (hasUnsavedChanges.current && !isSubmitting.current) {
         e.preventDefault();
         // Push current state back to prevent navigation
         window.history.pushState(null, "", window.location.pathname);
@@ -153,11 +172,11 @@ const EditJournalPage = () => {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, [isSubmitting]);
+  }, []);
 
   // Intercept link clicks
   useEffect(() => {
-    if (!hasUnsavedChanges.current || isSubmitting) return;
+    if (!hasUnsavedChanges.current || isSubmitting.current) return;
 
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -171,7 +190,7 @@ const EditJournalPage = () => {
         if (
           targetPath !== currentPath &&
           hasUnsavedChanges.current &&
-          !isSubmitting
+          !isSubmitting.current
         ) {
           e.preventDefault();
           e.stopPropagation();
@@ -183,7 +202,7 @@ const EditJournalPage = () => {
 
     document.addEventListener("click", handleClick, true);
     return () => document.removeEventListener("click", handleClick, true);
-  }, [isSubmitting]);
+  }, []);
 
   // Load draft data once on mount and clear it immediately
   useEffect(() => {
@@ -264,7 +283,7 @@ const EditJournalPage = () => {
 
   const handleSubmit = async () => {
     try {
-      setIsSubmitting(true);
+      isSubmitting.current = true;
       const submitTag = formData.tag
         .filter((t) => t.selected)
         .map((tag) => ({
@@ -304,7 +323,7 @@ const EditJournalPage = () => {
           toast.success("日誌已成功更新！");
           hasUnsavedChanges.current = false;
           dispatch(setSelectedJournal(null));
-          navigate(-1);
+          navigate("/moviejournal");
         }
       } else {
         const { data } = await createJournal({
@@ -315,7 +334,7 @@ const EditJournalPage = () => {
         if (data?.createJournal) {
           toast.success("日誌已成功建立！");
           hasUnsavedChanges.current = false;
-          navigate(-1);
+          navigate("/moviejournal");
         }
       }
     } catch (error) {
@@ -323,7 +342,7 @@ const EditJournalPage = () => {
       toast.error(
         selectedJournal ? "更新失敗，請稍後重試" : "建立失敗，請稍後重試"
       );
-      setIsSubmitting(false);
+      isSubmitting.current = false;
     }
   };
 

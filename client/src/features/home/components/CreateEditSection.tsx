@@ -104,6 +104,7 @@ const CreateEditSelection = () => {
         toast.success("日誌已成功建立！");
         setMovieName("");
         setContent("");
+        navigate("/moviejournal");
       }
     } catch (error) {
       console.error(error);
