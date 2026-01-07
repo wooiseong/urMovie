@@ -30,7 +30,7 @@ const JournalList = ({ journals }: JournalListProps) => {
   // Navigate to journal details
   const handleJournalClick = (journal: any) => {
     dispatch(setSelectedJournal(journal));
-    navigate("/journalDetails");
+    navigate(`/journalDetails/${journal.id}`);
   };
 
   return (

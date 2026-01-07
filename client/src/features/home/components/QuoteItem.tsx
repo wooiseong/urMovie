@@ -80,11 +80,6 @@ const QuoteItem: React.FC<QuoteItemProps> = ({
               <ColorLensIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title={t("home.changeContent")}>
-            <IconButton sx={{ "& svg": { cursor: "pointer" } }}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
           <Tooltip title={t("home.deleteQuote")}>
             <IconButton
               sx={{ "& svg": { cursor: "pointer" } }}

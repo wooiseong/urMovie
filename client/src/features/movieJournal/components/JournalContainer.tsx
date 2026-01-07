@@ -16,7 +16,7 @@ const JournalContainer = ({ journals, isListView }: JournalContainerProps) => {
 
   const handleJournalClick = (journal: Journal) => {
     dispatch(setSelectedJournal(journal));
-    navigate("/journalDetails");
+    navigate(`/journalDetails/${journal.id}`);
   };
 
   return (

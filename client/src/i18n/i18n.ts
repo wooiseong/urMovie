@@ -8,11 +8,16 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
+      "zh-TW": { translation: zh },
       zh: { translation: zh },
       en: { translation: en },
     },
-    lng: "zh",
     fallbackLng: "en",
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "i18nextLang",
+    },
     interpolation: {
       escapeValue: false,
     },

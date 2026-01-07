@@ -54,11 +54,11 @@
     "upgradePrompt": "趕快解鎖以獲得更多功能吧！",
     "successfullyUpgraded": "升級成功！",
     "modalUpgradeSuccessTitle": "升級成功！",
-    "modalUpgradeSuccessMessage": "恭喜您！您的會員資格已成功升級。",
-    "modalNewFeaturesTitle": "新功能已解鎖",
-    "modalNewFeaturesMessage": "探索無限的電影日誌條目及更多內容。",
-    "modalPremiumAccessTitle": "享受您的高級權限",
-    "modalPremiumAccessMessage": "開始無限創作與探索。",
+    "modalUpgradeSuccessMessage": "恭喜您！您已成功升級為高級會員。",
+    "modalUnlimitedQuoteTitle": "無限金句使用",
+    "modalUnlimitedQuoteMessage": "無限制地添加經典電影台詞到您的日誌中，盡情記錄您的觀影感受。",
+    "modalUnlimitedColorsTitle": "無限顏色自定義",
+    "modalUnlimitedColorsMessage": "使用無限的背景顏色選項個性化您的金句，盡情發揮您的創意。",
     "modalGetStartedButton": "開始使用"
   },
   "navBar": {
@@ -79,7 +79,9 @@
     "language": {
       "label": "語言",
       "en": "英文",
-      "zh": "中文"
+      "zh": "中文",
+      "en-short": "英",
+      "zh-short": "中"
     }
   },
   "operation": {
@@ -171,6 +173,7 @@
     "selectTagPlaceholder": "選擇標簽",
     "add": "新增",
     "delete": "刪除",
-    "cancel": "取消"
+    "cancel": "取消",
+    "close": "關閉"
   }
 }

@@ -19,9 +19,9 @@ const initialLang =
     ? "zh-TW"
     : "en");
 
-const initialTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-  ? "dark"
-  : "light";
+const initialTheme =
+  (localStorage.getItem("theme") as "light" | "dark") ||
+  (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 
 const initialState: SettingState = {
   theme: initialTheme as "light" | "dark",
