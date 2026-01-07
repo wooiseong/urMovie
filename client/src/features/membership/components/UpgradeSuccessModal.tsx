@@ -3,6 +3,7 @@ import { Modal, Box, Typography, IconButton, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
@@ -12,6 +13,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { useTranslation } from "react-i18next";
+
+// Import images
+import moreQuote from "../../../assets/images/membership/moreQuote.png";
+import moreColor from "../../../assets/images/membership/moreColor.png";
 
 interface UpgradeSuccessModalProps {
   open: boolean;
@@ -23,12 +28,14 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
-  height: 520,
+  width: { xs: "90%", sm: 500 },
+  height: { xs: "80vh", sm: 520 },
+  maxWidth: "90vw",
+  maxHeight: "90vh",
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
-  p: 2,
+  p: { xs: 1.5, sm: 2 },
   outline: "none",
   display: "flex",
   flexDirection: "column",
@@ -42,7 +49,6 @@ const swiperSlideStyle: React.CSSProperties = {
   alignItems: "center",
   justifyContent: "center",
   textAlign: "center",
-  padding: "20px 40px",
   height: "100%", // <-- Fill modal height so centering works
   boxSizing: "border-box",
 };
@@ -91,10 +97,18 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
                 background-color: #e0e0e0;
             }
             .swiper-button-prev-custom {
-                left: 15px;
+                left: 8px;
             }
             .swiper-button-next-custom {
-                right: 15px;
+                right: 8px;
+            }
+            @media (min-width: 600px) {
+                .swiper-button-prev-custom {
+                    left: 15px;
+                }
+                .swiper-button-next-custom {
+                    right: 15px;
+                }
             }
             .swiper-button-disabled {
                 opacity: 0.35 !important;
@@ -129,71 +143,123 @@ const UpgradeSuccessModal: React.FC<UpgradeSuccessModalProps> = ({
           style={{ width: "100%", height: "100%" }} // <-- Fill modal
         >
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
-              {t("membership.modalUpgradeSuccessTitle")}
-            </Typography>
-            <img
-              src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
-              alt="Congratulations"
-              style={{
-                width: "100%",
-                maxWidth: "300px",
-                borderRadius: "8px",
-                marginBottom: "16px",
-              }}
-            />
-            <Typography sx={{ color: "text.secondary" }}>
-              {t("membership.modalUpgradeSuccessMessage")}
-            </Typography>
+            <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 1, sm: 2 } }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: { xs: 2, sm: 3 },
+                  color: "text.primary",
+                  fontWeight: 600,
+                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                }}
+              >
+                {t("membership.modalUpgradeSuccessTitle")}
+              </Typography>
+              <CheckCircleIcon
+                sx={{
+                  fontSize: { xs: 80, sm: 120 },
+                  color: "#4caf50",
+                  mb: { xs: 2, sm: 3 },
+                }}
+              />
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "text.secondary",
+                  px: { xs: 1, sm: 2 },
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                }}
+              >
+                {t("membership.modalUpgradeSuccessMessage")}
+              </Typography>
+            </Box>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
-              {t("membership.modalNewFeaturesTitle")}
-            </Typography>
-            <img
-              src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
-              alt="New Feature 1"
-              style={{
-                width: "100%",
-                maxWidth: "300px",
-                borderRadius: "8px",
-                marginBottom: "16px",
-              }}
-            />
-            <Typography sx={{ color: "text.secondary" }}>
-              {t("membership.modalNewFeaturesMessage")}
-            </Typography>
+            <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 1, sm: 2 } }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: { xs: 2, sm: 3 },
+                  color: "text.primary",
+                  fontWeight: 600,
+                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                }}
+              >
+                {t("membership.modalUnlimitedQuoteTitle")}
+              </Typography>
+              <img
+                src={moreQuote}
+                alt="Unlimited Quotes"
+                style={{
+                  width: "100%",
+                  maxWidth: "250px",
+                  borderRadius: "8px",
+                  marginBottom: "16px",
+                }}
+              />
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "text.secondary",
+                  px: { xs: 1, sm: 2 },
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                }}
+              >
+                {t("membership.modalUnlimitedQuoteMessage")}
+              </Typography>
+            </Box>
           </SwiperSlide>
 
           <SwiperSlide style={swiperSlideStyle}>
-            <Typography variant="h5" sx={{ mb: 2, color: "text.primary" }}>
-              {t("membership.modalPremiumAccessTitle")}
-            </Typography>
-            <img
-              src="https://www.freevector.com/uploads/vector/preview/15506/FreeVector.com-Design-Pack-08.jpg"
-              alt="Get Started"
-              style={{
-                width: "100%",
-                maxWidth: "300px",
-                borderRadius: "8px",
-                marginBottom: "16px",
-              }}
-            />
-            <Typography sx={{ color: "text.secondary", mb: 2 }}>
-              {t("membership.modalPremiumAccessMessage")}
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={onClose}
-              sx={{
-                backgroundColor: "secondary.main",
-                mt: 1,
-                "&:hover": { backgroundColor: "secondary.dark" },
-              }}
-            >
-              {t("membership.modalGetStartedButton")}
-            </Button>
+            <Box sx={{ px: { xs: 2, sm: 4 }, py: { xs: 1, sm: 2 } }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: { xs: 2, sm: 3 },
+                  color: "text.primary",
+                  fontWeight: 600,
+                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                }}
+              >
+                {t("membership.modalUnlimitedColorsTitle")}
+              </Typography>
+              <img
+                src={moreColor}
+                alt="Unlimited Colors"
+                style={{
+                  width: "100%",
+                  maxWidth: "250px",
+                  borderRadius: "8px",
+                  marginBottom: "16px",
+                }}
+              />
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "text.secondary",
+                  mb: { xs: 2, sm: 3 },
+                  px: { xs: 1, sm: 2 },
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                }}
+              >
+                {t("membership.modalUnlimitedColorsMessage")}
+              </Typography>
+              <Button
+                variant="contained"
+                onClick={onClose}
+                sx={{
+                  backgroundColor: "secondary.main",
+                  mt: { xs: 0.5, sm: 1 },
+                  px: { xs: 3, sm: 4 },
+                  py: { xs: 0.75, sm: 1 },
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  "&:hover": { backgroundColor: "secondary.dark" },
+                }}
+              >
+                {t("membership.modalGetStartedButton")}
+              </Button>
+            </Box>
           </SwiperSlide>
         </Swiper>
 

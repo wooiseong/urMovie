@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   IconButton,
@@ -6,18 +6,22 @@ import {
   Chip,
   CardMedia,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "src/store/hook";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch } from "src/store/hook";
 import { useTiptapHtml } from "src/globalHooks/useTipTapHtml";
 import QuoteBoard from "../components/QuoteBoard";
 import CustomActionButton from "src/globalComponents/CustomActionButton";
 import { useTranslation } from "react-i18next";
 import { setSelectedJournal } from "src/store/modules/journalSlice";
-import { useDeleteJournalMutation } from "src/generated/graphql";
+import {
+  useDeleteJournalMutation,
+  useGetJournalQuery,
+} from "src/generated/graphql";
 import { useGraphQLErrorMessage } from "src/globalHooks/useGraphQLErrorMessage";
 import toast from "react-hot-toast";
 import ConfirmDialog from "src/globalComponents/ConfirmDialog";
@@ -26,11 +30,29 @@ const JournalDetailsPage: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
   const getGraphQLErrorMessage = useGraphQLErrorMessage();
-  const journal = useAppSelector((state) => state.journal.selectedJournal);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
+  // Fetch journal by ID from URL
+  const {
+    data,
+    loading,
+    error: fetchError,
+  } = useGetJournalQuery({
+    variables: { id: id || "" },
+    skip: !id,
+  });
+
+  const journal = data?.journal;
   const journalContent = useTiptapHtml(journal?.content, false);
+
+  // Update Redux state when journal is loaded (for Edit page compatibility)
+  useEffect(() => {
+    if (journal) {
+      dispatch(setSelectedJournal(journal));
+    }
+  }, [journal, dispatch]);
 
   const [deleteJournal] = useDeleteJournalMutation({
     onCompleted: () => {
@@ -80,10 +102,38 @@ const JournalDetailsPage: React.FC = () => {
     setConfirmDialogOpen(false);
   };
 
+  // Handle loading state
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "400px",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Handle error state
+  if (fetchError) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography color="error">
+          {getGraphQLErrorMessage(fetchError)}
+        </Typography>
+      </Box>
+    );
+  }
+
+  // Handle no journal found
   if (!journal) {
     return (
       <Box sx={{ p: 3 }}>
-        <Typography>No journal selected</Typography>
+        <Typography>Journal not found</Typography>
       </Box>
     );
   }

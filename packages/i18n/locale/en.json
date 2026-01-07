@@ -53,11 +53,11 @@
     "upgradePrompt": "Upgrade to unlock more features now!",
     "successfullyUpgraded": "Successfully upgraded!",
     "modalUpgradeSuccessTitle": "Upgrade Successful!",
-    "modalUpgradeSuccessMessage": "Congratulations! You have successfully upgraded your membership.",
-    "modalNewFeaturesTitle": "New Features Unlocked",
-    "modalNewFeaturesMessage": "Explore unlimited movie journal entries and more.",
-    "modalPremiumAccessTitle": "Enjoy Your Premium Access",
-    "modalPremiumAccessMessage": "Start creating and exploring without limits.",
+    "modalUpgradeSuccessMessage": "Congratulations! You have successfully upgraded to premium membership.",
+    "modalUnlimitedQuoteTitle": "Unlimited Quote Usage",
+    "modalUnlimitedQuoteMessage": "Add as many classic movie quotes as you want to your journals without any limitations.",
+    "modalUnlimitedColorsTitle": "Unlimited Color Customization",
+    "modalUnlimitedColorsMessage": "Personalize your quotes with unlimited background color options and express your creativity.",
     "modalGetStartedButton": "Get Started"
   },
   "navBar": {
@@ -78,7 +78,9 @@
     "language": {
       "label": "language",
       "en": "english",
-      "zh": "chinese"
+      "zh": "chinese",
+      "en-short": "EN",
+      "zh-short": "ZH"
     }
   },
   "operation": {

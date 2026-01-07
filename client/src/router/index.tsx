@@ -22,7 +22,7 @@ const routes: RouteObject[] = [
         element: <MainLayout />,
         children: [
           { path: "/", index: true, element: <HomePage /> },
-          { path: "journalDetails", element: <JournalDetailsPage /> },
+          { path: "journalDetails/:id", element: <JournalDetailsPage /> },
           { path: "editJournal", element: <EditJournalPage /> },
           { path: "movieJournal", element: <MovieJournalPage /> },
           { path: "profile", element: <ProfilePage /> },
@@ -42,7 +42,7 @@ const routes: RouteObject[] = [
         children: [
           { index: true, element: <HomePage /> },
           { path: "adminStatistics", element: <AdminStatisticsPage /> },
-          { path: "journalDetails", element: <JournalDetailsPage /> },
+          { path: "journalDetails/:id", element: <JournalDetailsPage /> },
           { path: "editJournal", element: <EditJournalPage /> },
           { path: "movieJournal", element: <MovieJournalPage /> },
           { path: "profile", element: <ProfilePage /> },
