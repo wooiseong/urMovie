@@ -9,6 +9,8 @@
 /server/dist
 /packages/i18n/dist
 /packages/types/dist
+/client/coverage
+/server/coverage
 
 # Environment variables
 .env
