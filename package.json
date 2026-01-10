@@ -12,7 +12,10 @@
     "dev:client": "npm run start --workspace=client",
     "dev:server": "npm run dev --workspace=server",
     "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
+    "test": "npm run test:ci --workspaces --if-present",
+    "test:client": "npm run test:ci --workspace=client",
+    "test:server": "npm run test --workspace=server",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
     "install:all": "npm install"
   },
   "devDependencies": {
@@ -22,4 +25,3 @@
     "eslint-plugin-flowtype": "8.0.3"
   }
 }
-
