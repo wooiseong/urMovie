@@ -1,4 +1,4 @@
-import { ErrorCodes } from "@shared-types/errorCodes";
+import { ErrorCodes } from "@urmovie/types";
 import { GraphQLJSON } from "graphql-type-json";
 import { DateTimeResolver } from "graphql-scalars";
 import { JournalModel } from "./journalSchema";

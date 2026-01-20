@@ -9,7 +9,8 @@
       "Bash(npm run generate:*)",
       "Bash(npm test:*)",
       "Bash(npm run test:*)",
-      "Bash(npm run test:server:*)"
+      "Bash(npm run test:server:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

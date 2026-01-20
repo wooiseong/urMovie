@@ -5,7 +5,7 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.test.ts', '**/?(*.)+(spec|test).ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   moduleNameMapper: {
-    '^@shared-types/(.*)$': '<rootDir>/../packages/types/dist/$1',
+    '^@urmovie/types$': '<rootDir>/../packages/types/dist/index.js',
   },
   collectCoverageFrom: [
     'src/**/*.ts',

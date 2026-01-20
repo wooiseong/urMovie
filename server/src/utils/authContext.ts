@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { throwGraphQLError } from "./graphqlError";
 import { Request } from "express";
-import { ErrorCodes } from "@shared-types/errorCodes";
+import { ErrorCodes } from "@urmovie/types";
 
 const SECRET_KEY = process.env.JWT_SECRET;
 
