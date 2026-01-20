@@ -19,7 +19,8 @@
     "install:all": "npm install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "typescript": "^5.2.2"
   },
   "overrides": {
     "eslint-plugin-flowtype": "8.0.3"

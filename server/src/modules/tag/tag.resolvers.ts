@@ -1,4 +1,4 @@
-import { ErrorCodes } from "@shared-types/errorCodes";
+import { ErrorCodes } from "@urmovie/types";
 import { GraphQLError } from "graphql";
 import { Context } from "../../utils/authContext";
 import { TagModel } from "./tagSchema";

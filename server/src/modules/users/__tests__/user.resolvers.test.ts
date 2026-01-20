@@ -1,4 +1,4 @@
-import { ErrorCodes } from "@shared-types/errorCodes";
+import { ErrorCodes } from "@urmovie/types";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import validator from "validator";

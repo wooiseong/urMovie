@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server-express";
-import { ErrorCodes } from "@shared-types/errorCodes";
+import { ErrorCodes } from "@urmovie/types";
 
 export function throwGraphQLError(
   message: ErrorCodes,
