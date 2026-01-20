@@ -64,11 +64,14 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle both Cloudinary URLs (complete) and legacy server URLs (need prefix)
   const avatarPreview = avatar?.startsWith("data:image")
     ? avatar
-    : avatar
-    ? `${process.env.REACT_APP_IMAGE_URL || ""}${avatar}`
-    : defaultAvatar;
+    : avatar?.includes("cloudinary.com") || avatar?.startsWith("http")
+      ? avatar
+      : avatar
+        ? `${process.env.REACT_APP_IMAGE_URL || ""}${avatar}`
+        : defaultAvatar;
 
   return (
     <Box sx={{ maxWidth: 1200, margin: "0 auto", pb: "70px" }}>
@@ -132,6 +135,7 @@ const ProfilePage = () => {
             label={t("user.avatar")}
             value={avatarPreview}
             onUpload={(url) => setAvatar(url)}
+            folder="avatars"
             sx={{ mr: "10px" }}
           />
         </Stack>

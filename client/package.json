@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.9.0",
+    "@cloudinary/react": "^1.14.3",
+    "@cloudinary/url-gen": "^1.22.0",
     "@emotion/react": "11.10.6",
     "@emotion/styled": "11.10.6",
     "@graphql-codegen/cli": "^6.0.0",
