@@ -46,6 +46,15 @@ async function initializeServer() {
 
 // Vercel serverless handler
 export default async function handler(req: any, res: any) {
-  await initializeServer();
-  return app(req, res);
+  try {
+    await initializeServer();
+    return new Promise((resolve, reject) => {
+      app(req, res);
+      res.on("finish", resolve);
+      res.on("error", reject);
+    });
+  } catch (err) {
+    console.error("Handler error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 }

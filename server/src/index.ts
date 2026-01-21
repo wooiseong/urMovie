@@ -2,11 +2,13 @@ import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 
-import { typeDefs, resolvers } from "./modules/index";
 dotenv.config();
 
-import authContext from "../src/utils/authContext";
+import { typeDefs, resolvers } from "./modules/index";
+
+import authContext from "./utils/authContext";
 import { seedAdminAccount } from "./utils/seedAdmin";
 import path from "path";
 
@@ -14,6 +16,9 @@ const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/urMovie";
 
 const app = express();
+
+// Enable CORS for all origins (configure as needed for production)
+app.use(cors());
 
 app.use(
   "/uploads",
