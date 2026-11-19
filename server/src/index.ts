@@ -9,6 +9,13 @@ dotenv.config();
 import authContext from "./utils/authContext";
 import { seedAdminAccount } from "./utils/seedAdmin";
 import path from "path";
+import dns from "dns";
+
+// Optional: some Windows setups leave Node with an unusable DNS server
+// (127.0.0.1), which breaks mongodb+srv:// lookups. e.g. DNS_SERVERS=1.1.1.1,8.8.8.8
+if (process.env.DNS_SERVERS) {
+  dns.setServers(process.env.DNS_SERVERS.split(",").map((s) => s.trim()));
+}
 
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/urMovie";
