@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import { typeDefs, resolvers } from "./modules/index";
 dotenv.config();
 
-import authContext from "../src/utils/authContext";
+import authContext from "./utils/authContext";
 import { seedAdminAccount } from "./utils/seedAdmin";
 import path from "path";
 
